@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AddRhythmView: View {
     @Environment (\.modelContext) var modelContext
-    
+    @Environment (\.dismiss) var dismiss
     @State private var name = ""
     
     var body: some View {
@@ -20,6 +20,14 @@ struct AddRhythmView: View {
                 Button ("Save") {
                     let newRhythm = Rhythm(name: name)
                     modelContext.insert(newRhythm)
+                    dismiss()
+                }
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button("Cancel") {
+                    dismiss()
                 }
             }
         }

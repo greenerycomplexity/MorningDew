@@ -11,12 +11,12 @@ import SwiftData
 @Model
 class Rhythm {
     var name: String = ""
-    var beats = [Beat]()
+    var tasks = [TaskItem]()
     
     var totalMinutes: Int {
         var minutes = 0
-        for beat in beats {
-            minutes += beat.time
+        for task in tasks {
+            minutes += task.time
         }
         return minutes
     }

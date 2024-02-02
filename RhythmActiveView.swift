@@ -8,12 +8,12 @@
 import SwiftUI
 import SwiftData
 
-struct BeatView: View {
-    var beat: Beat
+struct RhythmActiveView: View {
+    var task: TaskItem
     
     var body: some View {
         VStack {
-            Text(beat.name)
+            Text(task.name)
                 .font(.largeTitle.bold())
                 .fontDesign(.rounded)
             
@@ -66,9 +66,9 @@ struct TimerView: View {
 #Preview {
     do {
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try ModelContainer(for: Beat.self, configurations: configuration)
-        var beat = Beat(name: "Shower", time: 40, perceivedDifficulty: 4, orderIndex: 1)
-        return BeatView(beat: beat)
+        let container = try ModelContainer(for: TaskItem.self, configurations: configuration)
+        var task = TaskItem(name: "Shower", time: 40, perceivedDifficulty: 4, orderIndex: 1)
+        return RhythmActiveView(task: task)
     }
     catch {
         return Text("Failed to create preview")

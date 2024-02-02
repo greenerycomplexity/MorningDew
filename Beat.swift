@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Beat {
+class TaskItem {
     var name: String
     var time: Int
     var perceivedDifficulty: Int

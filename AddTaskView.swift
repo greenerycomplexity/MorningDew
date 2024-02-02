@@ -1,5 +1,5 @@
 //
-//  AddbeatView.swift
+//  AddtaskView.swift
 //  MorningDew
 //
 //  Created by Son Cao on 17/1/2024.
@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct AddBeatView: View {
+struct AddTaskView: View {
     @State private var name = ""
     @State private var minutes = 5
     @State private var perceivedDifficulty = 3
@@ -41,7 +41,7 @@ struct AddBeatView: View {
 
                 
             }
-            .navigationTitle("Add New beat")
+            .navigationTitle("Add New Task")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -53,13 +53,13 @@ struct AddBeatView: View {
                 ToolbarItem (placement: .confirmationAction) {
                     Button("Save") {
                         // Fetch the number of all items that contribute to the relative index ordering
-                        // Add filtering for which beats belong to current routine here
-                        let descriptor = FetchDescriptor<Beat>()
+                        // Add filtering for which tasks belong to current routine here
+                        let descriptor = FetchDescriptor<TaskItem>()
                         let count = (try? modelContext.fetchCount(descriptor)) ?? 0
                         
                         // Pass the next index to the new item
-                        let newbeat = Beat(name: name, time: minutes, perceivedDifficulty: perceivedDifficulty, orderIndex: count)
-                        modelContext.insert(newbeat)
+                        let newTask = TaskItem(name: name, time: minutes, perceivedDifficulty: perceivedDifficulty, orderIndex: count)
+                        modelContext.insert(newTask)
                         dismiss()
                     }
                 }
@@ -68,5 +68,5 @@ struct AddBeatView: View {
     }
 }
 #Preview {
-    AddBeatView()
+    AddTaskView()
 }
