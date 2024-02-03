@@ -19,11 +19,7 @@ struct MorningDew: App {
                 .modelContainer(modelContainer)
         }
     }
-    
-    
 }
-
-
 
 @MainActor
 class DataController {
@@ -37,10 +33,10 @@ class DataController {
             container.mainContext.insert(rhythm)
             
             let tasks = [
-                TaskItem(name: "Shower", time: 50, perceivedDifficulty: 4),
-                TaskItem(name: "Breakfast", time: 50, perceivedDifficulty: 2),
-                TaskItem(name: "Water plants", time: 50, perceivedDifficulty: 4),
-                TaskItem(name: "Pick outfit", time: 50, perceivedDifficulty: 5)
+                TaskItem(name: "Shower", time: 50, perceivedDifficulty: 4, orderIndex: 1),
+                TaskItem(name: "Breakfast", time: 50, perceivedDifficulty: 2, orderIndex: 2),
+                TaskItem(name: "Water plants", time: 50, perceivedDifficulty: 4, orderIndex: 3),
+                TaskItem(name: "Pick outfit", time: 50, perceivedDifficulty: 5, orderIndex: 4)
             ]
             
             for task in tasks {

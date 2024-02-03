@@ -18,41 +18,46 @@ struct AddRhythmView: View {
     let rhythmFailedMessage = "Existing Rhythm names cannot be reused. Please try again."
     
     var body: some View {
-        Form {
-            TextField ("Add new rhythm", text: $name)
-            
-            Section {
-                Button ("Save") {
-                    let descriptor = FetchDescriptor<Rhythm>(
-                        predicate: #Predicate { rhythm in
-                            rhythm.name == name
+        NavigationStack {
+            Form {
+                TextField ("Add new rhythm", text: $name)
+                
+                Section {
+                    Button ("Save") {
+                        let descriptor = FetchDescriptor<Rhythm>(
+                            predicate: #Predicate { rhythm in
+                                rhythm.name == name
+                            }
+                        )
+                        
+                        let count = (try? modelContext.fetchCount(descriptor)) ?? 0
+                        if count > 0 {
+                            showDuplicateNameAlert = true
+                        } else {
+                            let newRhythm = Rhythm(name: name)
+                            modelContext.insert(newRhythm)
+                            dismiss()
                         }
-                    )
-                    
-                    let count = (try? modelContext.fetchCount(descriptor)) ?? 0
-                    if count > 0 {
-                        showDuplicateNameAlert = true
-                    } else {
-                        let newRhythm = Rhythm(name: name)
-                        modelContext.insert(newRhythm)
+                    }
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
                         dismiss()
                     }
                 }
             }
-        }
-        .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button("Cancel") {
-                    dismiss()
-                }
+            
+            
+            
+            .alert(addRhythmFailed, isPresented: $showDuplicateNameAlert) {
+                Button("Okay") {}
+            } message: {
+                Text(rhythmFailedMessage)
             }
+            
         }
-        .alert(addRhythmFailed, isPresented: $showDuplicateNameAlert) {
-            Button("Okay") {}
-        } message: {
-            Text(rhythmFailedMessage)
-        }
-    
     }
 }
 
@@ -62,7 +67,7 @@ struct AddRhythmView: View {
         let container = try! ModelContainer(for: Rhythm.self, configurations: config)
         
         let rhythm = Rhythm(name: "Morning Routine")
-
+        
         return AddRhythmView()
             .modelContainer(container)
     }

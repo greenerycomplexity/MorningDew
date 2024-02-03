@@ -68,7 +68,7 @@ struct TimerView: View {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try! ModelContainer(for: Rhythm.self, configurations: config)
         
-        let task = TaskItem(name: "Shower", time: 40, perceivedDifficulty: 4)
+        let task = TaskItem(name: "Shower", time: 40, perceivedDifficulty: 4, orderIndex: 1)
         
         return RhythmActiveView(task: task)
             .modelContainer(container)

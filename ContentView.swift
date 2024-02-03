@@ -8,12 +8,41 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
+            Text("Let's get started!")
+            
+            
+            
+            
+            
+            
+            
+            
             List (rhythms) { rhythm in
                 NavigationLink(value: rhythm) {
-                    Text(rhythm.name)
-                        .font(.title3.bold())
-                        .fontDesign(.default)
-                        .foregroundStyle(.primary)
+                    
+                    HStack {
+                        Text(rhythm.name)
+                            .font(.title3.bold())
+                            .fontDesign(.default)
+                            .foregroundStyle(.primary)
+                        
+                        Spacer()
+                        
+                        VStack {
+                            Text("\(rhythm.totalMinutes)")
+                                .font(.title2.bold())
+                                .fontWeight(.heavy)
+                                .foregroundStyle(.black)
+                            
+                            Text ("minutes")
+                                .font(.subheadline)
+                                .foregroundStyle(.black)
+                        }
+                        .padding(.trailing,3)
+                        .foregroundStyle(.white)
+                        .fontDesign(.rounded)
+                        
+                    }
                 }
             }
             .navigationDestination(for: Rhythm.self) { rhythm in

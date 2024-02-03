@@ -19,7 +19,7 @@ struct RhythmDetailView: View {
             // Button to add new tasks
             HStack {
                 VStack (alignment: .leading) {
-                    Text("Total")
+                    Text("Time to complete")
                         .font(.title3.bold())
                         .fontDesign(.rounded)
                     
@@ -64,14 +64,17 @@ struct RhythmDetailView: View {
                         modelContext.delete(task)
                     }
                 })
-                //                .onMove(perform: { source, destination in
-                //                    var updatedTasksList = currentRhythm.tasks
-                //
-                //                    updatedTasksList.move(fromOffsets: source, toOffset: destination)
-                //                    for (index, task) in updatedTasksList.enumerated() {
-                //                        task.orderIndex = index
-                //                    }
-                //                })
+                .onMove(perform: { source, destination in
+                    var updatedTasksList = currentRhythm.tasks
+                    
+                    updatedTasksList.move(fromOffsets: source, toOffset: destination)
+                    currentRhythm.tasks.removeAll()
+                    currentRhythm.tasks.insert(contentsOf: updatedTasksList, at: 0)
+                    
+//                    for (index, task) in updatedTasksList.enumerated() {
+//                        task.orderIndex = index
+//                    }
+                })
                 
             }
             .listStyle(.plain)
