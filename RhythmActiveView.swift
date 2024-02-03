@@ -65,13 +65,15 @@ struct TimerView: View {
 
 #Preview {
     do {
-        let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try ModelContainer(for: TaskItem.self, configurations: configuration)
-        var task = TaskItem(name: "Shower", time: 40, perceivedDifficulty: 4, orderIndex: 1)
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try! ModelContainer(for: Rhythm.self, configurations: config)
+        
+        let task = TaskItem(name: "Shower", time: 40, perceivedDifficulty: 4)
+        
         return RhythmActiveView(task: task)
-    }
-    catch {
-        return Text("Failed to create preview")
+            .modelContainer(container)
     }
     
+    
+   
 }

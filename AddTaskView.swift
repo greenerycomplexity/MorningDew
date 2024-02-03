@@ -12,6 +12,7 @@ struct AddTaskView: View {
     @State private var name = ""
     @State private var minutes = 5
     @State private var perceivedDifficulty = 3
+    @Bindable var currentRhythm: Rhythm
     
     @Environment (\.dismiss) var dismiss
     @Environment (\.modelContext) var modelContext
@@ -38,7 +39,7 @@ struct AddTaskView: View {
                     }
                 }
                 
-
+                
                 
             }
             .navigationTitle("Add New Task")
@@ -52,15 +53,32 @@ struct AddTaskView: View {
                 
                 ToolbarItem (placement: .confirmationAction) {
                     Button("Save") {
-                        // Fetch the number of all items that contribute to the relative index ordering
-                        // Add filtering for which tasks belong to current routine here
-                        let descriptor = FetchDescriptor<TaskItem>()
+                        
+                        let rhythmName = currentRhythm.name
+                        let descriptor = FetchDescriptor<TaskItem>(
+                            predicate: #Predicate { taskItem in
+                                taskItem.rhythm?.name == rhythmName
+                            }
+                        )
+                        
                         let count = (try? modelContext.fetchCount(descriptor)) ?? 0
                         
-                        // Pass the next index to the new item
-                        let newTask = TaskItem(name: name, time: minutes, perceivedDifficulty: perceivedDifficulty, orderIndex: count)
-                        modelContext.insert(newTask)
+                        let newTask = TaskItem(name: name, time: minutes, perceivedDifficulty: perceivedDifficulty, rhythm: currentRhythm)
+                        
+                        currentRhythm.tasks.append(newTask)
                         dismiss()
+                        
+                        
+                        // Old version, without any filtering
+                        //                        // Fetch the number of all items that contribute to the relative index ordering
+                        //                        // Add filtering for which tasks belong to current routine here
+                        //                        let descriptor = FetchDescriptor<TaskItem>()
+                        //                        let count = (try? modelContext.fetchCount(descriptor)) ?? 0
+                        //
+                        //                        // Pass the next index to the new item
+                        //                        let newTask = TaskItem(name: name, time: minutes, perceivedDifficulty: perceivedDifficulty, orderIndex: count)
+                        //                        modelContext.insert(newTask)
+                        //                        dismiss()
                     }
                 }
             }
@@ -68,5 +86,16 @@ struct AddTaskView: View {
     }
 }
 #Preview {
-    AddTaskView()
+    
+    do {
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try! ModelContainer(for: Rhythm.self, configurations: config)
+        
+        let rhythm = Rhythm(name: "Morning Routine")
+        
+        return AddTaskView(currentRhythm: rhythm)
+            .modelContainer(container)
+    }
+    
+    
 }
