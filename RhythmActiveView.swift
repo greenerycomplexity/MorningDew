@@ -41,10 +41,10 @@ struct TimerView: View {
             Circle()
                 .stroke(Color.black, style: StrokeStyle(lineWidth: 2, lineCap: .butt, lineJoin: .miter, miterLimit: 0, dash: [dotLength, spaceLength], dashPhase: 0))
                 .frame(width: radius * 2, height: radius * 2)
-                .overlay(
-                    Circle()
-                        .stroke(Color.indigo, style: StrokeStyle( lineWidth: 10))
-                )
+//                .overlay(
+//                    Circle()
+//                        .stroke(Color.indigo, style: StrokeStyle( lineWidth: 10))
+//                )
             
             Text("Timer goes here")
         }

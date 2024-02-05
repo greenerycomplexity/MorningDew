@@ -11,7 +11,7 @@ import SwiftData
 struct RhythmDetailView: View {
     @Environment (\.modelContext) var modelContext
     @State private var showAddTaskView = false
-    var currentRhythm: Rhythm
+    @Bindable var currentRhythm: Rhythm
     
     var body: some View {
         VStack {
@@ -42,9 +42,10 @@ struct RhythmDetailView: View {
             }
             
             // Display the tasks in list view
-            
             List {
-                ForEach(currentRhythm.tasks, id: \.name) { task in
+                ForEach(currentRhythm.tasks.sorted(by: {
+                    $0.orderIndex < $1.orderIndex
+                }), id: \.self) { task in
                     HStack {
                         VStack (alignment: .leading) {
                             Text(task.name)
@@ -65,17 +66,14 @@ struct RhythmDetailView: View {
                     }
                 })
                 .onMove(perform: { source, destination in
-                    var updatedTasksList = currentRhythm.tasks
-                    
-                    updatedTasksList.move(fromOffsets: source, toOffset: destination)
-                    currentRhythm.tasks.removeAll()
-                    currentRhythm.tasks.insert(contentsOf: updatedTasksList, at: 0)
-                    
-//                    for (index, task) in updatedTasksList.enumerated() {
-//                        task.orderIndex = index
-//                    }
+                    for taskIndex in source {
+                        let moveTask = currentRhythm.tasks[taskIndex]
+                        
+                        currentRhythm.tasks.remove(at: taskIndex)
+                        
+                        currentRhythm.tasks.insert(moveTask, at: destination)
+                    }
                 })
-                
             }
             .listStyle(.plain)
             

@@ -42,9 +42,8 @@ struct AddRhythmView: View {
                             )
                     }
                 }
-                
-            
             }
+            .scrollDisabled(true)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
@@ -73,6 +72,8 @@ struct AddRhythmView: View {
                     }
                 }
             }
+            .navigationTitle("Add Rhythm")
+            .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showEmojiPicker) {
                 EmojiPickerView(chosenEmoji: $emoji)
             }
