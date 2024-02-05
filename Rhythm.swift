@@ -10,8 +10,9 @@ import SwiftData
 
 @Model
 class Rhythm {
-    var name: String = ""
+    var name: String
     var tasks = [TaskItem]()
+    var emoji: String
     
     var totalMinutes: Int {
         var minutes = 0
@@ -21,7 +22,8 @@ class Rhythm {
         return minutes
     }
     
-    init(name: String) {
+    init(name: String, emoji: String = AppData.defaultEmoji) {
         self.name = name
+        self.emoji = emoji
     }
 }

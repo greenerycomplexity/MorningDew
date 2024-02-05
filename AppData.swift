@@ -10,6 +10,7 @@ import SwiftData
 
 struct AppData {
     static let name = "MorningDew"
+    static let defaultEmoji = "🌻"
 }
 
 

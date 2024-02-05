@@ -27,7 +27,7 @@ struct ContentView: View {
                         ForEach(rhythms) { rhythm in
                             NavigationLink(value: rhythm) {
                                 HStack (spacing: 10) {
-                                    Text("🌻")
+                                    Text(rhythm.emoji)
                                         .font(.title)
                                     
                                     Text(rhythm.name)
@@ -70,7 +70,7 @@ struct ContentView: View {
                                         Image(systemName: "plus.circle")
                                             .font(.title3)
                                         
-                                        Text("Add Rhythm..")
+                                        Text("Add Rhythm")
                                             .font(.headline)
                                             .fontDesign(.rounded)
                                     }
@@ -80,7 +80,11 @@ struct ContentView: View {
                                     Spacer()
                                 }
                             }
+                            .sheet(isPresented: $showAddRhythmView) {
+                                AddRhythmView()
+                            }
                         }
+                        
                         
                     }
                     .scrollContentBackground(.hidden)
@@ -94,25 +98,21 @@ struct ContentView: View {
                             modelContext.insert(newRhythm)
                         }
                     })
-                    
-                    .sheet(isPresented: $showAddRhythmView) {
-                        AddRhythmView()
-                    }
-                    .toolbar {
-                        ToolbarItem(placement: .topBarLeading) {
-                            HStack (alignment: .bottom) {
-                                Image("dawn")
-                                    .resizable()
-                                    .scaledToFit()
-                                
-                                Text(AppData.name)
-                                    .font(.title3.bold())
-                                    .foregroundStyle(.white)
-                                    .fontDesign(.monospaced)
-                                
-                                Spacer()
-                            }
-                        }
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    HStack (alignment: .bottom) {
+                        Image("dawn")
+                            .resizable()
+                            .scaledToFit()
+                        
+                        Text(AppData.name)
+                            .font(.title3.bold())
+                            .foregroundStyle(.white)
+                            .fontDesign(.monospaced)
+                        
+                        Spacer()
                     }
                 }
             }

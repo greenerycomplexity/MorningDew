@@ -12,6 +12,9 @@ struct AddRhythmView: View {
     @Environment (\.modelContext) var modelContext
     @Environment (\.dismiss) var dismiss
     @State private var name = ""
+    @State private var emoji = AppData.defaultEmoji
+    @State private var showEmojiPicker = false
+
     
     @State private var showDuplicateNameAlert = false
     let addRhythmFailed = "Failed to save"
@@ -20,9 +23,36 @@ struct AddRhythmView: View {
     var body: some View {
         NavigationStack {
             Form {
-                TextField ("Add new rhythm", text: $name)
+                TextField ("Name", text: $name)
                 
-                Section {
+                HStack {
+                    Text("Choose an icon")
+                    Spacer()
+                    Button {
+                        showEmojiPicker = true
+                    } label: {
+                        Text(emoji)
+                            .font(.system(size: 40))
+                            .frame(minWidth: 80, minHeight: 80)
+                            .background(.black.opacity(0.8))
+                            .clipShape(Circle())
+                            .overlay (
+                                Circle()
+                                    .strokeBorder(.green, lineWidth: 5)
+                            )
+                    }
+                }
+                
+            
+            }
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+                
+                ToolbarItem(placement: .confirmationAction) {
                     Button ("Save") {
                         let descriptor = FetchDescriptor<Rhythm>(
                             predicate: #Predicate { rhythm in
@@ -34,22 +64,18 @@ struct AddRhythmView: View {
                         if count > 0 {
                             showDuplicateNameAlert = true
                         } else {
-                            let newRhythm = Rhythm(name: name)
-                            modelContext.insert(newRhythm)
+                            let newRhythm = Rhythm(name: name, emoji: emoji)
+                            withAnimation{
+                                modelContext.insert(newRhythm)
+                            }
                             dismiss()
                         }
                     }
                 }
             }
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
-                }
+            .sheet(isPresented: $showEmojiPicker) {
+                EmojiPickerView(chosenEmoji: $emoji)
             }
-            
-            
             
             .alert(addRhythmFailed, isPresented: $showDuplicateNameAlert) {
                 Button("Okay") {}
