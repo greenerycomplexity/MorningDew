@@ -90,8 +90,7 @@ struct RhythmDetailView: View {
         }
         .navigationTitle(currentRhythm.name)
         .navigationBarTitleDisplayMode(.inline)
-        .padding(.vertical)
-        .padding(.horizontal)
+        .padding()
         .sheet(isPresented: $showAddTaskView) {
             AddTaskView(currentRhythm: currentRhythm)
         }
