@@ -15,11 +15,11 @@ class Rhythm {
     var emoji: String
     
     var totalMinutes: Int {
-        var minutes = 0
+        var total = 0
         for task in tasks {
-            minutes += task.time
+            total += task.minutes
         }
-        return minutes
+        return total
     }
     
     init(name: String, tasks: [TaskItem] = [TaskItem](), emoji: String = AppData.defaultEmoji) {

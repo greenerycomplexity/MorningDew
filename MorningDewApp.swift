@@ -34,25 +34,25 @@ struct MorningDew: App {
             }
             
             let officeDayTasks = [
-                TaskItem(name: "Brush teeth", time: 3, perceivedDifficulty: 1, orderIndex: 0),
-                TaskItem(name: "Shower", time: 10, perceivedDifficulty: 2, orderIndex: 1),
-                TaskItem(name: "Make coffee", time: 5, perceivedDifficulty: 2, orderIndex: 2),
-                TaskItem(name: "Pick outfit", time: 7, perceivedDifficulty: 3, orderIndex: 3),
-                TaskItem(name: "Make bed", time: 3, perceivedDifficulty: 1, orderIndex: 4)
+                TaskItem(name: "Brush teeth", minutes: 3, perceivedDifficulty: 1, orderIndex: 0),
+                TaskItem(name: "Shower", minutes: 10, perceivedDifficulty: 2, orderIndex: 1),
+                TaskItem(name: "Make coffee", minutes: 5, perceivedDifficulty: 2, orderIndex: 2),
+                TaskItem(name: "Pick outfit", minutes: 7, perceivedDifficulty: 3, orderIndex: 3),
+                TaskItem(name: "Make bed", minutes: 3, perceivedDifficulty: 1, orderIndex: 4)
             ]
 
             let weekendTasks = [
-                TaskItem(name: "Drink a glass of water", time: 1, perceivedDifficulty: 1, orderIndex: 0),
-                TaskItem(name: "Have breakfast", time: 15, perceivedDifficulty: 2, orderIndex: 1),
-                TaskItem(name: "Yoga", time: 30, perceivedDifficulty: 4, orderIndex: 2),
-                TaskItem(name: "Meditate", time: 10, perceivedDifficulty: 3, orderIndex: 3),
-                TaskItem(name: "Journal", time: 15, perceivedDifficulty: 3, orderIndex: 4)
+                TaskItem(name: "Drink a glass of water", minutes: 1, perceivedDifficulty: 1, orderIndex: 0),
+                TaskItem(name: "Have breakfast", minutes: 15, perceivedDifficulty: 2, orderIndex: 1),
+                TaskItem(name: "Yoga", minutes: 30, perceivedDifficulty: 4, orderIndex: 2),
+                TaskItem(name: "Meditate", minutes: 10, perceivedDifficulty: 3, orderIndex: 3),
+                TaskItem(name: "Journal", minutes: 15, perceivedDifficulty: 3, orderIndex: 4)
             ]
 
             let wfhTasks = [
-                TaskItem(name: "Wash face", time: 3, perceivedDifficulty: 1, orderIndex: 0),
-                TaskItem(name: "Make coffee", time: 5, perceivedDifficulty: 2, orderIndex: 1),
-                TaskItem(name: "Have breakfast", time: 15, perceivedDifficulty: 2, orderIndex: 2)
+                TaskItem(name: "Wash face", minutes: 3, perceivedDifficulty: 1, orderIndex: 0),
+                TaskItem(name: "Make coffee", minutes: 5, perceivedDifficulty: 2, orderIndex: 1),
+                TaskItem(name: "Have breakfast", minutes: 15, perceivedDifficulty: 2, orderIndex: 2)
             ]
 
             officeDayRhythm.tasks.append(contentsOf: officeDayTasks)

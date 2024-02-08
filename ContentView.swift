@@ -123,5 +123,5 @@ struct ContentView: View {
 
 #Preview {
     return ContentView()
-        .modelContainer(DataController.previewContainer)
+        .modelContainer(AppData.previewContainer)
 }

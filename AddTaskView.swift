@@ -63,7 +63,7 @@ struct AddTaskView: View {
                         
                         let count = (try? modelContext.fetchCount(descriptor)) ?? 0
                         
-                        let newTask = TaskItem(name: name, time: minutes, perceivedDifficulty: perceivedDifficulty, orderIndex: count, rhythm: currentRhythm)
+                        let newTask = TaskItem(name: name, minutes: minutes, perceivedDifficulty: perceivedDifficulty, orderIndex: count, rhythm: currentRhythm)
                         
                         currentRhythm.tasks.append(newTask)
                         dismiss()

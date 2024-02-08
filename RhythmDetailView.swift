@@ -53,7 +53,7 @@ struct RhythmDetailView: View {
                                 .fontDesign(.default)
                                 .foregroundStyle(.primary)
                             
-                            Text("\(task.time) minutes")
+                            Text("\(task.minutes) minutes")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                         }
