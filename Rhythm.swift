@@ -11,8 +11,10 @@ import SwiftData
 @Model
 class Rhythm {
     var name: String
-    var tasks: [TaskItem]
     var emoji: String
+    
+    // If a Rhythm is deleted, then delete all tasks associated.
+    @Relationship(deleteRule: .cascade, inverse: \TaskItem.rhythm) var tasks: [TaskItem]
     
     var totalMinutes: Int {
         var total = 0

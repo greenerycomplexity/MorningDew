@@ -8,30 +8,24 @@
 import SwiftUI
 
 struct TimerView: View {
-    var taskItem: TaskItem
     @Bindable var rhythmManager: RhythmManager
-    
-    var endTime: Date
-    @State private var elapsed: Bool = false
     @State private var showElapsedAlert = false
     
+    private var currentTask: TaskItem
+    private var taskEndTime: Date
     
-    init(taskItem: TaskItem, rhythmManager: RhythmManager) {
-        self.taskItem = taskItem
+    init(rhythmManager: RhythmManager) {
         self.rhythmManager = rhythmManager
-        self.endTime = Date.now.addingTimeInterval(Double(taskItem.minutes) * 60)
+        self.currentTask = rhythmManager.currentTask
+        self.taskEndTime =  Date.now.addingTimeInterval(Double(currentTask.minutes) * 60 + 1)
     }
+    
     
     let timer = Timer
         .publish(every: 1, on: .main, in: .common)
         .autoconnect()
     
-//    func track() {
-//        if endTime >=
-//        
-//        
-//    }
-
+    
     var body: some View {
         ZStack {
             RadialGradient(colors: [.green, .teal], center: .topLeading, startRadius: .zero, endRadius: 500)
@@ -40,11 +34,11 @@ struct TimerView: View {
             // MARK: Display timer and task
             VStack {
                 
-                HStack {
-                    Text("Elapsed Time:")
+//                HStack {
+//                    Text("Elapsed Time:")
 //                    Text(rhythmManager.startTime, style:.timer)
-                }
-                .foregroundStyle(.secondary)
+//                }
+//                .foregroundStyle(.secondary)
                 
                 Spacer()
                 
@@ -55,18 +49,27 @@ struct TimerView: View {
                         }
                     
                     VStack {
-                        Text(endTime, style: .timer)
+                        Text(taskEndTime, style: .timer)
                             .font(.custom("SF Pro", size: 80, relativeTo: .largeTitle))
                             .fontDesign(.rounded)
                             .foregroundStyle(.white)
                     }
                 }
                 
-                Text(taskItem.name)
+                Text(currentTask.name)
                     .font(.title2)
                     .fontDesign(.rounded)
                     .foregroundStyle(.white)
                     .padding(.top)
+                
+                
+                
+                Button("Next Task") {
+                    rhythmManager.elapsed = true
+                    rhythmManager.next()
+                }
+                .buttonStyle(.borderedProminent)
+                .padding(.top)
                 
                 
                 // MARK: Rhythm Actions
@@ -77,10 +80,18 @@ struct TimerView: View {
                 Spacer()
             }
             .onReceive(timer, perform: { _ in
-                /*@START_MENU_TOKEN@*//*@PLACEHOLDER=code@*/ /*@END_MENU_TOKEN@*/
+                // If current time is later than endTime
+                if Date.now >= taskEndTime {
+                    rhythmManager.elapsed = true
+                    showElapsedAlert = true
+                } else {
+                    rhythmManager.elapsed = false
+                }
             })
             .alert("Timer Elapsed", isPresented: $showElapsedAlert) {
-                Button("Okay") {}
+                Button("Next Task") {
+                    rhythmManager.next()
+                }
             }
         }
     }
@@ -117,8 +128,8 @@ struct TimerProgressRing: View {
 }
 
 #Preview {
-    let task = TaskItem(name: "Shower", minutes: 40, orderIndex: 0)
-    let rhythmManager = RhythmManager()
-    return TimerView(taskItem: task, rhythmManager: rhythmManager)
+    let rhythm = Rhythm(name: "Morning Day")
+    let rhythmManager = RhythmManager(tasks: rhythm.tasks)
+    return TimerView(rhythmManager: rhythmManager)
         .modelContainer(AppData.previewContainer)
 }

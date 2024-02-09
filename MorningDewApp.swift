@@ -33,14 +33,23 @@ struct MorningDew: App {
                 container.mainContext.insert(rhythm)
             }
             
-            let officeDayTasks = [
-                TaskItem(name: "Brush teeth", minutes: 3, perceivedDifficulty: 1, orderIndex: 0),
-                TaskItem(name: "Shower", minutes: 10, perceivedDifficulty: 2, orderIndex: 1),
-                TaskItem(name: "Make coffee", minutes: 5, perceivedDifficulty: 2, orderIndex: 2),
-                TaskItem(name: "Pick outfit", minutes: 7, perceivedDifficulty: 3, orderIndex: 3),
-                TaskItem(name: "Make bed", minutes: 3, perceivedDifficulty: 1, orderIndex: 4)
-            ]
+//            let officeDayTasks = [
+//                TaskItem(name: "Brush teeth", minutes: 3, perceivedDifficulty: 1, orderIndex: 0),
+//                TaskItem(name: "Shower", minutes: 10, perceivedDifficulty: 2, orderIndex: 1),
+//                TaskItem(name: "Make coffee", minutes: 5, perceivedDifficulty: 2, orderIndex: 2),
+//                TaskItem(name: "Pick outfit", minutes: 7, perceivedDifficulty: 3, orderIndex: 3),
+//                TaskItem(name: "Make bed", minutes: 3, perceivedDifficulty: 1, orderIndex: 4)
+//            ]
 
+            
+            let officeDayTasks = [
+                TaskItem(name: "Brush teeth", minutes: 1, perceivedDifficulty: 1, orderIndex: 0),
+                TaskItem(name: "Shower", minutes: 2, perceivedDifficulty: 2, orderIndex: 1),
+                TaskItem(name: "Make coffee", minutes: 3, perceivedDifficulty: 2, orderIndex: 2),
+                TaskItem(name: "Pick outfit", minutes: 7, perceivedDifficulty: 3, orderIndex: 3),
+                TaskItem(name: "Make bed", minutes: 5, perceivedDifficulty: 1, orderIndex: 4)
+            ]
+            
             let weekendTasks = [
                 TaskItem(name: "Drink a glass of water", minutes: 1, perceivedDifficulty: 1, orderIndex: 0),
                 TaskItem(name: "Have breakfast", minutes: 15, perceivedDifficulty: 2, orderIndex: 1),

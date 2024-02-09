@@ -9,35 +9,28 @@ import SwiftUI
 import SwiftData
 
 struct RhythmActiveView: View {
-    @State var rhythmManager = RhythmManager()
+    var rhythm: Rhythm
+    @State private var rhythmManager: RhythmManager
+    
+    init(rhythm: Rhythm) {
+        self.rhythm = rhythm
+        rhythmManager = RhythmManager(tasks: rhythm.tasks)
+    }
+    
     // Add computed property here to manage colors and such on the timerViews
-
-    var task: TaskItem
     var body: some View {
-        VStack {
-            Text(task.name)
-                .font(.largeTitle.bold())
-                .fontDesign(.rounded)
-            
-//            TimerView(task: task)
-            
-            Spacer()
+        if rhythmManager.allCompleted {
+            Text("You're all done!")
+        } else {
+            TimerView(rhythmManager: rhythmManager)
         }
     }
 }
 
 
 #Preview {
-    do {
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try! ModelContainer(for: Rhythm.self, configurations: config)
-        
-        let task = TaskItem(name: "Shower", minutes: 40, perceivedDifficulty: 4, orderIndex: 1)
-        
-        return RhythmActiveView(task: task)
-            .modelContainer(container)
-    }
-    
-    
+    let rhythm = Rhythm(name: "Morning Day")
+    return RhythmActiveView(rhythm: rhythm)
+        .modelContainer(AppData.previewContainer)
    
 }

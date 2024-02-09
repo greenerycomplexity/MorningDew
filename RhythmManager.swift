@@ -20,24 +20,27 @@ enum RhythmState {
 class RhythmManager {
     private(set) var rhythmState: RhythmState
     private(set) var startTime: Date
-    private var endTime: Date
     
-    init() {
-        self.rhythmState = .getReady
+    var tasks: [TaskItem]
+    var currentTask: TaskItem
+    var elapsed: Bool = false
+    var allCompleted: Bool = false
+    
+    init(tasks: [TaskItem]) {
+        self.rhythmState = .active
         self.startTime = .now
+        self.tasks = tasks
         
-        // This is meant to be overwritten when the last task is finished
-        self.endTime = .now
+        currentTask = tasks.first!
+        self.tasks.remove(at: 0)
     }
     
-   
-//    var elapsedTime: Date {
-//        let diffComponents = Calendar.current.dateComponents([.minute, .second], from: startTime, to: Date.now)
-//        
-//        if let date = Calendar.current.date(from: diffComponents) {
-//            return date
-//        } else {
-//            return Date.now
-//        }
-//    }
+    func next() {
+        if tasks.isEmpty {
+            allCompleted = true
+        } else {
+            currentTask = tasks.remove(at: 0)
+            elapsed = false
+        }
+    }
 }

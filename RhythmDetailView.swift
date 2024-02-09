@@ -77,14 +77,18 @@ struct RhythmDetailView: View {
             }
             .listStyle(.plain)
             
-            // Start the routine
-            NavigationLink {
-                Text("Hello")
-            } label: {
-                Image(systemName: "play.circle.fill")
-                    .foregroundStyle(.green)
-                    .font(.system(size: 80))
+            
+            if currentRhythm.tasks.count > 0 {
+                // Start the routine
+                NavigationLink {
+                    RhythmActiveView(rhythm: currentRhythm)
+                } label: {
+                    Image(systemName: "play.circle.fill")
+                        .foregroundStyle(.green)
+                        .font(.system(size: 80))
+                }
             }
+           
         }
         .navigationTitle(currentRhythm.name)
         .navigationBarTitleDisplayMode(.inline)
