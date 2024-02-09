@@ -12,12 +12,14 @@ struct TimerView: View {
     @State private var showElapsedAlert = false
     
     private var currentTask: TaskItem
-    private var taskEndTime: Date
+    private var taskEndTime: Date {
+        Date.now.addingTimeInterval(Double(currentTask.minutes) * 60 + 1)
+    }
     
     init(rhythmManager: RhythmManager) {
         self.rhythmManager = rhythmManager
         self.currentTask = rhythmManager.currentTask
-        self.taskEndTime =  Date.now.addingTimeInterval(Double(currentTask.minutes) * 60 + 1)
+        totalTaskSeconds = Double(currentTask.minutes) * 60
     }
     
     
@@ -25,6 +27,14 @@ struct TimerView: View {
         .publish(every: 1, on: .main, in: .common)
         .autoconnect()
     
+    private var totalTaskSeconds: Double
+    @State private var taskElapsedSeconds = 0.0
+    @State private var progress = 0.0
+    
+    func resetProgress() {
+        taskElapsedSeconds = 0.0
+        progress = 0.0
+    }
     
     var body: some View {
         ZStack {
@@ -43,7 +53,7 @@ struct TimerView: View {
                 Spacer()
                 
                 ZStack {
-                    TimerProgressRing()
+                    TimerProgressRing(progress: $progress)
                         .containerRelativeFrame(.horizontal) {width, axis in
                             width * 0.8
                         }
@@ -66,7 +76,9 @@ struct TimerView: View {
                 
                 Button("Next Task") {
                     rhythmManager.elapsed = true
+                    resetProgress()
                     rhythmManager.next()
+                    
                 }
                 .buttonStyle(.borderedProminent)
                 .padding(.top)
@@ -86,6 +98,9 @@ struct TimerView: View {
                     showElapsedAlert = true
                 } else {
                     rhythmManager.elapsed = false
+                    taskElapsedSeconds += 1
+                    progress = taskElapsedSeconds / totalTaskSeconds
+                    print("Current progress: ", progress)
                 }
             })
             .alert("Timer Elapsed", isPresented: $showElapsedAlert) {
@@ -99,10 +114,9 @@ struct TimerView: View {
 
 
 struct TimerProgressRing: View {
-    @State private var progress = 0.0
+    @Binding var progress: Double
     
     // MARK: Progress Ring
-    
     let ringColor = Color.white.opacity(0.9)
     let width: Double = 10
     
@@ -119,16 +133,22 @@ struct TimerProgressRing: View {
                 .trim(from: 0.0, to: min(progress, 1.0))
                 .stroke(ringColor,style: StrokeStyle( lineWidth: width, lineCap: .round, lineJoin: .round))
                 .rotationEffect(.degrees(270))
-                .animation(.easeInOut(duration: 1.0), value: progress)
+                .animation(.easeInOut(duration: 2.0), value: progress)
         }
-        .onAppear(perform: {
-            progress = 0.9
-        })
     }
 }
 
 #Preview {
-    let rhythm = Rhythm(name: "Morning Day")
+    let rhythm = Rhythm(name: "Spring Day")
+    let tasks = [
+        TaskItem(name: "Shower", minutes: 10, perceivedDifficulty: 4, orderIndex: 1),
+        TaskItem(name: "Breakfast", minutes: 20, perceivedDifficulty: 2, orderIndex: 2),
+        TaskItem(name: "Water plants", minutes: 5, perceivedDifficulty: 4, orderIndex: 3),
+        TaskItem(name: "Pick outfit", minutes: 4, perceivedDifficulty: 5, orderIndex: 4)
+    ]
+    
+    rhythm.tasks.append(contentsOf: tasks)
+    
     let rhythmManager = RhythmManager(tasks: rhythm.tasks)
     return TimerView(rhythmManager: rhythmManager)
         .modelContainer(AppData.previewContainer)

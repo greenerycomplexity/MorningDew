@@ -31,7 +31,7 @@ class RhythmManager {
         self.startTime = .now
         self.tasks = tasks
         
-        currentTask = tasks.first!
+        currentTask = tasks[0]
         self.tasks.remove(at: 0)
     }
     
