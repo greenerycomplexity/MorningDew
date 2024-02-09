@@ -9,30 +9,22 @@ import SwiftUI
 
 struct TimerView: View {
     @Bindable var rhythmManager: RhythmManager
-    @State private var showElapsedAlert = false
-    
-    private var currentTask: TaskItem
-    private var taskEndTime: Date {
-        Date.now.addingTimeInterval(Double(currentTask.minutes) * 60 + 1)
-    }
+    @State private var elapsedSeconds = 0.0
+    @State private var progress = 0.0
+    private var taskEndTime: Date
     
     init(rhythmManager: RhythmManager) {
         self.rhythmManager = rhythmManager
-        self.currentTask = rhythmManager.currentTask
-        totalTaskSeconds = Double(currentTask.minutes) * 60
+        taskEndTime = Date.now.addingTimeInterval(Double(rhythmManager.currentTask.minutes) * 60 + 1)
     }
-    
-    
+
     let timer = Timer
         .publish(every: 1, on: .main, in: .common)
         .autoconnect()
     
-    private var totalTaskSeconds: Double
-    @State private var taskElapsedSeconds = 0.0
-    @State private var progress = 0.0
-    
-    func resetProgress() {
-        taskElapsedSeconds = 0.0
+    // For every new task that comes in, reset the progress ring
+    func resetProgressRing() {
+        elapsedSeconds = 0.0
         progress = 0.0
     }
     
@@ -43,13 +35,6 @@ struct TimerView: View {
             
             // MARK: Display timer and task
             VStack {
-                
-//                HStack {
-//                    Text("Elapsed Time:")
-//                    Text(rhythmManager.startTime, style:.timer)
-//                }
-//                .foregroundStyle(.secondary)
-                
                 Spacer()
                 
                 ZStack {
@@ -66,19 +51,16 @@ struct TimerView: View {
                     }
                 }
                 
-                Text(currentTask.name)
+                Text(rhythmManager.currentTask.name)
                     .font(.title2)
                     .fontDesign(.rounded)
                     .foregroundStyle(.white)
                     .padding(.top)
                 
-                
-                
                 Button("Next Task") {
                     rhythmManager.elapsed = true
-                    resetProgress()
+                    resetProgressRing()
                     rhythmManager.next()
-                    
                 }
                 .buttonStyle(.borderedProminent)
                 .padding(.top)
@@ -95,19 +77,12 @@ struct TimerView: View {
                 // If current time is later than endTime
                 if Date.now >= taskEndTime {
                     rhythmManager.elapsed = true
-                    showElapsedAlert = true
                 } else {
                     rhythmManager.elapsed = false
-                    taskElapsedSeconds += 1
-                    progress = taskElapsedSeconds / totalTaskSeconds
-                    print("Current progress: ", progress)
+                    elapsedSeconds += 1
+                    progress = elapsedSeconds / rhythmManager.currentTask.seconds
                 }
             })
-            .alert("Timer Elapsed", isPresented: $showElapsedAlert) {
-                Button("Next Task") {
-                    rhythmManager.next()
-                }
-            }
         }
     }
 }
@@ -142,9 +117,6 @@ struct TimerProgressRing: View {
     let rhythm = Rhythm(name: "Spring Day")
     let tasks = [
         TaskItem(name: "Shower", minutes: 10, perceivedDifficulty: 4, orderIndex: 1),
-        TaskItem(name: "Breakfast", minutes: 20, perceivedDifficulty: 2, orderIndex: 2),
-        TaskItem(name: "Water plants", minutes: 5, perceivedDifficulty: 4, orderIndex: 3),
-        TaskItem(name: "Pick outfit", minutes: 4, perceivedDifficulty: 5, orderIndex: 4)
     ]
     
     rhythm.tasks.append(contentsOf: tasks)
