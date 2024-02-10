@@ -26,32 +26,45 @@ struct RhythmActiveView: View {
                 RadialGradient(colors: [.yellow, .teal], center: .topLeading, startRadius: .zero, endRadius: 500)
                     .ignoresSafeArea()
                 
-                VStack {
+                VStack (spacing: 30) {
                     TimerView(rhythmManager: rhythmManager)
                     
                     Text(rhythmManager.currentTask.name)
-                        .font(.title2)
+                        .font(.largeTitle.bold())
                         .fontDesign(.rounded)
                         .foregroundStyle(.white)
-                        .padding(.top)
                     
-                    Button("Next Task") {
+                    Button("Done") {
                         rhythmManager.elapsed = true
                         rhythmManager.next()
                     }
                     .buttonStyle(.borderedProminent)
-                    .padding(.top)
+                    
+                    NavigationLink {
+                        // Add Break view in here later
+                        Text("Breathe with me for a minute!")
+                    } label: {
+                        Text("I need a break!")
+                    }
+                    
+                    Button("Quit", role: .destructive) {
+                        
+                    }
+                    .buttonStyle(.borderedProminent)
+                    
                 }
             }
             .onAppear(perform: {
                 rhythmManager.next()
             })
+            .navigationBarBackButtonHidden(true)
             
             // MARK: Rhythm Actions
             // Break
             // Skip
             // Mute music
         }
+        
     }
 }
 
