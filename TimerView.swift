@@ -27,7 +27,7 @@ struct TimerView: View {
                     Text(rhythmManager.taskEndTime, style: .timer)
                         .font(.custom("SF Pro", size: 80, relativeTo: .largeTitle))
                         .fontDesign(.rounded)
-                        .foregroundStyle(.primary)
+                        .foregroundStyle(.white)
                 }
             }
             .onReceive(timer, perform: { _ in
