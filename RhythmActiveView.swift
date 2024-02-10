@@ -27,7 +27,7 @@ struct RhythmActiveView: View {
                     .ignoresSafeArea()
                 
                 VStack {
-                    TimerView(task: rhythmManager.currentTask, elapsed: $rhythmManager.elapsed)
+                    TimerView(rhythmManager: rhythmManager)
                     
                     Text(rhythmManager.currentTask.name)
                         .font(.title2)

@@ -9,39 +9,23 @@ import SwiftUI
 
 // FIXME: Currently not counting down timer when used in RhythmActiveView
 struct TimerView: View {
-    var currentTask: TaskItem
-    private var taskEndTime: Date
-    @State private var elapsedSeconds = 0.0
-    @State private var progress = 0.0
-    @Binding var elapsed: Bool
-    
-    init(task: TaskItem, elapsed: Binding<Bool>) {
-        currentTask = task
-        _elapsed = elapsed
-        taskEndTime = Date.now.addingTimeInterval(Double(currentTask.minutes) * 60 + 1)
-    }
+    @Bindable var rhythmManager: RhythmManager
     
     let timer = Timer
         .publish(every: 1, on: .main, in: .common)
         .autoconnect()
     
-    // For every new task that comes in, reset the progress ring
-    mutating func resetProgressRing() {
-        elapsedSeconds = 0.0
-        progress = 0.0
-    }
-    
     var body: some View {
         ZStack {
             // MARK: Display timer and task
             ZStack {
-                TimerProgressRing(progress: $progress)
+                TimerProgressRing(progress: rhythmManager.progress)
                     .containerRelativeFrame(.horizontal) {width, axis in
                         width * 0.8
                     }
                 
                 VStack {
-                    Text(taskEndTime, style: .timer)
+                    Text(rhythmManager.taskEndTime, style: .timer)
                         .font(.custom("SF Pro", size: 80, relativeTo: .largeTitle))
                         .fontDesign(.rounded)
                         .foregroundStyle(.primary)
@@ -49,12 +33,12 @@ struct TimerView: View {
             }
             .onReceive(timer, perform: { _ in
                 // If current time is later than endTime
-                if Date.now >= taskEndTime {
-                    elapsed = true
+                if Date.now >= rhythmManager.taskEndTime {
+                    rhythmManager.elapsed = true
                 } else {
-                    elapsed = false
-                    elapsedSeconds += 1
-                    progress = elapsedSeconds / currentTask.seconds
+                    rhythmManager.elapsed = false
+                    rhythmManager.taskElapsedSeconds += 1
+                    rhythmManager.progress = rhythmManager.taskElapsedSeconds / rhythmManager.currentTask.seconds
                 }
             })
         }
@@ -63,7 +47,7 @@ struct TimerView: View {
 
 
 struct TimerProgressRing: View {
-    @Binding var progress: Double
+    var progress: Double
     
     let ringColor = Color.white.opacity(0.9)
     let width: Double = 10
@@ -87,8 +71,14 @@ struct TimerProgressRing: View {
 }
 
 #Preview {
-    let task = TaskItem(name: "Shower", minutes: 1, perceivedDifficulty: 4, orderIndex: 1)
+//    let task = TaskItem(name: "Shower", minutes: 1, perceivedDifficulty: 4, orderIndex: 1)
+    let tasks = [
+        TaskItem(name: "Shower", minutes: 10, perceivedDifficulty: 4, orderIndex: 1),
+        TaskItem(name: "Breakfast", minutes: 20, perceivedDifficulty: 2, orderIndex: 2),
+        TaskItem(name: "Water plants", minutes: 5, perceivedDifficulty: 4, orderIndex: 3),
+        TaskItem(name: "Pick outfit", minutes: 4, perceivedDifficulty: 5, orderIndex: 4)
+    ]
     
-    return TimerView(task: task, elapsed: .constant(false))
+    return TimerView(rhythmManager: RhythmManager(tasks: tasks))
         .modelContainer(AppData.previewContainer)
 }

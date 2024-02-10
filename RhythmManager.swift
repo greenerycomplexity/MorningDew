@@ -22,8 +22,6 @@ class RhythmManager {
     private(set) var startTime: Date = .now
     
     var tasks: [TaskItem]
-    var currentTask: TaskItem = AppData.taskItemExample
-    var elapsed: Bool = false
     var allCompleted: Bool = false
     
     init(tasks: [TaskItem]) {
@@ -31,12 +29,27 @@ class RhythmManager {
         self.tasks = tasks
     }
     
+    
+    var currentTask: TaskItem = AppData.taskItemExample
+    var taskElapsedSeconds = 0.0
+    var progress = 0.0
+    var elapsed: Bool = false
+    var taskEndTime: Date = Date.now
+    
+    // For every new task that comes in, reset the progress ring
+    func resetProgressRing() {
+        taskElapsedSeconds = 0.0
+        progress = 0.0
+    }
+    
     func next() {
         if tasks.isEmpty {
             allCompleted = true
         } else {
             currentTask = tasks.remove(at: 0)
+            taskEndTime = Date.now.addingTimeInterval(Double(currentTask.minutes) * 60 + 1)
             elapsed = false
+            resetProgressRing()
         }
     }
 }
