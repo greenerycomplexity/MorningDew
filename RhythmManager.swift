@@ -18,14 +18,13 @@ enum RhythmState {
 
 @Observable
 class RhythmManager {
-    private(set) var rhythmState: RhythmState
+    private(set) var rhythmState: RhythmState = .active
     private(set) var startTime: Date = .now
     
     var tasks: [TaskItem]
     var allCompleted: Bool = false
     
     init(tasks: [TaskItem]) {
-        self.rhythmState = .active
         self.tasks = tasks
     }
     
@@ -46,10 +45,22 @@ class RhythmManager {
         if tasks.isEmpty {
             allCompleted = true
         } else {
+            elapsed = false
             currentTask = tasks.remove(at: 0)
             taskEndTime = Date.now.addingTimeInterval(Double(currentTask.minutes) * 60 + 1)
-            elapsed = false
             resetProgressRing()
+        }
+    }
+    
+    func track() {
+        // If current time is later than endTime
+        if Date.now >= taskEndTime {
+            elapsed = true
+            next()
+        } else {
+            elapsed = false
+            taskElapsedSeconds += 1
+            progress = taskElapsedSeconds / (currentTask.seconds - 1)
         }
     }
 }

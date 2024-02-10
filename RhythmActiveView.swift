@@ -60,6 +60,16 @@ struct RhythmActiveView: View {
 
 #Preview {
     let rhythm = Rhythm(name: "Morning Day")
+    
+    let tasks = [
+        TaskItem(name: "Shower", minutes: 10, perceivedDifficulty: 4, orderIndex: 1),
+        TaskItem(name: "Breakfast", minutes: 20, perceivedDifficulty: 2, orderIndex: 2),
+        TaskItem(name: "Water plants", minutes: 5, perceivedDifficulty: 4, orderIndex: 3),
+        TaskItem(name: "Pick outfit", minutes: 4, perceivedDifficulty: 5, orderIndex: 4)
+    ]
+    
+    rhythm.tasks.append(contentsOf: tasks)
+    
     return RhythmActiveView(rhythm: rhythm)
         .modelContainer(AppData.previewContainer)
    

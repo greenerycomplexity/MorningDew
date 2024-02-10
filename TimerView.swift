@@ -7,17 +7,16 @@
 
 import SwiftUI
 
-// FIXME: Currently not counting down timer when used in RhythmActiveView
 struct TimerView: View {
     @Bindable var rhythmManager: RhythmManager
-    
+
     let timer = Timer
         .publish(every: 1, on: .main, in: .common)
         .autoconnect()
     
     var body: some View {
         ZStack {
-            // MARK: Display timer and task
+            // MARK: Display timer and progress ring
             ZStack {
                 TimerProgressRing(progress: rhythmManager.progress)
                     .containerRelativeFrame(.horizontal) {width, axis in
@@ -32,14 +31,7 @@ struct TimerView: View {
                 }
             }
             .onReceive(timer, perform: { _ in
-                // If current time is later than endTime
-                if Date.now >= rhythmManager.taskEndTime {
-                    rhythmManager.elapsed = true
-                } else {
-                    rhythmManager.elapsed = false
-                    rhythmManager.taskElapsedSeconds += 1
-                    rhythmManager.progress = rhythmManager.taskElapsedSeconds / rhythmManager.currentTask.seconds
-                }
+                rhythmManager.track()
             })
         }
     }
@@ -63,7 +55,7 @@ struct TimerProgressRing: View {
             // Colored Ring
             Circle()
                 .trim(from: 0.0, to: min(progress, 1.0))
-                .stroke(ringColor,style: StrokeStyle( lineWidth: width, lineCap: .round, lineJoin: .round))
+                .stroke(ringColor,style: StrokeStyle( lineWidth: width, lineCap: .round))
                 .rotationEffect(.degrees(270))
                 .animation(.easeInOut(duration: 2.0), value: progress)
         }
