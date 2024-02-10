@@ -107,15 +107,11 @@ struct RhythmDetailView: View {
 }
 
 #Preview {
-    do {
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try! ModelContainer(for: Rhythm.self, configurations: config)
-        
-        let rhythm = Rhythm(name: "Morning Routine")
-        
+    MainActor.assumeIsolated {
+        let container = AppData.previewContainer
+        let rhythm = AppData.rhythmExample
+        container.mainContext.insert(rhythm)
         return RhythmDetailView(currentRhythm: rhythm)
             .modelContainer(container)
     }
-    
-    
 }

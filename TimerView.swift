@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TimerView: View {
     @Bindable var rhythmManager: RhythmManager
-
+    
     let timer = Timer
         .publish(every: 1, on: .main, in: .common)
         .autoconnect()
@@ -63,14 +63,12 @@ struct TimerProgressRing: View {
 }
 
 #Preview {
-//    let task = TaskItem(name: "Shower", minutes: 1, perceivedDifficulty: 4, orderIndex: 1)
-    let tasks = [
-        TaskItem(name: "Shower", minutes: 10, perceivedDifficulty: 4, orderIndex: 1),
-        TaskItem(name: "Breakfast", minutes: 20, perceivedDifficulty: 2, orderIndex: 2),
-        TaskItem(name: "Water plants", minutes: 5, perceivedDifficulty: 4, orderIndex: 3),
-        TaskItem(name: "Pick outfit", minutes: 4, perceivedDifficulty: 5, orderIndex: 4)
-    ]
-    
-    return TimerView(rhythmManager: RhythmManager(tasks: tasks))
-        .modelContainer(AppData.previewContainer)
+    MainActor.assumeIsolated {
+        let container = AppData.previewContainer
+        let rhythm = AppData.rhythmExample
+        container.mainContext.insert(rhythm)
+        
+        return TimerView(rhythmManager: RhythmManager(tasks: rhythm.tasks))
+            .modelContainer(container)
+    }
 }

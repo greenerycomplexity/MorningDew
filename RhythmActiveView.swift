@@ -56,10 +56,12 @@ struct RhythmActiveView: View {
 }
 
 #Preview {
-    var rhythm = Rhythm(name: "Morning Fun")
-    
-    rhythm.tasks.append(TaskItem(name: "Shower", minutes: 1, orderIndex: 1))
-    
-    return RhythmActiveView(rhythm: rhythm)
-        .modelContainer(AppData.previewContainer)
+    MainActor.assumeIsolated {
+        let container = AppData.previewContainer
+        let rhythm = AppData.rhythmExample
+        container.mainContext.insert(rhythm)
+        
+        return RhythmActiveView(rhythm: rhythm)
+            .modelContainer(container)
+    }
 }

@@ -68,8 +68,6 @@ struct AppData {
         }
     }()
     
-    
-    
     // Used for SwiftData Previews
     static let previewContainer: ModelContainer = {
         do {
@@ -89,6 +87,7 @@ struct AppData {
             
             rhythm.tasks.append(contentsOf: tasks)
             return container
+            
         } catch {
             fatalError("Failed to create container")
         }
