@@ -22,10 +22,40 @@ struct RhythmActiveView: View {
         if rhythmManager.allCompleted {
             Text("You're all done!")
         } else {
-            TimerView(rhythmManager: rhythmManager)
+            ZStack {
+                RadialGradient(colors: [.green, .teal], center: .topLeading, startRadius: .zero, endRadius: 500)
+                    .ignoresSafeArea()
+                
+                VStack {
+                    TimerView(task: rhythmManager.currentTask, elapsed: $rhythmManager.elapsed)
+                    
+                    Text(rhythmManager.currentTask.name)
+                        .font(.title2)
+                        .fontDesign(.rounded)
+                        .foregroundStyle(.white)
+                        .padding(.top)
+                    
+                    Button("Next Task") {
+                        rhythmManager.elapsed = true
+                        rhythmManager.next()
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .padding(.top)
+                }
+            }
+            .onAppear(perform: {
+                rhythmManager.next()
+            })
+            
+            // MARK: Rhythm Actions
+            // Break
+            // Skip
+            // Mute music
         }
     }
 }
+
+
 
 
 #Preview {

@@ -7,80 +7,54 @@
 
 import SwiftUI
 
+// FIXME: Currently not counting down timer when used in RhythmActiveView
 struct TimerView: View {
-    @Bindable var rhythmManager: RhythmManager
+    var currentTask: TaskItem
+    private var taskEndTime: Date
     @State private var elapsedSeconds = 0.0
     @State private var progress = 0.0
-    private var taskEndTime: Date
+    @Binding var elapsed: Bool
     
-    init(rhythmManager: RhythmManager) {
-        self.rhythmManager = rhythmManager
-        taskEndTime = Date.now.addingTimeInterval(Double(rhythmManager.currentTask.minutes) * 60 + 1)
+    init(task: TaskItem, elapsed: Binding<Bool>) {
+        currentTask = task
+        _elapsed = elapsed
+        taskEndTime = Date.now.addingTimeInterval(Double(currentTask.minutes) * 60 + 1)
     }
-
+    
     let timer = Timer
         .publish(every: 1, on: .main, in: .common)
         .autoconnect()
     
     // For every new task that comes in, reset the progress ring
-    func resetProgressRing() {
+    mutating func resetProgressRing() {
         elapsedSeconds = 0.0
         progress = 0.0
     }
     
     var body: some View {
         ZStack {
-            RadialGradient(colors: [.green, .teal], center: .topLeading, startRadius: .zero, endRadius: 500)
-                .ignoresSafeArea()
-            
             // MARK: Display timer and task
-            VStack {
-                Spacer()
-                
-                ZStack {
-                    TimerProgressRing(progress: $progress)
-                        .containerRelativeFrame(.horizontal) {width, axis in
-                            width * 0.8
-                        }
-                    
-                    VStack {
-                        Text(taskEndTime, style: .timer)
-                            .font(.custom("SF Pro", size: 80, relativeTo: .largeTitle))
-                            .fontDesign(.rounded)
-                            .foregroundStyle(.white)
+            ZStack {
+                TimerProgressRing(progress: $progress)
+                    .containerRelativeFrame(.horizontal) {width, axis in
+                        width * 0.8
                     }
+                
+                VStack {
+                    Text(taskEndTime, style: .timer)
+                        .font(.custom("SF Pro", size: 80, relativeTo: .largeTitle))
+                        .fontDesign(.rounded)
+                        .foregroundStyle(.primary)
                 }
-                
-                Text(rhythmManager.currentTask.name)
-                    .font(.title2)
-                    .fontDesign(.rounded)
-                    .foregroundStyle(.white)
-                    .padding(.top)
-                
-                Button("Next Task") {
-                    rhythmManager.elapsed = true
-                    resetProgressRing()
-                    rhythmManager.next()
-                }
-                .buttonStyle(.borderedProminent)
-                .padding(.top)
-                
-                
-                // MARK: Rhythm Actions
-                // Break
-                // Skip
-                // Mute music
-                
-                Spacer()
             }
             .onReceive(timer, perform: { _ in
                 // If current time is later than endTime
                 if Date.now >= taskEndTime {
-                    rhythmManager.elapsed = true
+                    elapsed = true
                 } else {
-                    rhythmManager.elapsed = false
+                    elapsed = false
                     elapsedSeconds += 1
-                    progress = elapsedSeconds / rhythmManager.currentTask.seconds
+                    progress = elapsedSeconds / currentTask.seconds
                 }
             })
         }
@@ -91,7 +65,6 @@ struct TimerView: View {
 struct TimerProgressRing: View {
     @Binding var progress: Double
     
-    // MARK: Progress Ring
     let ringColor = Color.white.opacity(0.9)
     let width: Double = 10
     
@@ -114,14 +87,8 @@ struct TimerProgressRing: View {
 }
 
 #Preview {
-    let rhythm = Rhythm(name: "Spring Day")
-    let tasks = [
-        TaskItem(name: "Shower", minutes: 10, perceivedDifficulty: 4, orderIndex: 1),
-    ]
+    let task = TaskItem(name: "Shower", minutes: 1, perceivedDifficulty: 4, orderIndex: 1)
     
-    rhythm.tasks.append(contentsOf: tasks)
-    
-    let rhythmManager = RhythmManager(tasks: rhythm.tasks)
-    return TimerView(rhythmManager: rhythmManager)
+    return TimerView(task: task, elapsed: .constant(false))
         .modelContainer(AppData.previewContainer)
 }

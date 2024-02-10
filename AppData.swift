@@ -36,4 +36,6 @@ struct AppData {
             fatalError("Failed to create container")
         }
     }()
+    
+    static let taskItemExample: TaskItem = TaskItem(name: "Shower", minutes: 10, orderIndex: 0)
 }

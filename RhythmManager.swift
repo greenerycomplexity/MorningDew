@@ -19,20 +19,16 @@ enum RhythmState {
 @Observable
 class RhythmManager {
     private(set) var rhythmState: RhythmState
-    private(set) var startTime: Date
+    private(set) var startTime: Date = .now
     
     var tasks: [TaskItem]
-    var currentTask: TaskItem
+    var currentTask: TaskItem = AppData.taskItemExample
     var elapsed: Bool = false
     var allCompleted: Bool = false
     
     init(tasks: [TaskItem]) {
         self.rhythmState = .active
-        self.startTime = .now
         self.tasks = tasks
-        
-        currentTask = tasks[0]
-        self.tasks.remove(at: 0)
     }
     
     func next() {
