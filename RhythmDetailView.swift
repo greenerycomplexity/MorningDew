@@ -12,96 +12,113 @@ struct RhythmDetailView: View {
     @Environment (\.modelContext) var modelContext
     @State private var showAddTaskView = false
     @Bindable var currentRhythm: Rhythm
+    @State private var isActive: Bool = false
     
     var body: some View {
-        VStack {
-            // Rhythm length (in minutes)
-            // Button to add new tasks
-            HStack {
-                VStack (alignment: .leading) {
-                    Text("Time to complete")
-                        .font(.title3.bold())
-                        .fontDesign(.rounded)
+        if !isActive {
+            VStack {
+                // Rhythm length (in minutes)
+                // Button to add new tasks
+                HStack {
+                    VStack (alignment: .leading) {
+                        Text("Time to complete")
+                            .font(.title3.bold())
+                            .fontDesign(.rounded)
+                        
+                        
+                        Text("\(currentRhythm.totalMinutes) minutes")
+                            .font(.largeTitle.bold())
+                            .fontDesign(.rounded)
+                        
+                    }
                     
+                    Spacer()
                     
-                    Text("\(currentRhythm.totalMinutes) minutes")
-                        .font(.largeTitle.bold())
-                        .fontDesign(.rounded)
-                    
+                    Button {
+                        showAddTaskView = true
+                    } label: {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.largeTitle)
+                            .foregroundStyle(.green)
+                    }
                 }
                 
-                Spacer()
-                
-                Button {
-                    showAddTaskView = true
-                } label: {
-                    Image(systemName: "plus.circle.fill")
-                        .font(.largeTitle)
-                        .foregroundStyle(.green)
-                }
-            }
-            
-            // Display the tasks in list view
-            List {
-                ForEach(currentRhythm.tasks.sorted(by: {
-                    $0.orderIndex < $1.orderIndex
-                }), id: \.self) { task in
-                    HStack {
-                        VStack (alignment: .leading) {
-                            Text(task.name)
-                                .font(.title3.bold())
-                                .fontDesign(.default)
-                                .foregroundStyle(.primary)
-                            
-                            Text("\(task.minutes) minutes")
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
+                // Display the tasks in list view
+                List {
+                    ForEach(currentRhythm.tasks.sorted(by: {
+                        $0.orderIndex < $1.orderIndex
+                    }), id: \.self) { task in
+                        HStack {
+                            VStack (alignment: .leading) {
+                                Text(task.name)
+                                    .font(.title3.bold())
+                                    .fontDesign(.default)
+                                    .foregroundStyle(.primary)
+                                
+                                Text("\(task.minutes) minutes")
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                            }
                         }
                     }
+                    .onDelete(perform: { indexSet in
+                        for taskIndex in indexSet {
+                            let task = currentRhythm.tasks[taskIndex]
+                            modelContext.delete(task)
+                        }
+                    })
+                    .onMove(perform: { source, destination in
+                        for taskIndex in source {
+                            let moveTask = currentRhythm.tasks[taskIndex]
+                            
+                            currentRhythm.tasks.remove(at: taskIndex)
+                            
+                            currentRhythm.tasks.insert(moveTask, at: destination)
+                        }
+                    })
                 }
-                .onDelete(perform: { indexSet in
-                    for taskIndex in indexSet {
-                        let task = currentRhythm.tasks[taskIndex]
-                        modelContext.delete(task)
-                    }
-                })
-                .onMove(perform: { source, destination in
-                    for taskIndex in source {
-                        let moveTask = currentRhythm.tasks[taskIndex]
-                        
-                        currentRhythm.tasks.remove(at: taskIndex)
-                        
-                        currentRhythm.tasks.insert(moveTask, at: destination)
-                    }
-                })
-            }
-            .listStyle(.plain)
-            
-            
-            if currentRhythm.tasks.count > 0 {
-                // Start the routine
-                NavigationLink {
-                    RhythmActiveView(rhythm: currentRhythm)
-                } label: {
+                .listStyle(.plain)
+                
+                
+                if currentRhythm.tasks.count > 0 {
+                    // Start the routine
                     Image(systemName: "play.circle.fill")
                         .foregroundStyle(.green)
                         .font(.system(size: 80))
+                        .onTapGesture(perform: {
+                            withAnimation {
+                                isActive = true
+                            }
+                        })
+                    
+                    
+                    
+                    //                NavigationLink {
+                    //                    RhythmActiveView(rhythm: currentRhythm)
+                    //                } label: {
+                    //                    Image(systemName: "play.circle.fill")
+                    //                        .foregroundStyle(.green)
+                    //                        .font(.system(size: 80))
+                    //                }
+                }
+                
+            }
+            .navigationTitle(currentRhythm.name)
+            .navigationBarTitleDisplayMode(.inline)
+            .padding()
+            .sheet(isPresented: $showAddTaskView) {
+                AddTaskView(currentRhythm: currentRhythm)
+            }
+            .toolbar {
+                if currentRhythm.tasks.count > 0 {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        EditButton()
+                    }
                 }
             }
-           
-        }
-        .navigationTitle(currentRhythm.name)
-        .navigationBarTitleDisplayMode(.inline)
-        .padding()
-        .sheet(isPresented: $showAddTaskView) {
-            AddTaskView(currentRhythm: currentRhythm)
-        }
-        .toolbar {
-            if currentRhythm.tasks.count > 0 {
-                ToolbarItem(placement: .topBarTrailing) {
-                    EditButton()
-                }
-            }
+            .transition(.asymmetric(insertion:  .scale, removal: .scale))
+        } else {
+            RhythmActiveView(rhythm: currentRhythm)
         }
     }
 }

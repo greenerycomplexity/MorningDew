@@ -33,106 +33,103 @@ struct RhythmActiveView: View {
     
     // Add computed property here to manage colors and such on the timerViews
     var body: some View {
-        NavigationStack {
-            if rhythmManager.allCompleted {
-                Text("You're all done!")
-            } else {
-                ZStack {
-//                    LinearGradient(colors: [.red,.orange,.yellow], startPoint: .top, endPoint: .bottom)
-//                        .ignoresSafeArea()
-//                    
+        if rhythmManager.allCompleted {
+            Text("You're all done!")
+        } else {
+            ZStack {
+                //                    LinearGradient(colors: [.red,.orange,.yellow], startPoint: .top, endPoint: .bottom)
+                //                        .ignoresSafeArea()
+                //                    
+                
+                //                    LinearGradient(colors: [.yellow, .orange], startPoint: .top, endPoint: .bottom)
+                //                        .ignoresSafeArea()
+                //                    
+                LinearGradient(colors: [.teal, .green], startPoint: .top, endPoint: .bottom)
+                    .ignoresSafeArea()
+                
+                
+                VStack (spacing: 30) {
+                    Spacer()
+                    TimerView(rhythmManager: rhythmManager)
                     
-//                    LinearGradient(colors: [.yellow, .orange], startPoint: .top, endPoint: .bottom)
-//                        .ignoresSafeArea()
-//                    
-                    LinearGradient(colors: [.teal, .green], startPoint: .top, endPoint: .bottom)
-                        .ignoresSafeArea()
+                    Text(rhythmManager.currentTask.name)
+                        .font(.largeTitle.bold())
+                        .fontDesign(.rounded)
+                        .foregroundStyle(.white)
                     
-                    
-                    VStack (spacing: 30) {
-                        Spacer()
-                        TimerView(rhythmManager: rhythmManager)
+                    Spacer()
+                    HStack (alignment: .bottom, spacing: 30 ) {
                         
-                        Text(rhythmManager.currentTask.name)
-                            .font(.largeTitle.bold())
-                            .fontDesign(.rounded)
-                            .foregroundStyle(.white)
-                        
-                        Spacer()
-                        HStack (alignment: .bottom, spacing: 30 ) {
+                        Button {
                             
-                            Button {
-                            
-                            } label: {
-                                VStack {
-                                    Image(systemName: "speaker.slash")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 30, height: 30)
-                                        .foregroundStyle(.white)
-                                        .padding(15)
-                                        .background(.thinMaterial)
-                                        .clipShape(Circle())
-                                    
-                                    Text("Mute")
-                                        .foregroundStyle(.white)
-                                        .font(.headline)
-                                }
-                            }
-                            
-                            NavigationLink {
-                                // Add Break view in here later
-                                Text("Breathe with me for a minute!")
-                            } label: {
-                                VStack {
-                                    Image(.lotus)
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 60)
-                                        .padding()
-                                        .background(.black.opacity(0.7).gradient)
-                                        .clipShape(Circle())
-                                    
-                                    Text("Breathe")
-                                        .foregroundStyle(.white)
-                                        .font(.headline)
-                                }
-                            }
-                            
-                            Button {
-                                rhythmManager.elapsed = true
-                                rhythmManager.next()
-                            } label: {
-                                VStack {
-                                    Image(systemName: "checkmark.gobackward")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .foregroundStyle(.white)
-                                        .frame(width: 30, height: 30)
-                                        .padding(15)
-                                        .background(.thinMaterial)
-                                        .clipShape(Circle())
-                                    
-                                    Text("Done")
-                                        .foregroundStyle(.white)
-                                        .font(.headline)
-                                }
+                        } label: {
+                            VStack {
+                                Image(systemName: "speaker.slash")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 30, height: 30)
+                                    .foregroundStyle(.white)
+                                    .padding(15)
+                                    .background(.thinMaterial)
+                                    .clipShape(Circle())
+                                
+                                Text("Mute")
+                                    .foregroundStyle(.white)
+                                    .font(.headline)
                             }
                         }
-                        Spacer()
+                        
+                        NavigationLink {
+                            // Add Break view in here later
+                            Text("Breathe with me for a minute!")
+                        } label: {
+                            VStack {
+                                Image(.lotus)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 60)
+                                    .padding()
+                                    .background(.black.opacity(0.7).gradient)
+                                    .clipShape(Circle())
+                                
+                                Text("Breathe")
+                                    .foregroundStyle(.white)
+                                    .font(.headline)
+                            }
+                        }
+                        
+                        Button {
+                            rhythmManager.elapsed = true
+                            rhythmManager.next()
+                        } label: {
+                            VStack {
+                                Image(systemName: "checkmark.gobackward")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .foregroundStyle(.white)
+                                    .frame(width: 30, height: 30)
+                                    .padding(15)
+                                    .background(.thinMaterial)
+                                    .clipShape(Circle())
+                                
+                                Text("Done")
+                                    .foregroundStyle(.white)
+                                    .font(.headline)
+                            }
+                        }
                     }
+                    Spacer()
                 }
-                .onAppear(perform: {
-                    rhythmManager.next()
-                })
-                .navigationBarBackButtonHidden(true)
-                //            .transition(.scale)
-                // MARK: Rhythm Actions
-                // Break
-                // Skip
-                // Mute music
             }
-            
+            .onAppear(perform: {
+                rhythmManager.next()
+            })
+            .navigationBarBackButtonHidden(true)
+//            .transition(.scale(scale: .zero, anchor: .bottom))
+            // MARK: Rhythm Actions
+            // Break
+            // Skip
+            // Mute music
         }
     }
 }
