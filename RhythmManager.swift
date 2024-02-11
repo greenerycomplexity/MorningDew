@@ -18,7 +18,7 @@ enum RhythmState {
 
 @Observable
 class RhythmManager {
-    private(set) var rhythmState: RhythmState = .active
+    var rhythmState: RhythmState = .active
     private(set) var startTime: Date = .now
     
     var tasks: [TaskItem]
