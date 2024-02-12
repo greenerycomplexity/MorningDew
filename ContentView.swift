@@ -73,8 +73,10 @@ struct ContentView: View {
                                         Text("Add Rhythm")
                                             .font(.headline)
                                             .fontDesign(.rounded)
+                                            
                                     }
                                     .padding(10)
+                                    .foregroundStyle(.green)
                                     .background(.white)
                                     .clipShape(Capsule())
                                     Spacer()

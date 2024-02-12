@@ -24,6 +24,10 @@ class Rhythm {
         return total
     }
     
+    var totalSeconds: Int {
+        totalMinutes * 60
+    }
+    
     init(name: String, tasks: [TaskItem] = [TaskItem](), emoji: String = AppData.defaultEmoji) {
         self.name = name
         self.tasks = tasks
