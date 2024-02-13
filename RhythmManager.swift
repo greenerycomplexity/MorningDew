@@ -47,7 +47,7 @@ class RhythmManager {
         } else {
             elapsed = false
             currentTask = tasks.remove(at: 0)
-            taskEndTime = Date.now.addingTimeInterval(Double(currentTask.minutes) * 60 + 1)
+            taskEndTime = Date.now.addingTimeInterval(currentTask.seconds + 1)
             resetProgressRing()
         }
     }

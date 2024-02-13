@@ -11,7 +11,7 @@ import SwiftData
 @Model
 class TaskItem {
     var name: String
-    var minutes: Int
+    var minutes: Double
     var perceivedDifficulty: Int
     var orderIndex: Int
     var rhythm: Rhythm?
@@ -21,7 +21,7 @@ class TaskItem {
     }
 
     
-    init(name: String, minutes: Int, perceivedDifficulty: Int = 3, orderIndex: Int, rhythm: Rhythm? = nil) {
+    init(name: String, minutes: Double, perceivedDifficulty: Int = 3, orderIndex: Int, rhythm: Rhythm? = nil) {
         self.name = name
         self.minutes = minutes
         self.perceivedDifficulty = perceivedDifficulty

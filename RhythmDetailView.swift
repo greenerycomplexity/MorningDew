@@ -28,7 +28,7 @@ struct RhythmDetailView: View {
     // }
     
     private var estimatedEndTime: Date {
-        Calendar.current.date(byAdding: .minute, value: currentRhythm.totalMinutes, to: Date.now) ?? .now
+        Calendar.current.date(byAdding: .second, value: currentRhythm.totalSeconds, to: Date.now) ?? .now
     }
     
     @State private var showCellAnimation = false
@@ -46,7 +46,7 @@ struct RhythmDetailView: View {
                     // Rhythm length (in minutes)
                     // Button to add new tasks
                     HStack {
-                        Text("⏱️ \(currentRhythm.totalMinutes) minutes")
+                        Text("⏱️ \(currentRhythm.totalMinutes.formatted()) minutes")
                             .font(.largeTitle.bold())
                             .fontDesign(.rounded)
                         Spacer()
@@ -157,15 +157,20 @@ struct TaskListCell: View {
         HStack {
             VStack(alignment: .leading) {
                 Text(task.name)
+                    .foregroundStyle(.primary)
                     .font(.title2.bold())
                     .fontDesign(.default)
-                    .foregroundStyle(.primary)
                 
-                // Text("\(task.minutes) minutes")
-                Text("^[\(task.minutes) minute](inflect:true)")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                if task.minutes == 1.0 {
+                    Text("\(task.minutes.formatted()) minute")
+                        .foregroundStyle(.secondary)
+                } else {
+                    Text("\(task.minutes.formatted()) minutes")
+                        .foregroundStyle(.secondary)
+                }
+                // Text("^[\(task.minutes.formatted()) minute](inflect:true)")
             }
+            .font(.subheadline)
             .padding(.horizontal)
             
             Spacer()

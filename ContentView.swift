@@ -38,7 +38,7 @@ struct ContentView: View {
                                     Spacer()
                                     
                                     VStack {
-                                        Text("\(rhythm.totalMinutes)")
+                                        Text("\(rhythm.totalMinutes.formatted())")
                                             .font(.title2.bold())
                                             .fontWeight(.heavy)
                                         

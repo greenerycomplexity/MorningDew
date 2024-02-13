@@ -18,16 +18,16 @@ class Rhythm {
     
     var tasks: [TaskItem]
     
-    var totalMinutes: Int {
-        var total = 0
+    var totalMinutes: Double {
+        var minutes = 0.0
         for task in tasks {
-            total += task.minutes
+            minutes += task.minutes
         }
-        return total
+        return minutes
     }
     
     var totalSeconds: Int {
-        totalMinutes * 60
+        return Int(totalMinutes * 60)
     }
     
     init(name: String, tasks: [TaskItem] = [TaskItem](), emoji: String = AppData.defaultEmoji) {
