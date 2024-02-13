@@ -14,6 +14,19 @@ struct RhythmDetailView: View {
     @Bindable var currentRhythm: Rhythm
     @State private var isActive: Bool = false
     
+    
+    // @Query var tasks: [TaskItem]
+    // 
+    // init(currentRhythm: Rhythm) {
+    //     self.currentRhythm = currentRhythm
+    //     let currentRhythmID = currentRhythm.persistentModelID
+    //     
+    //     _tasks = Query(
+    //         filter: #Predicate<TaskItem> { task in
+    //             task.rhythm?.persistentModelID == currentRhythmID
+    //         }, sort: \TaskItem.name, order: .reverse)
+    // }
+    
     private var estimatedEndTime: Date {
         Calendar.current.date(byAdding: .minute, value: currentRhythm.totalMinutes, to: Date.now) ?? .now
     }
@@ -25,36 +38,20 @@ struct RhythmDetailView: View {
     
     var body: some View {
         ZStack {
-            LinearGradient(colors: [.cyan, .teal, .yellow], startPoint: .top, endPoint: .bottom)
+            RadialGradient(colors: [.green, .white], center: .bottom, startRadius: .zero, endRadius: 1000)
                 .ignoresSafeArea()
+            
             if !isActive {
                 VStack {
                     // Rhythm length (in minutes)
                     // Button to add new tasks
                     HStack {
-                        VStack(alignment: .leading) {
-                            Text("Time to complete")
-                                .font(.title3.bold())
-                                .fontDesign(.rounded)
-                            
-                            
-                            Text("\(currentRhythm.totalMinutes) minutes")
-                                .font(.largeTitle.bold())
-                                .fontDesign(.rounded)
-                            
-                        }
-                        
-                        
+                        Text("⏱️ \(currentRhythm.totalMinutes) minutes")
+                            .font(.largeTitle.bold())
+                            .fontDesign(.rounded)
                         Spacer()
-                        
-                        Button {
-                            showAddTaskView = true
-                        } label: {
-                            Image(systemName: "plus.circle.fill")
-                                .font(.largeTitle)
-                                .foregroundStyle(.white)
-                        }
                     }
+                    .padding(.horizontal)
                     
                     // Display the tasks in list view
                     List {
@@ -90,15 +87,20 @@ struct RhythmDetailView: View {
                     .scrollIndicators(.hidden)
                     
                     // Start Suggesstion
+                    // Text("""
+                    // If you start now,
+                    // you'll be ready by **\(estimatedEndTime.formatted(date: .omitted, time: .shortened))**
+                    // """)
+                    
                     Text("""
-                    If you start now,
-                    you'll be ready by **\(estimatedEndTime.formatted(date: .omitted, time: .shortened))**
+                    Start now, 
+                    and be ready by **\(estimatedEndTime.formatted(date: .omitted, time: .shortened))**
                     """)
                     .multilineTextAlignment(.center)
                     .padding()
                     .opacity(suggestStart ? 1.0 : 0)
                     .offset(y: suggestStart ? 0 : 30.0)
-                    
+                    .foregroundStyle(.primary)
                     
                     if currentRhythm.tasks.count > 0 {
                         // Start the routine
@@ -116,27 +118,27 @@ struct RhythmDetailView: View {
                 }
                 .navigationTitle(currentRhythm.name)
                 .navigationBarTitleDisplayMode(.inline)
-                .padding()
+                // .padding()
                 .sheet(isPresented: $showAddTaskView) {
                     AddTaskView(currentRhythm: currentRhythm)
                 }
                 .toolbar {
-                    if currentRhythm.tasks.count > 0 {
                         ToolbarItem(placement: .topBarTrailing) {
-                            EditButton()
+                            Button ("Add Task") {
+                                showAddTaskView = true
+                            }
                         }
-                    }
                 }
                 .onAppear(perform: {
                     withAnimation(.easeIn(duration: 0.8).delay(3.5)) {
                         suggestStart = true
                     }
                     
-                    // Because onAppear might execute too early, 
+                    // Because onAppear might execute too early,
                     // before the List view is fully initialized and ready for animation
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                           showCellAnimation = true
-                       }
+                        showCellAnimation = true
+                    }
                 })
                 
                 // For the RhythmActiveView to show up nicely later
@@ -152,7 +154,8 @@ struct TaskListCell: View {
     var task: TaskItem
     
     var body: some View {
-            VStack(alignment: .center) {
+        HStack {
+            VStack(alignment: .leading) {
                 Text(task.name)
                     .font(.title2.bold())
                     .fontDesign(.default)
@@ -163,9 +166,14 @@ struct TaskListCell: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
+            .padding(.horizontal)
+            
+            Spacer()
+        }
         .padding(.vertical)
         .frame(maxWidth: .infinity)
         .background(.thinMaterial)
+        .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 15))
     }
 }
