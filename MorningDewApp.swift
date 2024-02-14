@@ -4,10 +4,16 @@ import SwiftData
 @main
 @MainActor
 struct MorningDew: App {
+    @AppStorage("isOnboarding") var isOnboarding: Bool = true
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .modelContainer(AppData.appContainer)
+            if isOnboarding {
+                OnboardingView()
+            } else {
+                ContentView()
+                    .modelContainer(AppData.appContainer)
+            }
         }
     }
 }
