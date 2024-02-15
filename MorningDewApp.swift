@@ -1,5 +1,5 @@
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 @main
 @MainActor
@@ -8,12 +8,16 @@ struct MorningDew: App {
 
     var body: some Scene {
         WindowGroup {
-            if isOnboarding {
-                OnboardingView()
-            } else {
-                ContentView()
-                    .modelContainer(AppData.appContainer)
+            ZStack {
+                if isOnboarding {
+                    OnboardingView()
+                } else {
+                    ContentView()
+                        .modelContainer(AppData.appContainer)
+                        .transition(.opacity)
+                }
             }
+            .animation(.default, value: isOnboarding)
         }
     }
 }
