@@ -76,8 +76,11 @@ struct OnboardingEmpathiseView: View {
             .foregroundStyle(.white)
             .offset(y: showText ? 0 : 20)
             .padding(.bottom, 100)
+            
 
-            Button {} label: {
+            Button {
+                SoundPlayer().play(file: "gasp.wav")
+            } label: {
                 Text("Tap to Gasp")
                     .foregroundStyle(.white)
                     .font(.title3.bold())
@@ -88,6 +91,7 @@ struct OnboardingEmpathiseView: View {
                     .scaleEffect(showGaspButton ? 1 : 0)
                     .animation(.spring(duration: 0.4, bounce: 0.6).delay(delay * 4), value: showGaspButton)
             }
+            Spacer()
             Spacer()
         }
         .padding(.horizontal, 20)

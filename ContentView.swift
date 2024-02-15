@@ -117,6 +117,16 @@ struct ContentView: View {
                         Spacer()
                     }
                 }
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Reset Onboarding") {
+                        @AppStorage("isOnboarding") var isOnboarding: Bool?
+                        
+                        isOnboarding = true
+                    }
+                    .foregroundStyle(.white)
+                    
+                }
             }
         }
     }
