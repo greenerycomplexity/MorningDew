@@ -7,22 +7,54 @@
 
 import SwiftUI
 
+// To be used with onChange animations,
+// since multiple TabViews with onAppear becomes buggy 
+// => Unreliable animations
+enum OnboardingTab {
+    case greeting, checklist, emphathise, features
+}
+
 struct OnboardingView: View {
+    @State var activeTab: OnboardingTab = .greeting
+    
+   
     var body: some View {
-        ZStack {
+        ZStack(alignment: .bottomTrailing) {
             LinearGradient(colors: [.cyan, .green], startPoint: .bottomLeading, endPoint: .topTrailing)
                 .ignoresSafeArea()
 
             // LinearGradient(colors: [.cyan, .orange], startPoint: .bottomLeading, endPoint: .topTrailing)
             //     .ignoresSafeArea()
 
-            TabView {
-                OnboardingGreetingView()
-                OnboardingChecklistView()
-                OnboardingEmpathiseView()
-                OnboardingFeaturesView()
+            TabView (selection: $activeTab) {
+                OnboardingGreetingView(activeTab: $activeTab, tab: .greeting)
+                    .tag(OnboardingTab.greeting)
+
+                OnboardingChecklistView(activeTab: $activeTab, tab: .checklist)
+                    .tag(OnboardingTab.checklist)
+                
+                OnboardingEmpathiseView(activeTab: $activeTab, tab: .emphathise)
+                    .tag(OnboardingTab.emphathise)
+                
+                OnboardingFeaturesView(activeTab: $activeTab, tab: .features)
+                    .tag(OnboardingTab.features)
             }
+            
             .tabViewStyle(.page)
+            // .tabViewStyle(.page(indexDisplayMode: .never))
+            
+            
+            // Button {
+            //     
+            // } label: {
+            //     Image(systemName: "arrow.forward.circle.fill")
+            //         .font(.custom("SF Pro", size: 40, relativeTo: .largeTitle))
+            //         .foregroundStyle(.white)
+            //         .shadow(radius: 4, x: 2, y: 3)
+            //         .padding()
+            //         .padding(.trailing)
+            // 
+            // }
         }
     }
 }
@@ -63,6 +95,9 @@ struct OnboardingFeatureCell: View {
 
 struct OnboardingFeaturesView: View {
     @AppStorage("isOnboarding") var isOnboarding: Bool?
+    
+    @Binding var activeTab: OnboardingTab
+    let tab: OnboardingTab
 
     var body: some View {
         
@@ -100,8 +135,11 @@ struct OnboardingEmpathiseView: View {
 
     @State private var showText = false
 
-    var duration = 1.5
+    var textDuration = 1.5
     var delay = 1.0
+    
+    @Binding var activeTab: OnboardingTab
+    let tab: OnboardingTab
 
     var body: some View {
         VStack {
@@ -110,14 +148,14 @@ struct OnboardingEmpathiseView: View {
             VStack(alignment: .leading, spacing: 20) {
                 Text("But with ADHD, you get *distracted*.")
                     .opacity(showText ? 1.0 : 0)
-                    .animation(.bouncy(duration: duration), value: showText)
+                    .animation(.bouncy(duration: textDuration), value: showText)
 
                 Text("""
                 A 20-minute routine turns into
                 **an hour**.
                 """)
                 .opacity(showText ? 1.0 : 0)
-                .animation(.bouncy(duration: duration).delay(delay * 2), value: showText)
+                .animation(.bouncy(duration: textDuration).delay(delay * 2), value: showText)
             }
             .font(.title3)
             .foregroundStyle(.white)
@@ -141,23 +179,31 @@ struct OnboardingEmpathiseView: View {
             Spacer()
         }
         .padding(.horizontal, 20)
-        .onAppear(perform: {
-            showGaspButton = true
-            showText = true
-        })
+        // .onAppear(perform: {
+        //     showGaspButton = true
+        //     showText = true
+        // })
+        .onChange(of: activeTab) {
+            if activeTab == self.tab {
+                showGaspButton = true
+                showText = true
+            }
+        }
     }
 }
 
 struct OnboardingChecklistView: View {
+    @State private var showText = false
     @State private var showCellAnimation = false
     @State var listCellDelay = 1.0
 
     let listTextColor: Color = .white
     let backgroundListRowColor: Material = .ultraThinMaterial
 
-    var duration = 1.5
-
-    @State private var testAnimation = false
+    var textDuration = 1.5
+    
+    @Binding var activeTab: OnboardingTab
+    let tab: OnboardingTab
 
     var body: some View {
         VStack {
@@ -171,11 +217,9 @@ struct OnboardingChecklistView: View {
             .foregroundStyle(.white)
             .padding(.bottom, 40)
 
-            // TODO: Maybe keep this text animation
-            // TODO: Try to package all these opacity and offset into one extension for reusability
-            .opacity(testAnimation ? 1.0 : 0)
-            .offset(y: testAnimation ? 0 : 20)
-            .animation(.bouncy(duration: 1.5), value: testAnimation)
+            .opacity(showText ? 1.0 : 0)
+            .offset(y: showText ? 0 : 20)
+            .animation(.bouncy(duration: textDuration), value: showText)
 
             ForEach(1 ..< 4) { index in
                 HStack {
@@ -199,24 +243,34 @@ struct OnboardingChecklistView: View {
                 .offset(y: showCellAnimation ? 0 : 10)
                 .animation(.bouncy(duration: 0.5).delay(listCellDelay * Double(index)), value: showCellAnimation)
             }
+            .padding(.vertical, 2)
 
             Spacer()
             Spacer()
         }
         .padding(.horizontal, 20)
-        .onAppear(perform: {
-            // Because onAppear might execute too early,
-            // before the List view is fully initialized and ready for animation
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                showCellAnimation = true
+        // .onAppear(perform: {
+        //     // Because onAppear might execute too early,
+        //     // before the List view is fully initialized and ready for animation
+        //     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        //         showCellAnimation = true
+        //     }
+        //     testAnimation = true
+        // })
+        
+        .onChange(of: activeTab) {
+            if activeTab == self.tab {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    showCellAnimation = true
+                }
+                showText = true
             }
-            testAnimation = true
-        })
+        }
     }
 }
 
 struct DawnIconWithGlow: View {
-    @State private var showIcon = false
+    @Binding var showIcon: Bool
 
     var duration = 1.5
 
@@ -241,21 +295,22 @@ struct DawnIconWithGlow: View {
                 .opacity(showIcon ? 1.0 : 0)
                 .animation(.bouncy(duration: duration), value: showIcon)
         }
-        .onAppear(perform: {
-            showIcon = true
-        })
     }
 }
 
 struct OnboardingGreetingView: View {
+    @State private var showIcon = false
     @State private var showText = false
 
     var duration = 1.5
     var delay = 3.0
+    
+    @Binding var activeTab: OnboardingTab
+    let tab: OnboardingTab
 
     var body: some View {
         VStack(alignment: .leading) {
-            DawnIconWithGlow()
+            DawnIconWithGlow(showIcon: $showIcon)
 
             VStack(alignment: .leading) {
                 VStack(alignment: .leading) {
@@ -287,11 +342,14 @@ struct OnboardingGreetingView: View {
 
             .offset(y: showText ? 0 : 10)
             .foregroundStyle(.white)
-            .onAppear(perform: {
-                showText = true
-            })
         }
         .padding(.horizontal, 20)
+        .onAppear {
+            if activeTab == self.tab {
+                showIcon = true
+                showText = true
+            }
+        }
     }
 }
 
