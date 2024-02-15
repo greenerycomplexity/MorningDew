@@ -136,8 +136,8 @@ struct RhythmActiveView: View {
 
 #Preview {
     MainActor.assumeIsolated {
-        let container = AppData.previewContainer
-        let rhythm = AppData.rhythmExample
+        let container = PreviewData.container
+        let rhythm = PreviewData.rhythmExample
         container.mainContext.insert(rhythm)
         
         return RhythmActiveView(rhythm: rhythm)

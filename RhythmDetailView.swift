@@ -185,8 +185,8 @@ struct TaskListCell: View {
 
 #Preview {
     MainActor.assumeIsolated {
-        let container = AppData.previewContainer
-        let rhythm = AppData.rhythmExample
+        let container = PreviewData.container
+        let rhythm = PreviewData.rhythmExample
         container.mainContext.insert(rhythm)
         return RhythmDetailView(currentRhythm: rhythm)
             .modelContainer(container)

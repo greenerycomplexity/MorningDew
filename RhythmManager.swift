@@ -29,7 +29,7 @@ class RhythmManager {
     }
     
     
-    var currentTask: TaskItem = AppData.taskItemExample
+    var currentTask: TaskItem = PreviewData.taskItemExample
     var taskElapsedSeconds = 0.0
     var progress = 0.0
     var elapsed: Bool = false

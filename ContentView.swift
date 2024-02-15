@@ -135,5 +135,5 @@ struct ContentView: View {
 
 #Preview {
     return ContentView()
-        .modelContainer(AppData.previewContainer)
+        .modelContainer(PreviewData.container)
 }
