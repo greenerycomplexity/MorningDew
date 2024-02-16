@@ -8,7 +8,7 @@
 import AVFoundation
 import Foundation
 
-var audioPlayer: AVAudioPlayer!
+var soundPlayer: AVAudioPlayer!
 var musicPlayer: AVAudioPlayer!
 
 struct SoundPlayer {
@@ -17,8 +17,8 @@ struct SoundPlayer {
         let url = URL(fileURLWithPath: path)
 
         do {
-            audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioPlayer.play()
+            soundPlayer = try AVAudioPlayer(contentsOf: url)
+            soundPlayer.play()
         } catch {
             print("Couldn't load the file")
         }

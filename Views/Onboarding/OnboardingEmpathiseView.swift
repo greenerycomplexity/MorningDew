@@ -36,7 +36,7 @@ struct OnboardingEmpathiseView: View {
             }
             .font(.title3)
             .foregroundStyle(.white)
-            .offset(y: showText ? 0 : 20)
+            .offset(y: showText ? 0 : 10)
             .padding(.bottom, 100)
 
             Button {
@@ -51,8 +51,9 @@ struct OnboardingEmpathiseView: View {
                     .background(.orange.gradient)
                     .clipShape(RoundedRectangle(cornerRadius: 15))
                     .scaleEffect(showGaspButton ? 1 : 0)
-                    .animation(.spring(duration: 0.4, bounce: 0.6).delay(delay * 4), value: showGaspButton)
+                    .animation(.spring(bounce: 0.6).delay(delay * 4), value: showGaspButton)
             }
+            Spacer()
             Spacer()
             Spacer()
         }

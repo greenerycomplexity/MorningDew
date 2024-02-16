@@ -46,7 +46,7 @@ struct OnboardingGreetingView: View {
                 .font(.title3)
                 .padding(.top)
                 .opacity(showText ? 1.0 : 0)
-                .animation(.bouncy(duration: duration).delay(delay * 1.7), value: showText)
+                .animation(.bouncy(duration: duration).delay(delay * 1.75), value: showText)
             }
 
             .offset(y: showText ? 0 : 10)

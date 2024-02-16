@@ -13,45 +13,93 @@ struct OnboardingFeaturesView: View {
     @Binding var activeTab: OnboardingTab
     let tab: OnboardingTab = .features
 
+    @State private var showText = false
+    @State private var showTimer = false
+    @State private var showMusic = false
+    @State private var showAlarm = false
+    @State private var showStartButton = false
+
     var body: some View {
         VStack {
             Spacer()
-            VStack(alignment: .leading, spacing: 25) {
-                Text("How MorningDew helps:")
-                    .font(.title.bold())
-                    .fontDesign(.rounded)
-                    .foregroundStyle(.white)
+            VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading) {
+                    Text("MorningDew")
+                        .font(.largeTitle.bold())
+                        .fontDesign(.monospaced)
 
-                OnboardingFeatureCell(icon: "⏱️", title: "Timer", secondary: "Don't lose track of time!")
-                OnboardingFeatureCell(icon: "🎵", title: "Fast-paced music", secondary: "Get you moving!")
-                OnboardingFeatureCell(icon: "🚨", title: "Random checkups", secondary: "No response? Sound the alarm!")
+                    Text("helps by using:")
+                        .font(.title2)
+                        .fontDesign(.rounded)
+                }
+                .foregroundStyle(.white)
+                .padding(.bottom, 20)
+                .moveAndFade(showAnimation: showText)
+
+                OnboardingFeatureCell(showCellAnimation: $showTimer, icon: "⏱️", title: "Timer", secondary: "Don't lose track of time!")
+
+                OnboardingFeatureCell(showCellAnimation: $showMusic, icon: "🎵", title: "Fast-paced music", secondary: "Gets you moving!")
+
+                OnboardingFeatureCell(showCellAnimation: $showAlarm, icon: "🚨", title: "Random checkups", secondary: "No response? Sound the alarm!")
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 50)
 
-            Button("Get started") {
+            Button {
+                musicPlayer?.stop()
                 isOnboarding = false
+
+            } label: {
+                Text("Get started")
+                    .foregroundStyle(.white)
+                    .font(.title3.bold())
+                    .fontDesign(.rounded)
+                    .padding()
+                    .background(.orange.gradient)
+                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                    .scaleEffect(showStartButton ? 1 : 0)
+                    .animation(.spring(bounce: 0.6), value: showStartButton)
             }
-            .tint(.blue)
-            .buttonStyle(.borderedProminent)
             Spacer()
         }
         .onChange(of: activeTab) {
             if activeTab == self.tab {
-                // musicPlayer?.setVolume(0.1, fadeDuration: 1)
-                // musicPlayer?.play()
+                let deadline = DispatchTime.now()
 
+                DispatchQueue.main.asyncAfter(deadline: deadline) {
+                    showText = true
+                }
+
+                DispatchQueue.main.asyncAfter(deadline: deadline + 1.0) {
+                    musicPlayer?.pause()
+                    showTimer = true
+                    SoundPlayer().play(file: "tickingClock.wav")
+                }
+
+                DispatchQueue.main.asyncAfter(deadline: deadline + 3.5) {
+                    showMusic = true
+                    SoundPlayer().play(file: "electro.wav")
+                }
+
+                DispatchQueue.main.asyncAfter(deadline: deadline + 6.5) {
+                    showAlarm = true
+                    SoundPlayer().play(file: "alarm.wav")
+                }
+
+                DispatchQueue.main.asyncAfter(deadline: deadline + 9.5) {
+                    soundPlayer?.pause()
+                    musicPlayer?.play()
+                    showStartButton = true
+                }
             }
         }
-
-        // Use code below to time the sound effects of the features
-        // DispatchQueue.main.asyncAfter(deadline: when) {
-        //         self.play()
-        //     }
     }
 }
 
 struct OnboardingFeatureCell: View {
+    @Binding var showCellAnimation: Bool
+    let cellDuration = 1.0
+
     var icon: String
     var title: String
     var secondary: String
@@ -82,6 +130,16 @@ struct OnboardingFeatureCell: View {
         .frame(maxWidth: .infinity)
         .background(.thinMaterial)
         .clipShape(RoundedRectangle(cornerRadius: 15))
+        .moveAndFade(showAnimation: showCellAnimation, duration: cellDuration)
+    }
+}
+
+extension View {
+    func moveAndFade(showAnimation: Bool, duration: Double = 1.0, delay: Double = 0.0) -> some View {
+        self
+            .opacity(showAnimation ? 1.0 : 0)
+            .offset(y: showAnimation ? 0 : 10)
+            .animation(.bouncy(duration: duration).delay(delay), value: showAnimation)
     }
 }
 
