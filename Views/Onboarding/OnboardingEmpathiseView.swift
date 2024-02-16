@@ -40,6 +40,7 @@ struct OnboardingEmpathiseView: View {
             .padding(.bottom, 100)
 
             Button {
+                musicPlayer?.pause()
                 SoundPlayer().play(file: "gasp.wav")
             } label: {
                 Text("Tap to Gasp")

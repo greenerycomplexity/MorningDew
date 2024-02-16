@@ -36,6 +36,18 @@ struct OnboardingFeaturesView: View {
             .buttonStyle(.borderedProminent)
             Spacer()
         }
+        .onChange(of: activeTab) {
+            if activeTab == self.tab {
+                // musicPlayer?.setVolume(0.1, fadeDuration: 1)
+                // musicPlayer?.play()
+
+            }
+        }
+
+        // Use code below to time the sound effects of the features
+        // DispatchQueue.main.asyncAfter(deadline: when) {
+        //         self.play()
+        //     }
     }
 }
 

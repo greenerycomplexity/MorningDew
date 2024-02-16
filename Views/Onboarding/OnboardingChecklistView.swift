@@ -74,6 +74,7 @@ struct OnboardingChecklistView: View {
 
         .onChange(of: activeTab) {
             if activeTab == self.tab {
+                musicPlayer?.setVolume(0.75, fadeDuration: 1)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                     showCellAnimation = true
                 }

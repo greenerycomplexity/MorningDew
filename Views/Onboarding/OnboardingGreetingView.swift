@@ -57,6 +57,8 @@ struct OnboardingGreetingView: View {
             if activeTab == self.tab {
                 showIcon = true
                 showText = true
+                SoundPlayer().play(file: "startJingle.wav")
+                MusicPlayer().play(file: "forest.wav", volume: 0.1)
             }
         }
     }
