@@ -33,6 +33,7 @@ struct MusicPlayer {
         do {
             musicPlayer = try AVAudioPlayer(contentsOf: url)
             musicPlayer.volume = volume
+            musicPlayer.numberOfLoops = -1
             musicPlayer.play()
         } catch {
             print("Couldn't load the file")
