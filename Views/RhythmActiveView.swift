@@ -5,8 +5,8 @@
 //  Created by Son Cao on 19/1/2024.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct RhythmActiveView: View {
     var rhythm: Rhythm
@@ -17,6 +17,15 @@ struct RhythmActiveView: View {
         rhythmManager = RhythmManager(tasks: rhythm.tasks)
     }
     
+    @State private var soundMuted: Bool = false {
+        didSet {
+            if soundMuted {
+                musicPlayer?.volume = 0.0
+            } else {
+                musicPlayer?.volume = 1.0
+            }
+        }
+    }
     
     // TODO: Use this to change background color based on RhythmState
     var backgroundColor: Color {
@@ -27,28 +36,18 @@ struct RhythmActiveView: View {
             return .green
         case .meditation:
             return .blue
-            
         }
     }
     
-    // Add computed property here to manage colors and such on the timerViews
     var body: some View {
         if rhythmManager.allCompleted {
             Text("You're all done!")
         } else {
             ZStack {
-                //                    LinearGradient(colors: [.red,.orange,.yellow], startPoint: .top, endPoint: .bottom)
-                //                        .ignoresSafeArea()
-                //                    
-                
-                //                    LinearGradient(colors: [.yellow, .orange], startPoint: .top, endPoint: .bottom)
-                //                        .ignoresSafeArea()
-                //                    
                 LinearGradient(colors: [.teal, .green], startPoint: .top, endPoint: .bottom)
                     .ignoresSafeArea()
                 
-                
-                VStack (spacing: 30) {
+                VStack(spacing: 30) {
                     Spacer()
                     TimerView(rhythmManager: rhythmManager)
                     
@@ -58,25 +57,23 @@ struct RhythmActiveView: View {
                         .foregroundStyle(.white)
                     
                     Spacer()
-                    HStack (alignment: .bottom, spacing: 30 ) {
-                        
-                        Button {
-                            
-                        } label: {
-                            VStack {
+                    HStack(alignment: .bottom, spacing: 30) {
+                        VStack {
+                            Button {
+                                soundMuted.toggle()
+                            } label: {
                                 Image(systemName: "speaker.slash")
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 30, height: 30)
-                                    .foregroundStyle(.white)
+                                    .foregroundStyle(soundMuted ? .red : .white)
                                     .padding(15)
-                                    .background(.thinMaterial)
+                                    .background(soundMuted ? .white : .white.opacity(0.4))
                                     .clipShape(Circle())
-                                
-                                Text("Mute")
-                                    .foregroundStyle(.white)
-                                    .font(.headline)
                             }
+                            Text("Mute")
+                                .foregroundStyle(.white)
+                                .font(.headline)
                         }
                         
                         NavigationLink {
@@ -98,25 +95,25 @@ struct RhythmActiveView: View {
                             }
                         }
                         
-                        Button {
-                            rhythmManager.elapsed = true
-                            SoundPlayer().play(file: "taskFinished.wav")
-                            rhythmManager.next()
-                        } label: {
-                            VStack {
+                        VStack {
+                            Button {
+                                rhythmManager.elapsed = true
+                                SoundPlayer().play(file: "taskFinished.wav")
+                                rhythmManager.next()
+                            } label: {
                                 Image(systemName: "checkmark.gobackward")
                                     .resizable()
                                     .scaledToFit()
                                     .foregroundStyle(.white)
                                     .frame(width: 30, height: 30)
                                     .padding(15)
-                                    .background(.thinMaterial)
+                                    .background(.white.opacity(0.4))
                                     .clipShape(Circle())
-                                
-                                Text("Done")
-                                    .foregroundStyle(.white)
-                                    .font(.headline)
                             }
+                            
+                            Text("Done")
+                                .foregroundStyle(.white)
+                                .font(.headline)
                         }
                     }
                     Spacer()
@@ -128,11 +125,6 @@ struct RhythmActiveView: View {
                 musicPlayer?.setVolume(1.0, fadeDuration: 5)
             })
             .navigationBarBackButtonHidden(true)
-//            .transition(.scale(scale: .zero, anchor: .bottom))
-            // MARK: Rhythm Actions
-            // Break
-            // Skip
-            // Mute music
         }
     }
 }
