@@ -8,11 +8,10 @@
 import SwiftUI
 
 struct LotusTempSettingView: View {
-    @State private var numberOfPetals: Double = 1
+    @State private var numberOfPetals: Double = 5
     @State private var isMinimized = false
     @State private var animationDuration = 0.5
-
-    @State private var breathDuration = 4.2
+    @State private var breatheDuration = 4.2
 
     var body: some View {
         List {
@@ -36,13 +35,12 @@ struct LotusTempSettingView: View {
             }
 
             // Breathing Duration
-            Section(header: Text("Breathing Duration: \(breathDuration.formatted()) seconds")) {
-                Slider(value: $breathDuration, in: 0...10, step: 0.1)
+            Section(header: Text("Breathing Duration: \(animationDuration.formatted()) seconds")) {
+                Slider(value: $animationDuration, in: 0...10, step: 0.1)
             }
 
             // Breathe Button
             Button {
-                self.animationDuration = self.breathDuration
                 self.isMinimized.toggle()
 
                 DispatchQueue.main.asyncAfter(deadline: .now() + self.animationDuration) {
