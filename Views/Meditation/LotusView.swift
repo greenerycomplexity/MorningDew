@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct LotusView: View {
-    @Binding var isMinimized: Bool
+    @Binding var isMinimized: Bool {
+        didSet {
+            print("Status: \(isMinimized)")
+        }
+    }
     @Binding var numberOfPetals: Double
     @Binding var breatheDuration: Double
 
@@ -66,7 +70,7 @@ struct LotusView: View {
         .scaleEffect(isMinimized ? 0.3 : 1)
         
         // Animate breathing duration
-        .animation(.easeInOut(duration: breatheDuration).repeatForever(), value: isMinimized)
+        .animation(.easeInOut(duration: breatheDuration), value: isMinimized)
 
         // Rotation so that first petal shows up at the top
         .rotationEffect(.degrees(-90))

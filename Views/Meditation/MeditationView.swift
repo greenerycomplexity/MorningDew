@@ -19,11 +19,21 @@ struct MeditationView: View {
     
     @State private var instruction = "Get Ready..."
     @State private var showInstruction = false
-    
-    @State private var nowBreathing = false
-    
+
     // Timer to keep updating the number of petals for smooth transition
     let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
+    
+    private func breathe() {
+        isMinimized = true
+        
+        delay(seconds: breatheDuration) {
+            isMinimized = false
+        }
+        
+        delay(seconds: breatheDuration * 2) {
+            breathe()
+        }
+    }
     
     var body: some View {
         ZStack {
@@ -39,29 +49,29 @@ struct MeditationView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 30)
                     .opacity(showLotus ? 1 : 0)
-                    // .offset(y: showLotus ? 0 : 30)
                     .onReceive(timer, perform: { _ in
                         if startBloom {
                             numberOfPetals += 0.5
                             if numberOfPetals >= 7.0 {
                                 timer.upstream.connect().cancel()
                                 
+                                // Minimize the Lotus, prepare for breathing
                                 delay(seconds: 2.0) {
-                                    isMinimized.toggle()
+                                    breathe()
                                 }
                             }
                         }
                     })
                     .onAppear(perform: {
-                        let deadline = DispatchTime.now()
-
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                        // Show first sign of the lotus (single circle)
+                        delay(seconds: 2.0) {
                             withAnimation(.easeInOut(duration: 1.0)) {
                                 showLotus = true
                             }
                         }
                         
-                        DispatchQueue.main.asyncAfter(deadline: deadline + 3.5) {
+                        // Start adding more petals to the lotus
+                        delay(seconds: 3.5) {
                             startBloom = true
                         }
                     })
@@ -72,19 +82,19 @@ struct MeditationView: View {
                     .foregroundStyle(.white)
                     .font(.headline)
                     .moveAndFade(showAnimation: showInstruction, delay: 1.0)
+                    .transition(.opacity)
                     .animation(.spring, value: instruction)
                     .onAppear {
                         showInstruction = true
                     }
-                    // .onChange(of: isMinimized) {
-                    //         if isMinimized {
-                    //             instruction = "Strong exhale..."
-                    //         }
-                    //     
-                    //         else if !isMinimized {
-                    //             instruction = "Deep inhale..."
-                    //         }
-                    // }
+                    .onChange(of: isMinimized) {
+                        if isMinimized {
+                            instruction = "Strong exhale..."
+                                
+                        } else {
+                            instruction = "Deep inhale..."
+                        }
+                    }
                 
                 Spacer()
                 
