@@ -42,7 +42,8 @@ struct RhythmActiveView: View {
     var body: some View {
         if rhythmManager.allCompleted {
             Text("You're all done!")
-        } else {
+        }
+        else if rhythmManager.rhythmState == .active {
             ZStack {
                 LinearGradient(colors: [.teal, .green], startPoint: .top, endPoint: .bottom)
                     .ignoresSafeArea()
@@ -76,9 +77,10 @@ struct RhythmActiveView: View {
                                 .font(.headline)
                         }
                         
-                        NavigationLink {
-                            // Add Break view in here later
-                            Text("Breathe with me for a minute!")
+                        Button {
+                            withAnimation {
+                                rhythmManager.rhythmState = .meditation
+                            }
                         } label: {
                             VStack {
                                 Image(.lotus)
@@ -125,6 +127,16 @@ struct RhythmActiveView: View {
                 musicPlayer?.setVolume(1.0, fadeDuration: 5)
             })
             .navigationBarBackButtonHidden(true)
+            .transition(.opacity)
+        }
+        
+        else if rhythmManager.rhythmState == .meditation{
+            MeditationView(rhythmManager: rhythmManager)
+                .navigationBarBackButtonHidden(true)
+        }
+        
+        else {
+            EmptyView()
         }
     }
 }

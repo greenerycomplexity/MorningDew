@@ -10,8 +10,9 @@ import SwiftUI
 struct LotusView: View {
     @Binding var isMinimized: Bool
     @Binding var numberOfPetals: Double
-    @Binding var duration: Double
+    @Binding var breatheDuration: Double
 
+    let petalDuration: Double = 1.5
     // Diameter of each lotus image
     let diameter: CGFloat = 150
 
@@ -20,8 +21,8 @@ struct LotusView: View {
         return 360/numberOfPetals
     }
 
-    // Opacity percentage for the petal during adding/removing
-    // Avoid petals snapping in and out by having one always ready
+    // Opacity percentage for the petal during adding/removing (non-Int-able numberOfPetals)
+    // Avoid petals snapping in and out by having one always ready for opacity animation
     private var opacityPercentage: Double {
         let n = numberOfPetals.rounded(.down)
         let nextAngle = 360/(n + 1)
@@ -45,7 +46,7 @@ struct LotusView: View {
                     .foregroundStyle(pinkGradient)
                     .frame(width: diameter, height: diameter)
 
-                    // If petal is being added/removed, use this opacity
+                    // If petal is being added/removed, use calculated opacity
                     .opacity(petal == Int(self.numberOfPetals) ? self.opacityPercentage : 0.5)
 
                     // Rotate each new flower using its leading anchor, instead of its center
@@ -55,13 +56,17 @@ struct LotusView: View {
             }
         }
         .frame(width: diameter * 2, height: diameter * 2)
-        .animation(.easeInOut(duration: duration), value: numberOfPetals)
+        
+        // Animate adding/removing petals duration
+        .animation(.easeInOut(duration: petalDuration), value: numberOfPetals)
 
         // Center the view along the center of the flower
         .offset(x: isMinimized ? 0 : diameter/2)
         .rotationEffect(.degrees(isMinimized ? -90 : 0))
         .scaleEffect(isMinimized ? 0.3 : 1)
-        .animation(.easeInOut(duration: duration).repeatForever(), value: isMinimized)
+        
+        // Animate breathing duration
+        .animation(.easeInOut(duration: breatheDuration).repeatForever(), value: isMinimized)
 
         // Rotation so that first petal shows up at the top
         .rotationEffect(.degrees(-90))
@@ -72,5 +77,5 @@ struct LotusView: View {
     LotusView(
         isMinimized: .constant(false),
         numberOfPetals: .constant(5),
-        duration: .constant(4.2))
+        breatheDuration: .constant(4.2))
 }

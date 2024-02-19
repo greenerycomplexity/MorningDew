@@ -19,3 +19,9 @@ extension Double {
         }
     }
 }
+
+func delay(seconds: Double, _ perform: @escaping () -> Void) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + seconds ) {
+        perform()
+    }
+}

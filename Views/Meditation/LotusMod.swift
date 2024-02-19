@@ -19,7 +19,7 @@ struct LotusTempSettingView: View {
             Section {
                 LotusView(isMinimized: $isMinimized,
                           numberOfPetals: $numberOfPetals,
-                          duration: $animationDuration)
+                          breatheDuration: $animationDuration)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 30)
             }
