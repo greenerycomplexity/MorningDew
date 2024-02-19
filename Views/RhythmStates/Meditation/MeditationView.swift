@@ -114,6 +114,7 @@ struct MeditationView: View {
                         .clipShape(Circle())
                         .padding(.bottom)
                 }
+                
             }
         }
         .transition(.opacity)

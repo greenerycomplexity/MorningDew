@@ -14,13 +14,12 @@ struct RhythmDetailView: View {
     @Bindable var currentRhythm: Rhythm
     @State private var isActive: Bool = false
     
-    
     // @Query var tasks: [TaskItem]
-    // 
+    //
     // init(currentRhythm: Rhythm) {
     //     self.currentRhythm = currentRhythm
     //     let currentRhythmID = currentRhythm.persistentModelID
-    //     
+    //
     //     _tasks = Query(
     //         filter: #Predicate<TaskItem> { task in
     //             task.rhythm?.persistentModelID == currentRhythmID
@@ -122,11 +121,11 @@ struct RhythmDetailView: View {
                     AddTaskView(currentRhythm: currentRhythm)
                 }
                 .toolbar {
-                        ToolbarItem(placement: .topBarTrailing) {
-                            Button ("Add Task") {
-                                showAddTaskView = true
-                            }
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button("Add Task") {
+                            showAddTaskView = true
                         }
+                    }
                 }
                 .onAppear(perform: {
                     withAnimation(.easeIn(duration: 0.8).delay(3.5)) {
@@ -140,7 +139,7 @@ struct RhythmDetailView: View {
                     }
                 })
             } else {
-                RhythmActiveView(rhythm: currentRhythm)
+                RhythmStartView(rhythm: currentRhythm)
             }
         }
     }
