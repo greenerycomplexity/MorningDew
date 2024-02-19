@@ -8,17 +8,14 @@
 import SwiftUI
 
 struct LotusView: View {
-    @Binding var isMinimized: Bool {
-        didSet {
-            print("Status: \(isMinimized)")
-        }
-    }
+    @Binding var isMinimized: Bool
     @Binding var numberOfPetals: Double
     @Binding var breatheDuration: Double
 
-    let petalDuration: Double = 1.5
-    // Diameter of each lotus image
     let diameter: CGFloat = 150
+    let opacity: Double = 0.5
+    let petalDuration: Double = 1.5 // How long it takes to add a petal
+
 
     // The rotation angle needed for each petal, so they don't all overlap as one
     private var absoluteAngle: Double {
@@ -51,7 +48,7 @@ struct LotusView: View {
                     .frame(width: diameter, height: diameter)
 
                     // If petal is being added/removed, use calculated opacity
-                    .opacity(petal == Int(self.numberOfPetals) ? self.opacityPercentage : 0.5)
+                    .opacity(petal == Int(self.numberOfPetals) ? self.opacityPercentage : opacity)
 
                     // Rotate each new flower using its leading anchor, instead of its center
                     .rotationEffect(

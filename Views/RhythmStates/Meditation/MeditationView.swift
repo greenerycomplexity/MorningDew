@@ -17,11 +17,12 @@ struct MeditationView: View {
     @State private var startBloom = false
     @State private var showLotus = false
     
-    @State private var instruction = "Get Ready..."
+    @State private var nowBreathing = false
     @State private var showInstruction = false
+    @State private var instruction = "Get ready"
 
     // Timer to keep updating the number of petals for smooth transition
-    let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
+    let bloomTimer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
     
     private func breathe() {
         isMinimized = true
@@ -49,15 +50,21 @@ struct MeditationView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 30)
                     .opacity(showLotus ? 1 : 0)
-                    .onReceive(timer, perform: { _ in
+                    .onReceive(bloomTimer, perform: { _ in
                         if startBloom {
                             numberOfPetals += 0.5
                             if numberOfPetals >= 7.0 {
-                                timer.upstream.connect().cancel()
+                                bloomTimer.upstream.connect().cancel()
                                 
                                 // Minimize the Lotus, prepare for breathing
                                 delay(seconds: 2.0) {
-                                    breathe()
+                                    isMinimized = true
+                                    
+                                    // Actually start breathing, change to appropriate instruction Text
+                                    delay(seconds: breatheDuration / 3) {
+                                        nowBreathing = true
+                                        breathe()
+                                    }
                                 }
                             }
                         }
@@ -86,13 +93,19 @@ struct MeditationView: View {
                     .animation(.spring, value: instruction)
                     .onAppear {
                         showInstruction = true
+                        
+                        delay(seconds: breatheDuration * 1.5) {
+                            instruction = "Stay still"
+                        }
                     }
                     .onChange(of: isMinimized) {
-                        if isMinimized {
-                            instruction = "Strong exhale..."
-                                
-                        } else {
-                            instruction = "Deep inhale..."
+                        if nowBreathing {
+                            if isMinimized {
+                                instruction = "Strong exhale"
+                                    
+                            } else {
+                                instruction = "Deep inhale"
+                            }
                         }
                     }
                 
@@ -114,7 +127,6 @@ struct MeditationView: View {
                         .clipShape(Circle())
                         .padding(.bottom)
                 }
-                
             }
         }
         .transition(.opacity)
