@@ -118,9 +118,6 @@ struct MeditationView: View {
             }
         }
         .transition(.opacity)
-        .onAppear {
-            MusicPlayer().play(file: "forest.wav", volume: 0.2)
-        }
     }
 }
 

@@ -102,8 +102,6 @@ struct RhythmActiveView: View {
         }
         .onAppear(perform: {
             rhythmManager.next()
-            MusicPlayer().play(file: "electro.wav", volume: 0.1)
-            musicPlayer?.setVolume(1.0, fadeDuration: 5)
         })
         .transition(.opacity)
     }

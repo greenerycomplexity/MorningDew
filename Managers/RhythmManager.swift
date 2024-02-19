@@ -14,6 +14,7 @@ enum RhythmState {
     case getReady
     case active
     case meditation
+    case allCompleted
 }
 
 @Observable
@@ -22,7 +23,6 @@ class RhythmManager {
     private(set) var startTime: Date = .now
     
     var tasks: [TaskItem]
-    var allCompleted: Bool = false
     
     init(tasks: [TaskItem]) {
         self.tasks = tasks
@@ -43,7 +43,7 @@ class RhythmManager {
     
     func next() {
         if tasks.isEmpty {
-            allCompleted = true
+            rhythmState = .allCompleted
         } else {
             elapsed = false
             currentTask = tasks.remove(at: 0)
