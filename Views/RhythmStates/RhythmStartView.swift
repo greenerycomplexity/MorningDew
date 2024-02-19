@@ -17,7 +17,7 @@ struct RhythmStartView: View {
     
     // TODO: Use this to change background color based on RhythmState
     // var backgroundColor: Color {
-    //     switch rhythmManager.rhythmState {
+    //     switch rhythmManager.currentState {
     //     case .getReady:
     //         return .orange
     //     case .active:
@@ -28,7 +28,7 @@ struct RhythmStartView: View {
     // }
     // 
     var body: some View {
-        switch rhythmManager.rhythmState {
+        switch rhythmManager.currentState {
         case .active:
             RhythmActiveView(rhythmManager: rhythmManager)
                 .navigationBarBackButtonHidden(true)

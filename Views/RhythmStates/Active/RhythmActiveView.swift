@@ -58,7 +58,7 @@ struct RhythmActiveView: View {
                         
                     Button {
                         withAnimation {
-                            rhythmManager.rhythmState = .meditation
+                            rhythmManager.currentState = .meditation
                         }
                     } label: {
                         VStack {

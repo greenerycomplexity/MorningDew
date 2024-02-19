@@ -9,11 +9,7 @@ import SwiftUI
 
 struct TimerView: View {
     @Bindable var rhythmManager: RhythmManager
-    
-    let timer = Timer
-        .publish(every: 1, on: .main, in: .common)
-        .autoconnect()
-    
+  
     var body: some View {
         ZStack {
             // MARK: Display timer and progress ring
@@ -30,7 +26,7 @@ struct TimerView: View {
                         .foregroundStyle(.white)
                 }
             }
-            .onReceive(timer, perform: { _ in
+            .onReceive(rhythmManager.timer, perform: { _ in
                 rhythmManager.track()
             })
         }

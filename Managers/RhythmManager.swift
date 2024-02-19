@@ -8,8 +8,6 @@
 import Foundation
 import SwiftUI
 
-
-// Track the state and move to view, or change background color accordingly
 enum RhythmState {
     case getReady
     case active
@@ -19,21 +17,21 @@ enum RhythmState {
 
 @Observable
 class RhythmManager {
-    var rhythmState: RhythmState = .active
+    var currentState: RhythmState = .active
     private(set) var startTime: Date = .now
     
     var tasks: [TaskItem]
-    
-    init(tasks: [TaskItem]) {
-        self.tasks = tasks
-    }
-    
-    
     var currentTask: TaskItem = PreviewData.taskItemExample
     var taskElapsedSeconds = 0.0
     var progress = 0.0
     var elapsed: Bool = false
     var taskEndTime: Date = Date.now
+    
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    
+    init(tasks: [TaskItem]) {
+        self.tasks = tasks
+    }
     
     // For every new task that comes in, reset the progress ring
     func resetProgressRing() {
@@ -43,7 +41,7 @@ class RhythmManager {
     
     func next() {
         if tasks.isEmpty {
-            rhythmState = .allCompleted
+            currentState = .allCompleted
         } else {
             elapsed = false
             currentTask = tasks.remove(at: 0)
@@ -52,15 +50,30 @@ class RhythmManager {
         }
     }
     
+    func prepareMeditation() {
+        elapsed = false
+        taskEndTime = Date.now.addingTimeInterval(20)
+    }
+    
+    func trackMeditation() {
+        if Date.now >= taskEndTime {
+            withAnimation {
+                elapsed = true
+            }
+        }
+    }
+    
     func track() {
         // If current time is later than endTime
-        if Date.now >= taskEndTime {
-            elapsed = true
-            next()
-        } else {
-            elapsed = false
-            taskElapsedSeconds += 1
-            progress = taskElapsedSeconds / (currentTask.seconds - 1)
+        if currentState == .active {
+            if Date.now >= taskEndTime {
+                elapsed = true
+                next()
+            } else {
+                elapsed = false
+                taskElapsedSeconds += 1
+                progress = taskElapsedSeconds / (currentTask.seconds - 1)
+            }
         }
     }
 }
