@@ -53,32 +53,23 @@ struct AddTaskView: View {
                 
                 ToolbarItem (placement: .confirmationAction) {
                     Button("Save") {
-                        
                         let rhythmName = currentRhythm.name
-                        let descriptor = FetchDescriptor<TaskItem>(
-                            predicate: #Predicate { taskItem in
-                                taskItem.rhythm?.name == rhythmName
-                            }
-                        )
                         
-                        let count = (try? modelContext.fetchCount(descriptor)) ?? 0
+                        /// Ordering feature is archived for now
+                        // // Fetch all tasks that belong to the same rhythm, for ordering purposes
+                        // let descriptor = FetchDescriptor<TaskItem>(
+                        //     predicate: #Predicate { taskItem in
+                        //         taskItem.rhythm?.name == rhythmName
+                        //     }
+                        // )
+                        // 
+                        // // And get new index variable
+                        // let count = (try? modelContext.fetchCount(descriptor)) ?? 0
                         
-                        let newTask = TaskItem(name: name, minutes: Double(minutes), perceivedDifficulty: perceivedDifficulty, orderIndex: count, rhythm: currentRhythm)
+                        let newTask = TaskItem(name: name, minutes: Double(minutes), perceivedDifficulty: perceivedDifficulty, rhythm: currentRhythm)
                         
                         currentRhythm.tasks.append(newTask)
                         dismiss()
-                        
-                        
-                        // Old version, without any filtering
-                        //                        // Fetch the number of all items that contribute to the relative index ordering
-                        //                        // Add filtering for which tasks belong to current routine here
-                        //                        let descriptor = FetchDescriptor<TaskItem>()
-                        //                        let count = (try? modelContext.fetchCount(descriptor)) ?? 0
-                        //
-                        //                        // Pass the next index to the new item
-                        //                        let newTask = TaskItem(name: name, time: minutes, perceivedDifficulty: perceivedDifficulty, orderIndex: count)
-                        //                        modelContext.insert(newTask)
-                        //                        dismiss()
                     }
                 }
             }

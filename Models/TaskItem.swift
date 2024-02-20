@@ -13,19 +13,16 @@ class TaskItem {
     var name: String
     var minutes: Double
     var perceivedDifficulty: Int
-    var orderIndex: Int
     var rhythm: Rhythm?
-    
-    var seconds : Double {
+
+    var seconds: Double {
         Double(minutes) * 60
     }
 
-    
-    init(name: String, minutes: Double, perceivedDifficulty: Int = 3, orderIndex: Int, rhythm: Rhythm? = nil) {
+    init(name: String, minutes: Double, perceivedDifficulty: Int = 3, rhythm: Rhythm? = nil) {
         self.name = name
         self.minutes = minutes
         self.perceivedDifficulty = perceivedDifficulty
-        self.orderIndex = orderIndex
         self.rhythm = rhythm
     }
 }

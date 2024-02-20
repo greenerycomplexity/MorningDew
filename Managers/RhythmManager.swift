@@ -16,10 +16,6 @@ enum RhythmState {
     case allCompleted
 }
 
-// TODO: Somehow include the Alarm checkup view in here as well
-// right now it's in its own view because its timer needs to be reset
-// if continued "No response" from user
-
 // Manages the entire Rhythm lifecycle once the user clicks begin
 @Observable
 class RhythmManager {
@@ -30,7 +26,7 @@ class RhythmManager {
                 resetTask()
             }
             
-            // Either way, if going back to Active, reset the progress ring, it's better this way.
+            // Either way, if going back to Active, reset the progress ring.
             if currentState == .active {
                 resetProgressRing()
             }
@@ -44,6 +40,7 @@ class RhythmManager {
     var progress = 0.0
     var elapsed: Bool = false
     var taskEndTime: Date = .now
+    let meditationLength: Double = 30
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
@@ -103,7 +100,6 @@ class RhythmManager {
     
     // MARK: Meditation
 
-    let meditationLength: Double = 30
     func prepareMeditation() {
         elapsed = false
         
