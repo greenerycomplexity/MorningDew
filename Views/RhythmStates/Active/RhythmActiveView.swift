@@ -15,12 +15,14 @@ struct RhythmActiveView: View {
         didSet {
             if soundMuted {
                 musicPlayer?.volume = 0.0
-            }
-            else {
+            } else {
                 musicPlayer?.volume = 1.0
             }
         }
     }
+
+    @State private var showEncouragement = false
+    @State private var encouragement = "Well done!"
     
     var body: some View {
         ZStack {
@@ -29,15 +31,31 @@ struct RhythmActiveView: View {
                 
             VStack(spacing: 30) {
                 Spacer()
+                
+                // MARK: Timer
+
                 TimerView(rhythmManager: rhythmManager)
                     
+                // Current task name
                 Text(rhythmManager.currentTask.name)
                     .font(.largeTitle.bold())
                     .fontDesign(.rounded)
                     .foregroundStyle(.white)
                     
                 Spacer()
+                
+                // MARK: Encouragement text
+
+                Text(encouragement)
+                    .foregroundStyle(.white)
+                    .font(.headline)
+                    .moveAndFade(showAnimation: showEncouragement)
+
+                // MARK: Control buttons
+
                 HStack(alignment: .bottom, spacing: 30) {
+                    // MARK: Mute Toggle
+
                     VStack {
                         Button {
                             soundMuted.toggle()
@@ -55,7 +73,9 @@ struct RhythmActiveView: View {
                             .foregroundStyle(.white)
                             .font(.headline)
                     }
-                        
+                     
+                    // MARK: Start Meditation
+
                     Button {
                         withAnimation {
                             rhythmManager.currentState = .meditation
@@ -76,11 +96,14 @@ struct RhythmActiveView: View {
                         }
                     }
                         
+                    // MARK: Change to next task
+
                     VStack {
                         Button {
                             rhythmManager.elapsed = true
                             SoundPlayer().play(file: "taskFinished.wav")
                             rhythmManager.next()
+                            generateEncouragement()
                         } label: {
                             Image(systemName: "checkmark.gobackward")
                                 .resizable()
@@ -92,7 +115,7 @@ struct RhythmActiveView: View {
                                 .clipShape(Circle())
                         }
                             
-                        Text("Done")
+                        Text("Next")
                             .foregroundStyle(.white)
                             .font(.headline)
                     }
@@ -104,6 +127,23 @@ struct RhythmActiveView: View {
             rhythmManager.next()
         })
         .transition(.opacity)
+    }
+    
+    private func generateEncouragement() {
+        let encouragements = ["Keep it up!", "Awesome job!", "Amazing job!", "You're doing great!", "Way to go!", "Great work!"]
+        
+        // Make sure it's not the same as the last one
+        let temp = encouragement
+        while encouragement == temp {
+            encouragement = encouragements.randomElement()!
+        }
+
+        delay(seconds: 0.25) {
+            showEncouragement = true
+            delay(seconds: 2.0) {
+                showEncouragement = false
+            }
+        }
     }
 }
 

@@ -134,15 +134,6 @@ struct OnboardingFeatureCell: View {
     }
 }
 
-extension View {
-    func moveAndFade(showAnimation: Bool, duration: Double = 1.0, delay: Double = 0.0) -> some View {
-        self
-            .opacity(showAnimation ? 1.0 : 0)
-            .offset(y: showAnimation ? 0 : 10)
-            .animation(.bouncy(duration: duration).delay(delay), value: showAnimation)
-    }
-}
-
 #Preview {
     OnboardingFeaturesView(activeTab: .constant(.features))
 }

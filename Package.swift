@@ -10,7 +10,7 @@ import AppleProductTypes
 let package = Package(
     name: "MorningDew",
     platforms: [
-        .iOS("17.2")
+        .iOS("17.0")
     ],
     products: [
         .iOSApplication(
@@ -23,14 +23,10 @@ let package = Package(
             appIcon: .asset("AppIcon"),
             accentColor: .presetColor(.green),
             supportedDeviceFamilies: [
-                .pad,
                 .phone
             ],
             supportedInterfaceOrientations: [
-                .portrait,
-                .landscapeRight,
-                .landscapeLeft,
-                .portraitUpsideDown(.when(deviceFamilies: [.pad]))
+                .portrait
             ],
             appCategory: .productivity
         )

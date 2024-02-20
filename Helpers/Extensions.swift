@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import SwiftUI
 
 extension Double {
     var formatted: String {
@@ -25,3 +25,33 @@ func delay(seconds: Double, _ perform: @escaping () -> Void) {
         perform()
     }
 }
+
+extension View {
+    func moveAndFade(showAnimation: Bool, duration: Double = 1.0, delay: Double = 0.0) -> some View {
+        self
+            .opacity(showAnimation ? 1.0 : 0)
+            .offset(y: showAnimation ? 0 : 10)
+            .animation(.bouncy(duration: duration).delay(delay), value: showAnimation)
+    }
+}
+
+// Showing and hiding the view without moving other views around
+// struct IsShown: ViewModifier {
+//     var shown = false
+//
+//     func body(content: Content) -> some View {
+//         if shown {
+//             content
+//         } else {
+//             content.hidden()
+//         }
+//     }
+// }
+//
+// extension View {
+//     func isShown(shown: Bool) -> some View {
+//         modifier(
+//             IsShown(shown: shown)
+//         )
+//     }
+// }
