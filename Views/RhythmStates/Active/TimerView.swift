@@ -26,9 +26,6 @@ struct TimerView: View {
                         .foregroundStyle(.white)
                 }
             }
-            .onReceive(rhythmManager.timer, perform: { _ in
-                rhythmManager.track()
-            })
         }
     }
 }

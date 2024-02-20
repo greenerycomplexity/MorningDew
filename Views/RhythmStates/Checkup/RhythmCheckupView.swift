@@ -9,7 +9,7 @@ import SwiftUI
 
 struct RhythmCheckupView: View {
     @Bindable var rhythmManager: RhythmManager
-    @State private var timeRemaining = 10
+    @State private var timeRemaining = 7
     @State private var showAlert = false
     
     @State var alarmTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
@@ -19,6 +19,8 @@ struct RhythmCheckupView: View {
         alarmTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
         timeRemaining = 10
     }
+    
+    let extraTimeAllotment: Double = 15
     
     var body: some View {
         ZStack {
@@ -57,10 +59,10 @@ struct RhythmCheckupView: View {
                 Spacer()
                 
                 VStack(spacing: 20) {
-                    
                     // MARK: Go to next task
+
                     Button {
-                        rhythmManager.next()
+                        rhythmManager.nextTask()
                         rhythmManager.currentState = .active
                     } label: {
                         Text("Yes")
@@ -74,11 +76,12 @@ struct RhythmCheckupView: View {
                     }
                     
                     // MARK: Go back to current task but add 30s
-                    // TODO: Figure out this logic here
                     Button {
+                        // Add extra time, then go back to current task
+                        rhythmManager.addExtraTime(seconds: extraTimeAllotment)
                         rhythmManager.currentState = .active
                     } label: {
-                        Text("I need more time (+30s)")
+                        Text("I need more time (+\(extraTimeAllotment.formatted())s)")
                             .foregroundStyle(.white)
                             .font(.headline.bold())
                             .fontDesign(.rounded)
@@ -92,6 +95,7 @@ struct RhythmCheckupView: View {
             }
             .foregroundStyle(.white)
         }
+        .transition(.opacity)
     }
 }
 

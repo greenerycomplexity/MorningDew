@@ -24,6 +24,8 @@ struct RhythmActiveView: View {
     @State private var showEncouragement = false
     @State private var encouragement = "Well done!"
     
+    @State private var showNextTaskAlert = false
+    
     var body: some View {
         ZStack {
             LinearGradient(colors: [.teal, .green], startPoint: .top, endPoint: .bottom)
@@ -100,10 +102,7 @@ struct RhythmActiveView: View {
 
                     VStack {
                         Button {
-                            rhythmManager.elapsed = true
-                            SoundPlayer().play(file: "taskFinished.wav")
-                            rhythmManager.next()
-                            generateEncouragement()
+                            showNextTaskAlert = true
                         } label: {
                             Image(systemName: "checkmark.gobackward")
                                 .resizable()
@@ -119,14 +118,30 @@ struct RhythmActiveView: View {
                             .foregroundStyle(.white)
                             .font(.headline)
                     }
+                    .alert("Move to next Task?", isPresented: $showNextTaskAlert) {
+                        Button("Confirm") {
+                            SoundPlayer().play(file: "taskFinished.wav")
+                            rhythmManager.nextTask()
+                            generateEncouragement()
+                        }
+                        
+                        Button("Cancel", role: .cancel) {}
+                    } message: {
+                        Text("You won't be able to go back")
+                    }
                 }
                 Spacer()
             }
         }
-        .onAppear(perform: {
-            rhythmManager.next()
-        })
         .transition(.opacity)
+        .onAppear {
+            if rhythmManager.currentTask == PreviewData.taskItemExample {
+                rhythmManager.nextTask()
+            }
+        }
+        .onReceive(rhythmManager.timer, perform: { _ in
+            rhythmManager.trackTask()
+        })
     }
     
     private func generateEncouragement() {

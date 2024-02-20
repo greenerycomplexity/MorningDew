@@ -34,7 +34,7 @@ struct RhythmStartView: View {
                 .navigationBarBackButtonHidden(true)
                 .onAppear {
                     MusicPlayer().play(file: "electro.wav", volume: 0.1)
-                    musicPlayer?.setVolume(1.0, fadeDuration: 5)
+                    musicPlayer?.setVolume(1.0, fadeDuration: 4)
                 }
             
         case .meditation:
@@ -48,6 +48,16 @@ struct RhythmStartView: View {
             RhythmStatisticsView(rhythmManager: rhythmManager)
                 .onAppear {
                     musicPlayer?.stop()
+                }
+            
+        case .checkup:
+            RhythmCheckupView(rhythmManager: rhythmManager)
+                .navigationBarBackButtonHidden(true)
+                .onAppear {
+                    musicPlayer?.setVolume(0.0, fadeDuration: 3)
+                    delay(seconds: 3) {
+                        musicPlayer?.stop()
+                    }
                 }
             
         default: Text("There really should be something here!")

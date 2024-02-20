@@ -22,7 +22,7 @@ struct MeditationView: View {
     @State private var instruction = "Get ready"
 
     @State private var showFarewell = false
-    
+
     // Timer to keep updating the number of petals for smooth transition
     let bloomTimer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
     
@@ -113,7 +113,7 @@ struct MeditationView: View {
                         }
                     
                 } else {
-                    VStack (spacing: 30) {
+                    VStack(spacing: 30) {
                         Text("Well done.")
                             .font(.largeTitle.bold())
                             .moveAndFade(showAnimation: showFarewell, delay: 1.5)
@@ -132,10 +132,10 @@ struct MeditationView: View {
                     }
                 }
               
-                
                 Spacer()
                 
-                Text(rhythmManager.taskEndTime, style: .timer)
+                // Text(rhythmManager.taskEndTime, style: .timer)
+                
                 Button {
                     withAnimation {
                         rhythmManager.currentState = .active
