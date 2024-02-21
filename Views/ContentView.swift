@@ -1,8 +1,8 @@
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct ContentView: View {
-    @Environment (\.modelContext) var modelContext
+    @Environment(\.modelContext) var modelContext
     @Query private var rhythms: [Rhythm]
     @State private var showAddRhythmView = false
     
@@ -26,7 +26,7 @@ struct ContentView: View {
                     List {
                         ForEach(rhythms) { rhythm in
                             NavigationLink(value: rhythm) {
-                                HStack (spacing: 10) {
+                                HStack(spacing: 10) {
                                     Text(rhythm.emoji)
                                         .font(.title)
                                     
@@ -38,20 +38,18 @@ struct ContentView: View {
                                     Spacer()
                                     
                                     VStack {
-                                        Text("\(rhythm.totalMinutes.formatted())")
+                                        Text("\(rhythm.totalMinutes.clean)")
                                             .font(.title2.bold())
                                             .fontWeight(.heavy)
                                         
-                                        Text ("minutes")
+                                        Text("minutes")
                                             .font(.subheadline)
-                                        
                                     }
-                                    .padding(.trailing,3)
+                                    .padding(.trailing, 3)
                                     .foregroundStyle(.black)
                                     .fontDesign(.rounded)
                                 }
                             }
-                            
                         }
                         .onDelete(perform: { indexSet in
                             for rhythmIndex in indexSet {
@@ -67,16 +65,17 @@ struct ContentView: View {
                                 HStack {
                                     Spacer()
                                     HStack {
-                                        Image(systemName: "plus.circle")
-                                            .font(.title3)
-                                        
                                         Text("Add Rhythm")
                                             .font(.headline)
+                                            .foregroundStyle(.black)
                                             .fontDesign(.rounded)
+                                            .padding(.leading)
                                             
+                                        Image(systemName: "plus")
+                                            .font(.headline)
+                                            .foregroundStyle(.green)
                                     }
                                     .padding(10)
-                                    .foregroundStyle(.green)
                                     .background(.white)
                                     .clipShape(Capsule())
                                     Spacer()
@@ -86,25 +85,29 @@ struct ContentView: View {
                                 AddRhythmView()
                             }
                         }
-                        
-                        
                     }
                     .scrollContentBackground(.hidden)
                     .navigationDestination(for: Rhythm.self) { rhythm in
                         RhythmDetailView(currentRhythm: rhythm)
                     }
-                    
                     .onAppear(perform: {
                         if rhythms.count == 0 {
                             let newRhythm = Rhythm(name: "Morning")
                             modelContext.insert(newRhythm)
                         }
                     })
+                    
+                    Button("Reset Onboarding") {
+                        @AppStorage("isOnboarding") var isOnboarding: Bool?
+                        
+                        isOnboarding = true
+                    }
+                    .foregroundStyle(.white)
                 }
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    HStack (alignment: .bottom) {
+                    HStack(alignment: .bottom) {
                         Image("dawn")
                             .resizable()
                             .scaledToFit()
@@ -117,23 +120,12 @@ struct ContentView: View {
                         Spacer()
                     }
                 }
-                
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Reset Onboarding") {
-                        @AppStorage("isOnboarding") var isOnboarding: Bool?
-                        
-                        isOnboarding = true
-                    }
-                    .foregroundStyle(.white)
-                    
-                }
             }
         }
     }
 }
 
-
 #Preview {
-    return ContentView()
+    ContentView()
         .modelContainer(PreviewData.container)
 }

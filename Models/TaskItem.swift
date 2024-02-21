@@ -11,17 +11,17 @@ import SwiftData
 @Model
 class TaskItem {
     var name: String
-    var minutes: Double
+    var seconds: Double
+    var minutes: Double {
+        Double(seconds) / 60
+    }
     var perceivedDifficulty: Int
     var rhythm: Rhythm?
 
-    var seconds: Double {
-        Double(minutes) * 60
-    }
 
-    init(name: String, minutes: Double, perceivedDifficulty: Int = 3, rhythm: Rhythm? = nil) {
+    init(name: String, seconds: Double, perceivedDifficulty: Int = 3, rhythm: Rhythm? = nil) {
         self.name = name
-        self.minutes = minutes
+        self.seconds = seconds
         self.perceivedDifficulty = perceivedDifficulty
         self.rhythm = rhythm
     }

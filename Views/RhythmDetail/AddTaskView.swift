@@ -8,17 +8,22 @@
 import SwiftData
 import SwiftUI
 
+
 struct AddTaskView: View {
     @State private var name = "New Task"
-    @State private var minutes = 5
     @State private var perceivedDifficulty = 3
     @Bindable var currentRhythm: Rhythm
     
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
     
-    @State private var minutesNew: Int = 0
-    @State private var secondsNew: Int = 15
+    @State private var minutes: Int = 0
+    @State private var seconds: Int = 15
+    
+    // Get total seconds
+    private var totalSeconds: Double {
+        return  Double(minutes * 60) + Double(seconds)
+    }
     
     let gradient =
         LinearGradient(colors: [.teal, .green], startPoint: .leading, endPoint: .trailing)
@@ -55,7 +60,7 @@ struct AddTaskView: View {
                             .foregroundStyle(.white)
                         Spacer()
                             
-                        Text("\(minutes) min.")
+                        Text("\(minutes) min. \(seconds) sec.")
                         Image(systemName: "chevron.right")
                     }
                     .foregroundStyle(.white)
@@ -65,7 +70,7 @@ struct AddTaskView: View {
                     .clipShape(.rect(cornerRadius: 10))
                 }
                 .sheet(isPresented: $showDurationEdit) {
-                    TaskDurationView(minutes: $minutesNew, seconds: $secondsNew)
+                    TaskDurationView(minutes: $minutes, seconds: $seconds)
                         .presentationDetents([.fraction(0.5)])
                 }
                     
@@ -86,7 +91,7 @@ struct AddTaskView: View {
                 Spacer()
                 
                 Button {
-                    let newTask = TaskItem(name: name, minutes: Double(minutes), perceivedDifficulty: perceivedDifficulty, rhythm: currentRhythm)
+                    let newTask = TaskItem(name: name, seconds: totalSeconds, perceivedDifficulty: perceivedDifficulty, rhythm: currentRhythm)
                         
                     currentRhythm.tasks.append(newTask)
                     dismiss()

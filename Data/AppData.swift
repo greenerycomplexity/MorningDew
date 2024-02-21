@@ -37,25 +37,25 @@ struct AppData {
             }
             
             let officeDayTasks = [
-                TaskItem(name: "Brush teeth", minutes: 1, perceivedDifficulty: 1),
-                TaskItem(name: "Shower", minutes: 1, perceivedDifficulty: 2),
-                TaskItem(name: "Make coffee", minutes: 1, perceivedDifficulty: 2),
-                TaskItem(name: "Pick outfit", minutes: 1, perceivedDifficulty: 3),
-                TaskItem(name: "Make bed", minutes: 1, perceivedDifficulty: 1)
+                TaskItem(name: "Brush teeth", seconds: 60, perceivedDifficulty: 1),
+                TaskItem(name: "Shower", seconds: 60, perceivedDifficulty: 2),
+                TaskItem(name: "Make coffee", seconds: 60, perceivedDifficulty: 2),
+                TaskItem(name: "Pick outfit", seconds: 60, perceivedDifficulty: 3),
+                TaskItem(name: "Make bed", seconds: 60, perceivedDifficulty: 1)
             ]
 
             let weekendTasks = [
-                TaskItem(name: "Drink a glass of water", minutes: 1, perceivedDifficulty: 1),
-                TaskItem(name: "Have breakfast", minutes: 15, perceivedDifficulty: 2),
-                TaskItem(name: "Yoga", minutes: 30, perceivedDifficulty: 4),
-                TaskItem(name: "Meditate", minutes: 10, perceivedDifficulty: 3),
-                TaskItem(name: "Journal", minutes: 15, perceivedDifficulty: 3)
+                TaskItem(name: "Drink a glass of water", seconds: 60, perceivedDifficulty: 1),
+                TaskItem(name: "Have breakfast", seconds: 15 * 60, perceivedDifficulty: 2),
+                TaskItem(name: "Yoga", seconds: 30 * 60, perceivedDifficulty: 4),
+                TaskItem(name: "Meditate", seconds: 10 * 60, perceivedDifficulty: 3),
+                TaskItem(name: "Journal", seconds: 15 * 60, perceivedDifficulty: 3)
             ]
 
             let wfhTasks = [
-                TaskItem(name: "Wash face", minutes: 3, perceivedDifficulty: 1),
-                TaskItem(name: "Make coffee", minutes: 5, perceivedDifficulty: 2),
-                TaskItem(name: "Have breakfast", minutes: 15, perceivedDifficulty: 2)
+                TaskItem(name: "Wash face", seconds: 3 * 60, perceivedDifficulty: 1),
+                TaskItem(name: "Make coffee", seconds: 5 * 60, perceivedDifficulty: 2),
+                TaskItem(name: "Have breakfast", seconds: 15 * 60, perceivedDifficulty: 2)
             ]
 
 

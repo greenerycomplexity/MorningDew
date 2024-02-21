@@ -23,10 +23,10 @@ struct PreviewData {
             container.mainContext.insert(rhythm)
             
             let tasks = [
-                TaskItem(name: "Shower", minutes: 10, perceivedDifficulty: 4),
-                TaskItem(name: "Breakfast", minutes: 20, perceivedDifficulty: 2),
-                TaskItem(name: "Water plants", minutes: 5, perceivedDifficulty: 4),
-                TaskItem(name: "Pick outfit", minutes: 4, perceivedDifficulty: 5)
+                TaskItem(name: "Shower", seconds: 10 * 60, perceivedDifficulty: 4),
+                TaskItem(name: "Breakfast", seconds: 20 * 60, perceivedDifficulty: 2),
+                TaskItem(name: "Water plants", seconds: 5 * 60, perceivedDifficulty: 4),
+                TaskItem(name: "Pick outfit", seconds: 4 * 60, perceivedDifficulty: 5)
             ]
             
             rhythm.tasks.append(contentsOf: tasks)
@@ -37,16 +37,16 @@ struct PreviewData {
         }
     }()
     
-    static let taskItemExample = TaskItem(name: "Shower Example", minutes: 10)
+    static let taskItemExample = TaskItem(name: "Shower Example", seconds: 10 * 60)
     
     static let rhythmExample: Rhythm = {
         let rhythm = Rhythm(name: "Morning Example", emoji: "🌻")
         
         let tasks = [
-            TaskItem(name: "Shower", minutes: 10, perceivedDifficulty: 4),
-            TaskItem(name: "Breakfast", minutes: 20, perceivedDifficulty: 2),
-            TaskItem(name: "Water plants", minutes: 5, perceivedDifficulty: 4),
-            TaskItem(name: "Pick outfit", minutes: 4, perceivedDifficulty: 5)
+            TaskItem(name: "Shower", seconds: 10 * 60, perceivedDifficulty: 4),
+            TaskItem(name: "Breakfast", seconds: 20 * 60, perceivedDifficulty: 2),
+            TaskItem(name: "Water plants", seconds: 5 * 60, perceivedDifficulty: 4),
+            TaskItem(name: "Pick outfit", seconds: 4 * 60, perceivedDifficulty: 5)
         ]
         
         rhythm.tasks.append(contentsOf: tasks)

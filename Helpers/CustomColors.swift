@@ -13,10 +13,3 @@ struct CustomColor {
         makeColor(32, 32, 32)
     }
 }
-
-extension ShapeStyle where Self == Color {
-    static var offBlackBackground: Color {
-        CustomColor.offBlackBackground
-    }
-
-}

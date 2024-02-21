@@ -81,7 +81,7 @@ struct RhythmCheckupView: View {
                         rhythmManager.addExtraTime(seconds: extraTimeAllotment)
                         rhythmManager.currentState = .active
                     } label: {
-                        Text("I need more time (+\(extraTimeAllotment.formatted())s)")
+                        Text("I need more time (+\(extraTimeAllotment.clean)s)")
                             .foregroundStyle(.white)
                             .font(.headline.bold())
                             .fontDesign(.rounded)

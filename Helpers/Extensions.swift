@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 extension Double {
-    var formatted: String {
+    var clean: String {
         // Check if the double value is an integer
         // Since it will display nicer
         if floor(self) == self {

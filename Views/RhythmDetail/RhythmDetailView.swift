@@ -45,7 +45,7 @@ struct RhythmDetailView: View {
                     // Rhythm length (in minutes)
                     // Button to add new tasks
                     HStack {
-                        Text("⏱️ \(currentRhythm.totalMinutes.formatted()) minutes")
+                        Text("⏱️ \(currentRhythm.totalMinutes.clean) minutes")
                             .font(.largeTitle.bold())
                             .fontDesign(.rounded)
                         Spacer()
@@ -158,13 +158,12 @@ struct TaskListCell: View {
                     .fontDesign(.default)
                 
                 if task.minutes == 1.0 {
-                    Text("\(task.minutes.formatted()) minute")
+                    Text("\(task.minutes.clean) minute")
                         .foregroundStyle(.secondary)
                 } else {
-                    Text("\(task.minutes.formatted()) minutes")
+                    Text("\(task.minutes.clean) minutes")
                         .foregroundStyle(.secondary)
                 }
-                // Text("^[\(task.minutes.formatted()) minute](inflect:true)")
             }
             .font(.subheadline)
             .padding(.horizontal)
