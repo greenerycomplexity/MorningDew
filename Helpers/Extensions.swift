@@ -26,6 +26,10 @@ func delay(seconds: Double, _ perform: @escaping () -> Void) {
     }
 }
 
+func makeColor(_ red: Double, _ green: Double, _ blue: Double) -> Color {
+    Color(red: red/255, green: green/255, blue: blue/255)
+}
+
 extension View {
     func moveAndFade(showAnimation: Bool, duration: Double = 1.0, delay: Double = 0.0) -> some View {
         self

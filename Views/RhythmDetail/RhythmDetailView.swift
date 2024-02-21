@@ -119,6 +119,7 @@ struct RhythmDetailView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .sheet(isPresented: $showAddTaskView) {
                     AddTaskView(currentRhythm: currentRhythm)
+                        .presentationDetents([.fraction(0.50)])
                 }
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
