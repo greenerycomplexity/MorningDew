@@ -39,31 +39,43 @@ struct RhythmDetailView: View {
     let gradient =
         LinearGradient(colors: [.teal, .green], startPoint: .leading, endPoint: .trailing)
     
+    let circleGradient =
+        LinearGradient(colors: [.purple, .pink, .yellow], startPoint: .leading, endPoint: .trailing)
+    
+    let circleHeight: CGFloat = 300
+    
     var body: some View {
         ZStack {
-            LinearGradient(colors: [.cyan, .green], startPoint: .bottomLeading, endPoint: .topTrailing)
-                .ignoresSafeArea()
             
-            Color.black.opacity(0.3).ignoresSafeArea()
+            CustomColor.offBlackBackground.ignoresSafeArea()
             
-            // CustomColor.offBlackBackground
+            
             if !isActive {
+                // Colored Ring
+    
                 VStack {
-                    VStack(alignment: .leading, spacing: 5) {
-                        HStack {
-                            Text("⏱️ \(currentRhythm.totalMinutes.clean) minutes")
+                    ZStack(alignment: .bottom) {
+                        Circle()
+                            .trim(from: 0.0, to: 0.5)
+                            .stroke(circleGradient, style: StrokeStyle(lineWidth: 7))
+                            .rotationEffect(.degrees(180))
+                            .frame(height: circleHeight)
+                            .frame(height: circleHeight / 2)
+                            .offset(y: circleHeight / 4)
+                            .padding(.top)
+
+                        VStack(spacing: 10) {
+                            Text("\(currentRhythm.totalMinutes.clean) minutes")
                                 .font(.largeTitle.bold())
-                                .fontDesign(.rounded)
-                                
-                            Spacer()
+                                .fontWidth(.condensed)
+                            
+                            // Start suggestion
+                            Text(
+                                "Start now, and be ready by **\(estimatedEndTime.formatted(date: .omitted, time: .shortened))**")
                         }
-                        
-                        // Start suggestion
-                        Text(
-                            "Start now, and be ready by **\(estimatedEndTime.formatted(date: .omitted, time: .shortened))**")
+                        .foregroundStyle(.white)
                     }
-                    .padding(.horizontal, 20)
-                    .foregroundStyle(.white)
+                    .padding(.top, 5)
                     
                     // Display the tasks in list view
                     List {
@@ -110,16 +122,35 @@ struct RhythmDetailView: View {
                 }
                 .sheet(isPresented: $showAddTaskView) {
                     AddTaskView(currentRhythm: currentRhythm)
-                        .presentationDetents([.fraction(0.50)])
+                        .presentationDetents([.fraction(0.5), .large])
                         .presentationDragIndicator(.visible)
                 }
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
-                        Button("Add Task") {
+                        // Button("Add Task") {
+                        //     showAddTaskView = true
+                        // }
+                        // 
+                        Button {
                             showAddTaskView = true
+                        } label: {
+                            ZStack {
+                                gradient
+                                Color.white.opacity(0.5)
+                            }.mask {
+                                Image(systemName: "plus.circle.fill")
+                            }
+                            .frame(width: 40, height: 40)
                         }
                     }
                 }
+                .navigationTitle("\(currentRhythm.name) \(currentRhythm.emoji)")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbarColorScheme(.dark, for: .navigationBar)
+                .toolbarBackground(
+                    makeColor(68, 68, 68),
+                    for: .navigationBar)
+                .toolbarBackground(.visible, for: .navigationBar)
                 .onAppear(perform: {
                     withAnimation(.easeIn(duration: 0.8).delay(3.5)) {
                         suggestStart = true
@@ -145,7 +176,7 @@ struct TaskListCell: View {
         HStack {
             VStack(alignment: .leading) {
                 Text(task.name)
-                    .font(.title2.bold())
+                    .font(.title3.bold())
                 
                 if task.minutes == 1.0 {
                     Text("\(task.minutes.clean) minute")
@@ -158,10 +189,10 @@ struct TaskListCell: View {
             
             Spacer()
         }
-        .foregroundStyle(.black)
+        .foregroundStyle(.white)
         .padding(.vertical)
         .frame(maxWidth: .infinity)
-        .background(.white)
+        .background(makeColor(68, 68, 68))
         .clipShape(RoundedRectangle(cornerRadius: 15))
     }
 }

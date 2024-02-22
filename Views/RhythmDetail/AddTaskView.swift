@@ -8,7 +8,6 @@
 import SwiftData
 import SwiftUI
 
-
 struct AddTaskView: View {
     @State private var name = "New Task"
     @State private var perceivedDifficulty = 3
@@ -22,7 +21,7 @@ struct AddTaskView: View {
     
     // Get total seconds
     private var totalSeconds: Double {
-        return  Double(minutes * 60) + Double(seconds)
+        return Double(minutes * 60) + Double(seconds)
     }
     
     let gradient =
@@ -39,7 +38,8 @@ struct AddTaskView: View {
             VStack(spacing: 10) {
                 HStack {
                     TextField("New Task", text: $name)
-                        .font(.title2.bold())
+                        .font(.title.bold())
+                        .fontWidth(.expanded)
                         .foregroundStyle(.white)
                         
                     Image(systemName: "pencil")
@@ -72,6 +72,7 @@ struct AddTaskView: View {
                 .sheet(isPresented: $showDurationEdit) {
                     TaskDurationView(minutes: $minutes, seconds: $seconds)
                         .presentationDetents([.fraction(0.5)])
+                        .presentationDragIndicator(.visible)
                 }
                     
                 HStack {
@@ -106,8 +107,6 @@ struct AddTaskView: View {
                         .clipShape(Capsule())
                 }
                 .padding(.top, 30)
-                
-                
             }
             .padding(20)
         }
