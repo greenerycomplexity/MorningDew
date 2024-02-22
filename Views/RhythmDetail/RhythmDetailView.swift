@@ -34,23 +34,36 @@ struct RhythmDetailView: View {
     @State var animationDelay = 0.5
 
     @State private var suggestStart: Bool = false
+    @Environment(\.dismiss) var dismiss
+    
+    let gradient =
+        LinearGradient(colors: [.teal, .green], startPoint: .leading, endPoint: .trailing)
     
     var body: some View {
         ZStack {
-            RadialGradient(colors: [.green, .white], center: .bottom, startRadius: .zero, endRadius: 1000)
+            LinearGradient(colors: [.cyan, .green], startPoint: .bottomLeading, endPoint: .topTrailing)
                 .ignoresSafeArea()
             
+            Color.black.opacity(0.3).ignoresSafeArea()
+            
+            // CustomColor.offBlackBackground
             if !isActive {
                 VStack {
-                    // Rhythm length (in minutes)
-                    // Button to add new tasks
-                    HStack {
-                        Text("⏱️ \(currentRhythm.totalMinutes.clean) minutes")
-                            .font(.largeTitle.bold())
-                            .fontDesign(.rounded)
-                        Spacer()
+                    VStack(alignment: .leading, spacing: 5) {
+                        HStack {
+                            Text("⏱️ \(currentRhythm.totalMinutes.clean) minutes")
+                                .font(.largeTitle.bold())
+                                .fontDesign(.rounded)
+                                
+                            Spacer()
+                        }
+                        
+                        // Start suggestion
+                        Text(
+                            "Start now, and be ready by **\(estimatedEndTime.formatted(date: .omitted, time: .shortened))**")
                     }
-                    .padding(.horizontal)
+                    .padding(.horizontal, 20)
+                    .foregroundStyle(.white)
                     
                     // Display the tasks in list view
                     List {
@@ -72,54 +85,33 @@ struct RhythmDetailView: View {
                                 modelContext.delete(task)
                             }
                         })
-                        .onMove(perform: { source, destination in
-                            for taskIndex in source {
-                                let moveTask = currentRhythm.tasks[taskIndex]
-                                
-                                currentRhythm.tasks.remove(at: taskIndex)
-                                
-                                currentRhythm.tasks.insert(moveTask, at: destination)
-                            }
-                        })
                     }
                     .scrollContentBackground(.hidden)
                     .scrollIndicators(.hidden)
                     
-                    // Start Suggesstion
-                    // Text("""
-                    // If you start now,
-                    // you'll be ready by **\(estimatedEndTime.formatted(date: .omitted, time: .shortened))**
-                    // """)
-                    
-                    Text("""
-                    Start now, 
-                    and be ready by **\(estimatedEndTime.formatted(date: .omitted, time: .shortened))**
-                    """)
-                    .multilineTextAlignment(.center)
-                    .padding()
-                    .opacity(suggestStart ? 1.0 : 0)
-                    .offset(y: suggestStart ? 0 : 30.0)
-                    .foregroundStyle(.primary)
-                    
                     if currentRhythm.tasks.count > 0 {
-                        // Start the routine
-                        Image(systemName: "play.circle.fill")
-                            .foregroundStyle(.green)
-                            .font(.system(size: 80))
-                            .background(.white)
-                            .clipShape(Circle())
-                            .onTapGesture(perform: {
-                                withAnimation {
-                                    isActive = true
-                                }
-                            })
+                        Button {
+                            withAnimation {
+                                isActive = true
+                            }
+                        } label: {
+                            Text("Start Rhythm")
+                                .font(.headline)
+                                .foregroundStyle(.black)
+                                .padding()
+                                .frame(maxWidth: .infinity, maxHeight: 60)
+                                .background(.white.opacity(0.5))
+                                .background(gradient.opacity(1.0))
+                                .clipShape(Capsule())
+                        }
+                        .padding(.bottom)
+                        .padding(.horizontal, 20)
                     }
                 }
-                .navigationTitle(currentRhythm.name)
-                .navigationBarTitleDisplayMode(.inline)
                 .sheet(isPresented: $showAddTaskView) {
                     AddTaskView(currentRhythm: currentRhythm)
                         .presentationDetents([.fraction(0.50)])
+                        .presentationDragIndicator(.visible)
                 }
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
@@ -153,16 +145,12 @@ struct TaskListCell: View {
         HStack {
             VStack(alignment: .leading) {
                 Text(task.name)
-                    .foregroundStyle(.primary)
                     .font(.title2.bold())
-                    .fontDesign(.default)
                 
                 if task.minutes == 1.0 {
                     Text("\(task.minutes.clean) minute")
-                        .foregroundStyle(.secondary)
                 } else {
                     Text("\(task.minutes.clean) minutes")
-                        .foregroundStyle(.secondary)
                 }
             }
             .font(.subheadline)
@@ -170,9 +158,9 @@ struct TaskListCell: View {
             
             Spacer()
         }
+        .foregroundStyle(.black)
         .padding(.vertical)
         .frame(maxWidth: .infinity)
-        .background(.thinMaterial)
         .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 15))
     }

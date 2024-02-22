@@ -39,7 +39,7 @@ struct AddTaskView: View {
             VStack(spacing: 10) {
                 HStack {
                     TextField("New Task", text: $name)
-                        .font(.title.bold())
+                        .font(.title2.bold())
                         .foregroundStyle(.white)
                         
                     Image(systemName: "pencil")

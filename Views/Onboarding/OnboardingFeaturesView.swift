@@ -47,6 +47,7 @@ struct OnboardingFeaturesView: View {
 
             Button {
                 musicPlayer?.stop()
+                soundPlayer?.stop()
                 isOnboarding = false
 
             } label: {
