@@ -83,6 +83,7 @@ struct ContentView: View {
                             }
                             .sheet(isPresented: $showAddRhythmView) {
                                 AddRhythmView()
+                                    .presentationDetents([.fraction(0.5), .large])
                             }
                         }
                     }

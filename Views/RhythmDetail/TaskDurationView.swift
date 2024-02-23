@@ -20,7 +20,7 @@ struct TaskDurationView: View {
                 Text("Duration")
                     .font(.title.bold())
                 
-                Text("Select how long this Task should last.")
+                Text("Select how long this Task should last")
                 
                 TimePickerView(minutes: $minutes, seconds: $seconds)
                     .padding(.vertical, 10)

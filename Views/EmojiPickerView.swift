@@ -17,7 +17,6 @@ struct EmojiPickerView: View {
     ]
     private var emojis = [String]()
     
-    
     init(chosenEmoji: Binding<String>) {
         for range in emojiUnicodeRanges {
             for emoji in range {
@@ -32,41 +31,37 @@ struct EmojiPickerView: View {
         GridItem(.flexible(minimum: 70)),
         GridItem(.flexible(minimum: 70)),
         GridItem(.flexible(minimum: 70)),
-        GridItem(.flexible(minimum: 70))
+        GridItem(.flexible(minimum: 70)),
     ]
     
     var body: some View {
-        NavigationStack {
-            ZStack {
-                Color.black.opacity(0.9)
-                    .ignoresSafeArea()
+        ZStack {
+            Color.black.opacity(0.9)
+                .ignoresSafeArea()
+            VStack {
+                Text("Choose an icon for your Rhythm")
+                    .font(.headline)
+                    .foregroundStyle(.white)
                 
                 ScrollView {
-                    LazyVGrid (columns: gridLayout) {
-                        ForEach (emojis, id: \.self) { emoji in
+                    LazyVGrid(columns: gridLayout) {
+                        ForEach(emojis, id: \.self) { emoji in
                             Text(emoji)
                                 .font(.system(size: 45))
-                                .frame(minWidth:80, minHeight: 80)
+                                .frame(minWidth: 80, minHeight: 80)
                                 .background(.white.opacity(0.2))
                                 .clipShape(.rect(cornerRadius: 15))
                                 .onTapGesture {
                                     chosenEmoji = emoji
                                     dismiss()
                                 }
-                                .padding(.bottom,2)
+                                .padding(.bottom, 2)
                         }
-                        
                     }
                     .padding()
                 }
             }
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
-                }
-            }
+            .padding(.top, 30)
         }
     }
 }
@@ -75,4 +70,3 @@ struct EmojiPickerView: View {
     @State var emoji = "🚀"
     return EmojiPickerView(chosenEmoji: $emoji)
 }
-
