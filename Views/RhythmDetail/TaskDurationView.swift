@@ -10,17 +10,11 @@ import SwiftUI
 struct TaskDurationView: View {
     @Binding var minutes: Int
     @Binding var seconds: Int
-    
-    let gradient =
-        LinearGradient(colors: [.teal, .green], startPoint: .leading, endPoint: .trailing)
-        
-    // LinearGradient(colors: [.cyan, .green], startPoint: .leading, endPoint: .trailing)
-    
-    @Environment (\.dismiss) var dismiss
+    @Environment(\.dismiss) var dismiss
 
     var body: some View {
         ZStack {
-            CustomColor.offBlackBackground.ignoresSafeArea()
+            Color.offBlack.ignoresSafeArea()
             
             VStack(alignment: .center, spacing: 15) {
                 Text("Duration")
@@ -42,18 +36,8 @@ struct TaskDurationView: View {
                         .clipShape(Capsule())
                         .overlay(
                             Capsule()
-                                .stroke(gradient, lineWidth: 3)
+                                .stroke(.buttonGradient, lineWidth: 3)
                         )
-                    
-                    // // Temporary text
-                    // Text("Confirm")
-                    //     .font(.headline)
-                    //     .foregroundStyle(CustomColor.offBlackBackground)
-                    //     .padding()
-                    //     .frame(width: 150, height: 50)
-                    //     .background(.white.opacity(0.1))
-                    //     .background(gradient.opacity(1.0))
-                    //     .clipShape(Capsule())
                 }
             }
             .foregroundStyle(.white)
@@ -70,11 +54,6 @@ struct TimePickerView: View {
 
     var body: some View {
         ZStack {
-            // Rectangle()
-            //     .fill(.gray.opacity(0.3))
-            //     .frame(maxWidth: .infinity, minHeight: 30, maxHeight: 30)
-            //     .clipShape(.rect(cornerRadius: 10))
-            
             HStack(spacing: 30) {
                 HStack(spacing: 0) {
                     Picker("select minutes", selection: $minutes) {

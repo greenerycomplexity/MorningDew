@@ -36,20 +36,13 @@ struct RhythmDetailView: View {
     @State private var suggestStart: Bool = false
     @Environment(\.dismiss) var dismiss
     
-    let gradient =
-        LinearGradient(colors: [.teal, .green], startPoint: .leading, endPoint: .trailing)
-    
-    let circleGradient =
+    let archGradient =
         LinearGradient(colors: [.purple, .pink, .yellow], startPoint: .leading, endPoint: .trailing)
-    
     let circleHeight: CGFloat = 300
     
     var body: some View {
         ZStack {
-            
-            CustomColor.offBlackBackground.ignoresSafeArea()
-            
-            
+            Color.offBlack.ignoresSafeArea()
             if !isActive {
                 // Colored Ring
     
@@ -57,7 +50,7 @@ struct RhythmDetailView: View {
                     ZStack(alignment: .bottom) {
                         Circle()
                             .trim(from: 0.0, to: 0.5)
-                            .stroke(circleGradient, style: StrokeStyle(lineWidth: 7))
+                            .stroke(archGradient, style: StrokeStyle(lineWidth: 7))
                             .rotationEffect(.degrees(180))
                             .frame(height: circleHeight)
                             .frame(height: circleHeight / 2)
@@ -102,21 +95,12 @@ struct RhythmDetailView: View {
                     .scrollIndicators(.hidden)
                     
                     if currentRhythm.tasks.count > 0 {
-                        Button {
+                        Button ("Start Rhythm") {
                             withAnimation {
                                 isActive = true
                             }
-                        } label: {
-                            Text("Start Rhythm")
-                                .font(.headline)
-                                .foregroundStyle(.black)
-                                .padding()
-                                .frame(maxWidth: .infinity, maxHeight: 60)
-                                .background(.white.opacity(0.5))
-                                .background(gradient.opacity(1.0))
-                                .clipShape(Capsule())
                         }
-                        .padding(.bottom)
+                        .buttonStyle(GradientButton(gradient: .buttonGradient))
                         .padding(.horizontal, 20)
                     }
                 }
@@ -127,15 +111,11 @@ struct RhythmDetailView: View {
                 }
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
-                        // Button("Add Task") {
-                        //     showAddTaskView = true
-                        // }
-                        // 
                         Button {
                             showAddTaskView = true
                         } label: {
                             ZStack {
-                                gradient
+                                LinearGradient.buttonGradient
                                 Color.white.opacity(0.5)
                             }.mask {
                                 Image(systemName: "plus.circle.fill")
@@ -148,9 +128,10 @@ struct RhythmDetailView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbarColorScheme(.dark, for: .navigationBar)
                 .toolbarBackground(
-                    makeColor(68, 68, 68),
+                    Color.offBlackHighlight,
                     for: .navigationBar)
                 .toolbarBackground(.visible, for: .navigationBar)
+                
                 .onAppear(perform: {
                     withAnimation(.easeIn(duration: 0.8).delay(3.5)) {
                         suggestStart = true
@@ -192,7 +173,7 @@ struct TaskListCell: View {
         .foregroundStyle(.white)
         .padding(.vertical)
         .frame(maxWidth: .infinity)
-        .background(makeColor(68, 68, 68))
+        .background(Color.offBlackHighlight)
         .clipShape(RoundedRectangle(cornerRadius: 15))
     }
 }
