@@ -45,11 +45,11 @@ struct OnboardingEmpathiseView: View {
             } label: {
                 Text("Tap to Gasp")
                     .foregroundStyle(.white)
-                    .font(.title3.bold())
+                    .font(.title2.bold())
                     .fontDesign(.rounded)
-                    .padding()
+                    .padding(25)
                     .background(.orange.gradient)
-                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                    .clipShape(.rect(cornerRadius: 20))
                     .scaleEffect(showGaspButton ? 1 : 0)
                     .animation(.spring(bounce: 0.6).delay(delay * 4), value: showGaspButton)
             }

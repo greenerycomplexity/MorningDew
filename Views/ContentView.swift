@@ -40,7 +40,6 @@ struct ContentView: View {
                                     VStack {
                                         Text("\(rhythm.totalMinutes.clean)")
                                             .font(.title2.bold())
-                                            .fontWeight(.heavy)
                                         
                                         Text("minutes")
                                             .font(.subheadline)

@@ -23,10 +23,10 @@ struct PreviewData {
             container.mainContext.insert(rhythm)
             
             let tasks = [
-                TaskItem(name: "Shower", seconds: 10 * 60, perceivedDifficulty: 4),
-                TaskItem(name: "Breakfast", seconds: 20 * 60, perceivedDifficulty: 2),
-                TaskItem(name: "Water plants", seconds: 5 * 60, perceivedDifficulty: 4),
-                TaskItem(name: "Pick outfit", seconds: 4 * 60, perceivedDifficulty: 5)
+                TaskItem(name: "Breakfast", seconds: 90, perceivedDifficulty: 2),
+                TaskItem(name: "Shower", seconds: 75, perceivedDifficulty: 4),
+                TaskItem(name: "Water plants", seconds: 30, perceivedDifficulty: 4),
+                TaskItem(name: "Pick outfit", seconds: 45, perceivedDifficulty: 5)
             ]
             
             rhythm.tasks.append(contentsOf: tasks)
@@ -43,10 +43,10 @@ struct PreviewData {
         let rhythm = Rhythm(name: "Morning Example", emoji: "🌻")
         
         let tasks = [
+            TaskItem(name: "Breakfast", seconds: 20, perceivedDifficulty: 2),
+            TaskItem(name: "Water plants", seconds: 70, perceivedDifficulty: 4),
             TaskItem(name: "Shower", seconds: 10 * 60, perceivedDifficulty: 4),
-            TaskItem(name: "Breakfast", seconds: 20 * 60, perceivedDifficulty: 2),
-            TaskItem(name: "Water plants", seconds: 5 * 60, perceivedDifficulty: 4),
-            TaskItem(name: "Pick outfit", seconds: 4 * 60, perceivedDifficulty: 5)
+            TaskItem(name: "Pick outfit", seconds: 100, perceivedDifficulty: 5)
         ]
         
         rhythm.tasks.append(contentsOf: tasks)
