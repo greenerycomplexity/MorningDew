@@ -159,11 +159,7 @@ struct TaskListCell: View {
                 Text(task.name)
                     .font(.title3.bold())
                 
-                if task.minutes == 1.0 {
-                    Text("\(task.minutes.clean) minute")
-                } else {
-                    Text("\(task.minutes.clean) minutes")
-                }
+                Text(task.seconds.detailed)
             }
             .font(.subheadline)
             .padding(.horizontal)

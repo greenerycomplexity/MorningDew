@@ -9,19 +9,33 @@ import Foundation
 import SwiftUI
 
 extension Double {
+    // MARK: Return a rounded down value for minutes Double values. Displays better.
+
     var clean: String {
-        // Check if the double value is an integer
-        // Since it will display nicer
-        if floor(self) == self {
-            return String(Int(self))
+        return String(Int(self.rounded(.down)))
+    }
+
+    // MARK: Return a detailed minute and second string from a Seconds Double value
+
+    // When not used directly in a Text view, the return type must be LocalizedStringKey for the inflection engine to work
+    var detailed: LocalizedStringKey {
+        let minutes = Int(self / 60)
+        let remainingSeconds = Int(self) % 60
+
+        if minutes > 0 {
+            if remainingSeconds > 0 {
+                return "^[\(minutes) minute](inflect: true) and ^[\(remainingSeconds) second](inflect: true)"
+            } else {
+                return "^[\(minutes) minute](inflect: true)"
+            }
         } else {
-            return String(format: "%.1f", self)
+            return "^[\(remainingSeconds) second](inflect: true)"
         }
     }
 }
 
 func delay(seconds: Double, _ perform: @escaping () -> Void) {
-    DispatchQueue.main.asyncAfter(deadline: .now() + seconds ) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
         perform()
     }
 }
