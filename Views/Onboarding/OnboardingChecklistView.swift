@@ -10,7 +10,7 @@ import SwiftUI
 struct OnboardingChecklistView: View {
     @State private var showText = false
     @State private var showCellAnimation = false
-    @State var listCellDelay = 1.0
+    @State var listCellDelay = 0.5
 
     let listTextColor: Color = .white
     let backgroundListRowColor: Material = .ultraThinMaterial
@@ -20,13 +20,15 @@ struct OnboardingChecklistView: View {
     @Binding var activeTab: OnboardingTab
     let tab: OnboardingTab = .checklist
 
+    let exampleTasks = ["Make coffee", "Shower", "Pushups", "Feed my pet unicorn", "Pick an outfit"]
+
     var body: some View {
         VStack {
             Spacer()
             Text("""
             You already have a morning routine,
             a set of tasks to do - your morning
-            **Rhythm**.
+            ***Rhythm***.
             """)
             .font(.title3)
             .foregroundStyle(.white)
@@ -35,13 +37,12 @@ struct OnboardingChecklistView: View {
             .offset(y: showText ? 0 : 20)
             .animation(.bouncy(duration: textDuration), value: showText)
 
-            ForEach(1 ..< 4) { index in
+            ForEach(exampleTasks.indices, id: \.self) { index in
                 HStack {
                     VStack(alignment: .leading) {
-                        Text("Task \(index)")
+                        Text("\(index + 1). \(exampleTasks[index])")
                             .foregroundStyle(listTextColor)
                             .font(.title2.bold())
-                            .fontDesign(.default)
                     }
                     .padding(.horizontal)
 
@@ -63,22 +64,14 @@ struct OnboardingChecklistView: View {
             Spacer()
         }
         .padding(.horizontal, 20)
-        // .onAppear(perform: {
-        //     // Because onAppear might execute too early,
-        //     // before the List view is fully initialized and ready for animation
-        //     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-        //         showCellAnimation = true
-        //     }
-        //     testAnimation = true
-        // })
-
         .onChange(of: activeTab) {
             if activeTab == self.tab {
+                showText = true
                 musicPlayer?.setVolume(0.5, fadeDuration: 1)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                delay(seconds: 2.0) {
                     showCellAnimation = true
                 }
-                showText = true
+                
             }
         }
     }

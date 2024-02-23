@@ -16,7 +16,7 @@ struct CustomColor {
     }
 }
 
-extension Color {
+extension ShapeStyle where Self == Color {
     static var offBlack: Color {
         CustomColor.makeColor(32, 32, 32)
     }

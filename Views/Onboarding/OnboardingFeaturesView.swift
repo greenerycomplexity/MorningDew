@@ -17,7 +17,13 @@ struct OnboardingFeaturesView: View {
     @State private var showTimer = false
     @State private var showMusic = false
     @State private var showAlarm = false
+    @State private var showBreathe = false
     @State private var showStartButton = false
+    
+    func pauseAllSounds() {
+        soundPlayer?.pause()
+        musicPlayer?.pause()
+    }
 
     var body: some View {
         VStack {
@@ -29,8 +35,7 @@ struct OnboardingFeaturesView: View {
                         .fontDesign(.monospaced)
 
                     Text("helps by using:")
-                        .font(.title2)
-                        .fontDesign(.rounded)
+                        .font(.title2.bold())
                 }
                 .foregroundStyle(.white)
                 .padding(.bottom, 20)
@@ -41,6 +46,8 @@ struct OnboardingFeaturesView: View {
                 OnboardingFeatureCell(showCellAnimation: $showMusic, icon: "🎵", title: "Fast-paced music", secondary: "Gets you moving!")
 
                 OnboardingFeatureCell(showCellAnimation: $showAlarm, icon: "🚨", title: "Random checkups", secondary: "No response? Sound the alarm!")
+                
+                OnboardingFeatureCell(showCellAnimation: $showBreathe, icon: "🧘", title: "Guided Breathing", secondary: "A moment of calm, if you're overwhelmed.")
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 50)
@@ -72,24 +79,33 @@ struct OnboardingFeaturesView: View {
                 }
 
                 DispatchQueue.main.asyncAfter(deadline: deadline + 1.0) {
-                    musicPlayer?.pause()
+                    pauseAllSounds()
                     showTimer = true
                     SoundPlayer().play(file: "tickingClock.wav")
                 }
 
-                DispatchQueue.main.asyncAfter(deadline: deadline + 3.5) {
+                DispatchQueue.main.asyncAfter(deadline: deadline + 3) {
+                    pauseAllSounds()
                     showMusic = true
                     SoundPlayer().play(file: "electro.wav")
                 }
 
                 DispatchQueue.main.asyncAfter(deadline: deadline + 6.5) {
+                    pauseAllSounds()
                     showAlarm = true
                     SoundPlayer().play(file: "alarm.wav")
                 }
-
-                DispatchQueue.main.asyncAfter(deadline: deadline + 9.5) {
-                    soundPlayer?.pause()
+                
+                DispatchQueue.main.asyncAfter(deadline: deadline + 8.5) {
+                    pauseAllSounds()
+                    showBreathe = true
+                    
+                    // Continue playing the birds sound
+                    musicPlayer?.volume = 0.8
                     musicPlayer?.play()
+                }
+
+                DispatchQueue.main.asyncAfter(deadline: deadline + 11) {
                     showStartButton = true
                 }
             }
@@ -109,9 +125,9 @@ struct OnboardingFeatureCell: View {
     var secondaryColor: any ShapeStyle = Color.secondary
 
     var body: some View {
-        HStack(spacing: 20) {
+        HStack(spacing: 15) {
             Text(icon)
-                .font(.custom("SF Pro", size: 50, relativeTo: .largeTitle))
+                .font(.custom("SF Pro", size: 40, relativeTo: .largeTitle))
                 .fontDesign(.rounded)
                 .frame(width: 60, height: 80)
                 .padding(.leading)
@@ -121,13 +137,15 @@ struct OnboardingFeatureCell: View {
                     .font(.title3.bold())
                     .fontDesign(.rounded)
                     .foregroundStyle(titleColor)
+                
                 Text(secondary)
-                    .font(.headline)
-                    .foregroundStyle(secondaryColor)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.offBlackHighlight)
             }
             Spacer()
         }
-        .padding(.vertical, 10)
+        .padding(.vertical, 5)
         .frame(maxWidth: .infinity)
         .background(.thinMaterial)
         .clipShape(RoundedRectangle(cornerRadius: 15))
