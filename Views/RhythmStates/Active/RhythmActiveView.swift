@@ -100,7 +100,6 @@ struct RhythmActiveView: View {
 
                     VStack {
                         Button {
-                            // showNextTaskAlert = true
                             SoundPlayer().play(file: "taskFinished.wav")
                             rhythmManager.nextTask()
                             generateEncouragement()
@@ -128,7 +127,7 @@ struct RhythmActiveView: View {
                         
                         Button("Cancel", role: .cancel) {}
                     } message: {
-                        Text("It will last for \(rhythmManager.meditationLength.clean) seconds")
+                        Text("Breathe for \(rhythmManager.meditationLength.clean) seconds. This Task will be restarted when you come back.")
                     }
                 }
                 Spacer()

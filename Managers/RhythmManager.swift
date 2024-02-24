@@ -19,6 +19,23 @@ enum RhythmState {
 // Manages the entire Rhythm lifecycle once the user clicks begin
 @Observable
 class RhythmManager {
+    private(set) var rhythm: Rhythm
+    private(set) var tasksToComplete: [TaskItem]
+    private(set) var rhythmStartTime: Date = .now
+    private(set) var rhythmEndTime: Date = .now
+    
+    private(set) var currentTask: TaskItem = PreviewData.taskItemExample
+    private(set) var taskEndTime: Date = .now
+    private(set) var taskElapsedSeconds = 0.0
+    private(set) var progress = 0.0
+    private(set) var elapsed: Bool = false
+    
+    private(set) var meditationLength: Double = 30
+    private(set) var meditationOpened: Int = 0
+    private(set) var elapsedMeditationTotal: Double = 0.0
+    
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    
     var currentState: RhythmState = .active {
         didSet {
             // Going back from Meditation view means resetting the entire task again
@@ -36,24 +53,8 @@ class RhythmManager {
             }
         }
     }
-
-    var rhythm: Rhythm
-    var tasksToComplete: [TaskItem]
-    private(set) var startTime: Date = .now
-    var currentTask: TaskItem = PreviewData.taskItemExample
-    var taskElapsedSeconds = 0.0
-    var progress = 0.0
-    var elapsed: Bool = false
-    var taskEndTime: Date = .now
-    let meditationLength: Double = 30
-    var rhythmEndTime: Date = .now
     
-    var meditationOpened: Int = 0
-    var elapsedMeditationTotal: Double = 0.0
-    
-    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    
-    var overTime: Bool {
+    private var overTime: Bool {
         // If current time is later than endTime
         return Date.now >= taskEndTime
     }

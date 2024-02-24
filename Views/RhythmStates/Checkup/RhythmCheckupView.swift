@@ -62,8 +62,8 @@ struct RhythmCheckupView: View {
                     // MARK: Go to next task
 
                     Button {
-                        rhythmManager.nextTask()
                         rhythmManager.currentState = .active
+                        rhythmManager.nextTask()
                     } label: {
                         Text("Yes")
                             .foregroundStyle(.white)

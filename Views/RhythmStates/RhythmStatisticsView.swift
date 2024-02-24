@@ -11,7 +11,7 @@ struct RhythmStatisticsView: View {
     @Bindable var rhythmManager: RhythmManager
 
     private var timeSinceStart: TimeInterval {
-        rhythmManager.rhythmEndTime.timeIntervalSince(rhythmManager.startTime)
+        rhythmManager.rhythmEndTime.timeIntervalSince(rhythmManager.rhythmStartTime)
     }
 
     var body: some View {
