@@ -24,7 +24,7 @@ struct RhythmActiveView: View {
     @State private var showEncouragement = false
     @State private var encouragement = "Well done!"
     
-    @State private var showNextTaskAlert = false
+    @State private var showMeditationAlert = false
     
     var body: some View {
         ZStack {
@@ -79,9 +79,7 @@ struct RhythmActiveView: View {
                     // MARK: Start Meditation
 
                     Button {
-                        withAnimation {
-                            rhythmManager.currentState = .meditation
-                        }
+                        showMeditationAlert = true
                     } label: {
                         VStack {
                             Image(.lotus)
@@ -102,7 +100,10 @@ struct RhythmActiveView: View {
 
                     VStack {
                         Button {
-                            showNextTaskAlert = true
+                            // showNextTaskAlert = true
+                            SoundPlayer().play(file: "taskFinished.wav")
+                            rhythmManager.nextTask()
+                            generateEncouragement()
                         } label: {
                             Image(systemName: "checkmark.gobackward")
                                 .resizable()
@@ -118,16 +119,16 @@ struct RhythmActiveView: View {
                             .foregroundStyle(.white)
                             .font(.headline)
                     }
-                    .alert("Move to next Task?", isPresented: $showNextTaskAlert) {
+                    .alert("Start Meditation?", isPresented: $showMeditationAlert) {
                         Button("Confirm") {
-                            SoundPlayer().play(file: "taskFinished.wav")
-                            rhythmManager.nextTask()
-                            generateEncouragement()
+                            withAnimation {
+                                rhythmManager.currentState = .meditation
+                            }
                         }
                         
                         Button("Cancel", role: .cancel) {}
                     } message: {
-                        Text("You won't be able to go back")
+                        Text("It will last for \(rhythmManager.meditationLength.clean) seconds")
                     }
                 }
                 Spacer()
@@ -168,7 +169,7 @@ struct RhythmActiveView: View {
         let rhythm = PreviewData.rhythmExample
         container.mainContext.insert(rhythm)
         
-        return RhythmActiveView(rhythmManager: RhythmManager(tasks: rhythm.tasks))
+        return RhythmActiveView(rhythmManager: RhythmManager(rhythm: rhythm))
             .modelContainer(container)
     }
 }

@@ -15,15 +15,15 @@ struct RhythmDetailView: View {
     @State private var isActive: Bool = false
     
     // @Query var tasks: [TaskItem]
-    //
+    // 
     // init(currentRhythm: Rhythm) {
     //     self.currentRhythm = currentRhythm
     //     let currentRhythmID = currentRhythm.persistentModelID
-    //
+    // 
     //     _tasks = Query(
     //         filter: #Predicate<TaskItem> { task in
     //             task.rhythm?.persistentModelID == currentRhythmID
-    //         }, sort: \TaskItem.name, order: .reverse)
+    //         }, sort: \TaskItem.addedTime, order: .reverse)
     // }
     
     private var estimatedEndTime: Date {
@@ -45,7 +45,6 @@ struct RhythmDetailView: View {
             Color.offBlack.ignoresSafeArea()
             if !isActive {
                 // Colored Ring
-    
                 VStack {
                     ZStack(alignment: .bottom) {
                         Circle()

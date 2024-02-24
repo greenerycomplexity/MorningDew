@@ -26,6 +26,10 @@ class RhythmManager {
                 resetTask()
             }
             
+            if currentState == .meditation {
+                meditationOpened += 1
+            }
+            
             // Either way, if going back to Active, reset the progress ring.
             if currentState == .active {
                 resetProgressRing()
@@ -33,14 +37,19 @@ class RhythmManager {
         }
     }
 
+    var rhythm: Rhythm
+    var tasksToComplete: [TaskItem]
     private(set) var startTime: Date = .now
-    var tasks: [TaskItem]
     var currentTask: TaskItem = PreviewData.taskItemExample
     var taskElapsedSeconds = 0.0
     var progress = 0.0
     var elapsed: Bool = false
     var taskEndTime: Date = .now
     let meditationLength: Double = 30
+    var rhythmEndTime: Date = .now
+    
+    var meditationOpened: Int = 0
+    var elapsedMeditationTotal: Double = 0.0
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
@@ -49,8 +58,9 @@ class RhythmManager {
         return Date.now >= taskEndTime
     }
     
-    init(tasks: [TaskItem]) {
-        self.tasks = tasks
+    init(rhythm: Rhythm) {
+        self.rhythm = rhythm
+        self.tasksToComplete = rhythm.tasks
     }
     
     // For every new task that comes in, reset the progress ring
@@ -70,15 +80,16 @@ class RhythmManager {
         taskEndTime = Date.now.addingTimeInterval(currentTask.seconds + 1)
     }
     
-    // MARK: Active Task
+    // MARK: Active Task tracker
 
     func nextTask() {
         elapsed = true
-        if tasks.isEmpty {
+        if tasksToComplete.isEmpty {
+            rhythmEndTime = .now
             currentState = .allCompleted
         } else {
             elapsed = false
-            currentTask = tasks.remove(at: 0)
+            currentTask = tasksToComplete.remove(at: 0)
             resetTask()
             resetProgressRing()
         }
@@ -98,7 +109,7 @@ class RhythmManager {
         }
     }
     
-    // MARK: Meditation
+    // MARK: Meditation tracker
 
     func prepareMeditation() {
         elapsed = false
@@ -112,5 +123,6 @@ class RhythmManager {
                 elapsed = true
             }
         }
+        elapsedMeditationTotal += 1
     }
 }

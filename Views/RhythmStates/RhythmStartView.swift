@@ -12,7 +12,7 @@ struct RhythmStartView: View {
     @State private var rhythmManager: RhythmManager
     
     init(rhythm: Rhythm) {
-        rhythmManager = RhythmManager(tasks: rhythm.tasks)
+        rhythmManager = RhythmManager(rhythm: rhythm)
     }
     
     // TODO: Use this to change background color based on RhythmState

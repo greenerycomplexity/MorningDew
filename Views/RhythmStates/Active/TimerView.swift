@@ -61,7 +61,7 @@ struct TimerProgressRing: View {
         let rhythm = PreviewData.rhythmExample
         container.mainContext.insert(rhythm)
         
-        return TimerView(rhythmManager: RhythmManager(tasks: rhythm.tasks))
+        return TimerView(rhythmManager: RhythmManager(rhythm: rhythm))
             .modelContainer(container)
     }
 }

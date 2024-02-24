@@ -9,7 +9,7 @@ import SwiftUI
 
 struct RhythmCheckupView: View {
     @Bindable var rhythmManager: RhythmManager
-    @State private var timeRemaining = 7
+    @State private var timeRemaining = 10
     @State private var showAlert = false
     
     @State var alarmTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
@@ -20,7 +20,7 @@ struct RhythmCheckupView: View {
         timeRemaining = 10
     }
     
-    let extraTimeAllotment: Double = 15
+    let extraTimeAllotment: Double = 30
     
     var body: some View {
         ZStack {
@@ -29,15 +29,15 @@ struct RhythmCheckupView: View {
             
             VStack(alignment: .center, spacing: 10) {
                 Spacer()
-                Text("Have you completed")
+                Text("Have you completed this task?")
                     .font(.headline)
                 
-                Text("\(rhythmManager.currentTask.name)?")
+                Text("\(rhythmManager.currentTask.name)")
                     .font(.largeTitle.bold())
                     .fontDesign(.rounded)
                     .foregroundStyle(.white)
                 
-                Text("Alarm incoming: \(timeRemaining)")
+                Text("Alarm incoming: **\(timeRemaining)**")
                     .foregroundStyle(.white)
                     .onReceive(alarmTimer, perform: { _ in
                         if timeRemaining > 0 {
@@ -105,7 +105,7 @@ struct RhythmCheckupView: View {
         let rhythm = PreviewData.rhythmExample
         container.mainContext.insert(rhythm)
         
-        return RhythmCheckupView(rhythmManager: RhythmManager(tasks: rhythm.tasks))
+        return RhythmCheckupView(rhythmManager: RhythmManager(rhythm: rhythm))
             .modelContainer(container)
     }
 }

@@ -10,12 +10,44 @@ import SwiftUI
 struct RhythmStatisticsView: View {
     @Bindable var rhythmManager: RhythmManager
 
+    private var timeSinceStart: TimeInterval {
+        rhythmManager.rhythmEndTime.timeIntervalSince(rhythmManager.startTime)
+    }
+
     var body: some View {
-        Text("Well done, you've completed your morning routine!")
-            .multilineTextAlignment(.center)
-            .frame(maxWidth: .infinity)
-            .background(.clear)
+        ZStack {
+            Color.offBlack.ignoresSafeArea()
+
+            VStack(alignment: .leading, spacing: 15) {
+                
+                // MARK: Greeting
+                Text("Well done, you've completed your morning routine!")
+                    .foregroundStyle(.white)
+
+                Text("Here's how you did")
+                    .foregroundStyle(.white)
+
+                // MARK: Rhythm Time report
+                Text("Expected time: \(rhythmManager.rhythm.totalMinutes.clean) minutes")
+                    .foregroundStyle(.white)
+
+                Text("Actual time:")
+                    .foregroundStyle(.white)
+
+                Text(timeSinceStart.detailed)
+                    .foregroundStyle(.white)
+
+                // MARK: Meditation report
+                Text("You took \(rhythmManager.meditationOpened) breathing sessions")
+                    .foregroundStyle(.white)
+
+                if rhythmManager.meditationOpened > 0 {
+                    Text(rhythmManager.elapsedMeditationTotal.detailed)
+                        .foregroundStyle(.white)
+                }
+            }
             .padding(.horizontal, 20)
+        }
     }
 }
 
@@ -25,7 +57,7 @@ struct RhythmStatisticsView: View {
         let rhythm = PreviewData.rhythmExample
         container.mainContext.insert(rhythm)
 
-        return RhythmStatisticsView(rhythmManager: RhythmManager(tasks: rhythm.tasks))
+        return RhythmStatisticsView(rhythmManager: RhythmManager(rhythm: rhythm))
             .modelContainer(container)
     }
 }

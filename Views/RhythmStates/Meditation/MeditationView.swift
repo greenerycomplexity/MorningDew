@@ -170,7 +170,7 @@ struct MeditationView: View {
         let rhythm = PreviewData.rhythmExample
         container.mainContext.insert(rhythm)
         
-        return MeditationView(rhythmManager: RhythmManager(tasks: rhythm.tasks))
+        return MeditationView(rhythmManager: RhythmManager(rhythm: rhythm))
             .modelContainer(container)
     }
 }
