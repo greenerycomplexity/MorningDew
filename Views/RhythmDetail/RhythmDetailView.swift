@@ -57,8 +57,6 @@ struct RhythmDetailView: View {
                     List {
                         Section {
                             ZStack(alignment: .bottom) {
-                                Color.offBlack
-                                
                                 Circle()
                                     .trim(from: 0.0, to: 0.5)
                                     .stroke(archGradient, style: StrokeStyle(lineWidth: 7))
@@ -79,7 +77,9 @@ struct RhythmDetailView: View {
                                 }
                                 .foregroundStyle(.white)
                             }
+                            .frame(maxWidth: .infinity)
                             .listRowInsets(EdgeInsets())
+                            .listRowBackground(Color.offBlack)
                         }
                         
                         ForEach(currentRhythm.tasks.indices, id: \.self) { index in
