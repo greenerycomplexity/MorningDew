@@ -48,6 +48,11 @@ struct AddTaskView: View {
                     showDurationEdit = true
                 } label: {
                     HStack {
+                        Image(systemName: "clock.arrow.circlepath")
+                            .frame(width: 10, height: 10)
+                            .foregroundStyle(.secondary)
+                            .padding(.trailing,5)
+                        
                         Text("Duration")
                             .font(.headline)
                         Spacer()
@@ -64,6 +69,11 @@ struct AddTaskView: View {
                 }
                     
                 HStack {
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                        .frame(width: 10, height: 10)
+                        .foregroundStyle(.secondary)
+                        .padding(.trailing,5)
+                    
                     Text("Difficulty")
                         .font(.headline)
                     Spacer()

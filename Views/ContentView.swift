@@ -45,7 +45,7 @@ struct ContentView: View {
                                             .font(.subheadline)
                                     }
                                     .padding(.trailing, 3)
-                                    .foregroundStyle(.black)
+                                    .foregroundStyle(.primary)
                                     .fontDesign(.rounded)
                                 }
                             }
@@ -82,7 +82,7 @@ struct ContentView: View {
                             }
                             .sheet(isPresented: $showAddRhythmView) {
                                 AddRhythmView()
-                                    .presentationDetents([.fraction(0.5), .large])
+                                    .presentationDetents([.fraction(0.65), .large])
                             }
                         }
                     }

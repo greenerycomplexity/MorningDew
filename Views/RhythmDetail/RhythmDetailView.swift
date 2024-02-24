@@ -157,15 +157,15 @@ struct TaskListCell: View {
             VStack(alignment: .leading) {
                 Text(task.name)
                     .font(.title3.bold())
+                    .foregroundStyle(.white)
                 
                 Text(task.seconds.detailed)
+                    .foregroundStyle(.white.opacity(0.8))
+                    .font(.subheadline)
             }
-            .font(.subheadline)
             .padding(.horizontal)
-            
             Spacer()
         }
-        .foregroundStyle(.white)
         .padding(.vertical)
         .frame(maxWidth: .infinity)
         .background(Color.offBlackHighlight)

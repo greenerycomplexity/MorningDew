@@ -141,7 +141,7 @@ struct OnboardingFeatureCell: View {
                 Text(secondary)
                     .font(.subheadline)
                     .fontWeight(.semibold)
-                    .foregroundStyle(.offBlackHighlight)
+                    .foregroundStyle(.secondary)
             }
             Spacer()
         }

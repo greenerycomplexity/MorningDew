@@ -26,25 +26,37 @@ struct AddRhythmView: View {
             Color.offBlack.ignoresSafeArea()
                     
             VStack(spacing: 20) {
-                Button {
-                    showEmojiPicker = true
-                } label: {
-                    Text(emoji)
-                        .font(.system(size: 75))
-                        .frame(width: 150, height: 150)
-                        .background(.black.opacity(0.8))
-                        .clipShape(Circle())
-                        .overlay(
-                            Circle()
-                                .strokeBorder(.green, lineWidth: 5)
-                        )
+                
+                ZStack (alignment: .bottom) {
+                    Button {
+                        showEmojiPicker = true
+                    } label: {
+                        Text(emoji)
+                            .font(.system(size: 75))
+                            .frame(width: 125, height: 125)
+                            .background(.black.opacity(0.8))
+                            .clipShape(Circle())
+                            .overlay(
+                                Circle()
+                                    .strokeBorder(.green, lineWidth: 5)
+                            )
+                    }
+                    .sheet(isPresented: $showEmojiPicker) {
+                        EmojiPickerView(chosenEmoji: $emoji)
+                            .presentationDetents([.fraction(0.75)])
+                            .presentationDragIndicator(.visible)
+                    }
+                    .padding(20)
+                    .padding(.bottom)
+                    .background(.offBlackHighlight)
+                    .clipShape(.rect(cornerRadius: 30))
+                    .padding(.top, 5)
+                    
+                    Text("Tap to Edit")
+                        .offset(y:-10)
+                        .font(.headline)
+                        .foregroundStyle(.white)
                 }
-                .sheet(isPresented: $showEmojiPicker) {
-                    EmojiPickerView(chosenEmoji: $emoji)
-                        .presentationDetents([.fraction(0.75)])
-                        .presentationDragIndicator(.visible)
-                }
-                .padding(.top)
                 
                 HStack {
                     TextField("Name", text: $name)
