@@ -26,6 +26,7 @@ struct AddTaskView: View {
     }
     
     @State private var showDurationEdit = false
+    @State private var showEmptyAlert = false
     
     var body: some View {
         ZStack {
@@ -33,9 +34,10 @@ struct AddTaskView: View {
                 
             VStack(spacing: 10) {
                 HStack {
-                    TextField("New Task", text: $name)
-                        .font(.title.bold())
+                    TextField("Name", text: $name)
+                        .font(.title2.bold())
                         .fontWidth(.expanded)
+                        .maxInputLength(for: $name, length: 25)
                         
                     Image(systemName: "pencil")
                         .font(.title3.bold())
@@ -73,10 +75,18 @@ struct AddTaskView: View {
                 Spacer()
                 
                 Button("Save") {
+                    guard !name.isEmpty else {
+                        showEmptyAlert = true
+                        return
+                    }
+                    
                     let newTask = TaskItem(name: name, seconds: totalSeconds, perceivedDifficulty: perceivedDifficulty, rhythm: currentRhythm)
                         
                     currentRhythm.tasks.append(newTask)
                     dismiss()
+                }
+                .alert("Name field cannot be empty", isPresented: $showEmptyAlert) {
+                    Button("Okay") {}
                 }
                 .buttonStyle(GradientButton(gradient: .buttonGradient))
             }

@@ -26,6 +26,16 @@ extension ShapeStyle where Self == Color {
     }
 }
 
+// MARK: Fade in from bottom animation
+extension View {
+    func moveAndFade(showAnimation: Bool, duration: Double = 1.0, delay: Double = 0.0) -> some View {
+        self
+            .opacity(showAnimation ? 1.0 : 0)
+            .offset(y: showAnimation ? 0 : 10)
+            .animation(.bouncy(duration: duration).delay(delay), value: showAnimation)
+    }
+}
+
 
 // MARK: Gradients for buttons
 extension ShapeStyle where Self == LinearGradient {
@@ -61,16 +71,26 @@ struct OffBlackHighlightFrame: ViewModifier {
 }
 
 extension View {
-    // MARK: Fade in from bottom animation
-    func moveAndFade(showAnimation: Bool, duration: Double = 1.0, delay: Double = 0.0) -> some View {
-        self
-            .opacity(showAnimation ? 1.0 : 0)
-            .offset(y: showAnimation ? 0 : 10)
-            .animation(.bouncy(duration: duration).delay(delay), value: showAnimation)
-    }
-    
     func charcoalFrame() -> some View {
         modifier(OffBlackHighlightFrame())
+    }
+}
+
+// MARK: Text Field Character Limiter
+struct TextFieldLimit: ViewModifier {
+    @Binding var input: String
+    var length: Int
+    func body(content: Content) -> some View {
+        content
+            .onChange(of: input) {
+                input = String(input.prefix(length))
+            }
+    }
+}
+
+extension View {
+    func maxInputLength(for input: Binding<String>, length: Int) -> some View {
+        self.modifier(TextFieldLimit(input: input, length: length))
     }
 }
 

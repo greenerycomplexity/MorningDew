@@ -19,12 +19,13 @@ struct AddRhythmView: View {
     let addRhythmFailed = "Failed to save"
     let rhythmFailedMessage = "Existing Rhythm names cannot be reused. Please try again."
     
+    @State private var showEmptyAlert = false
+    
     var body: some View {
         ZStack {
             Color.offBlack.ignoresSafeArea()
                     
             VStack(spacing: 20) {
-                
                 Button {
                     showEmojiPicker = true
                 } label: {
@@ -46,9 +47,10 @@ struct AddRhythmView: View {
                 .padding(.top)
                 
                 HStack {
-                    TextField("Rhythm Name", text: $name)
+                    TextField("Name", text: $name)
                         .font(.title.bold())
                         .fontWidth(.expanded)
+                        .maxInputLength(for: $name, length: 16)
                             
                     Image(systemName: "pencil")
                         .font(.title3.bold())
@@ -58,6 +60,11 @@ struct AddRhythmView: View {
                 Spacer()
                     
                 Button("Save") {
+                    guard !name.isEmpty else {
+                        showEmptyAlert = true
+                        return
+                    }
+                    
                     let descriptor = FetchDescriptor<Rhythm>(
                         predicate: #Predicate { rhythm in
                             rhythm.name == name
@@ -76,6 +83,9 @@ struct AddRhythmView: View {
                     }
                 }
                 .buttonStyle(GradientButton(gradient: .buttonGradient))
+                .alert("Name field cannot be empty", isPresented: $showEmptyAlert) {
+                    Button("Okay") {}
+                }
             }
             .foregroundStyle(.white)
             .padding(20)
