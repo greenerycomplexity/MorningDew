@@ -19,13 +19,11 @@ enum AppData {
         do {
             let container = try ModelContainer(for: Rhythm.self)
 
-            // Make sure current container is empty before loading, else return current container
+            // Sample data population code will only run if the persistent store is empty.
             var itemFetchDescriptor = FetchDescriptor<Rhythm>()
             itemFetchDescriptor.fetchLimit = 1
 
             guard try container.mainContext.fetch(itemFetchDescriptor).count == 0 else { return container }
-
-            // This code will only run if the persistent store is empty.
 
             let wfhRhythm = Rhythm(name: "WFH Weekday", emoji: "🏠")
             let weekendRhythm = Rhythm(name: "Weekend", emoji: "🌻")
@@ -36,20 +34,22 @@ enum AppData {
             for rhythm in rhythms {
                 container.mainContext.insert(rhythm)
             }
+            
+            let weekendTasks = [
+                TaskItem(name: "Drink water", seconds: 15, perceivedDifficulty: 1),
+                TaskItem(name: "Moisturise", seconds: 45, perceivedDifficulty: 1),
+                TaskItem(name: "Have breakfast", seconds: 10 * 60, perceivedDifficulty: 2),
+                TaskItem(name: "Journal", seconds: (5 * 60) + 30, perceivedDifficulty: 3),
+                TaskItem(name: "Do laundry", seconds: 2 * 60 + 45, perceivedDifficulty: 2),
+                TaskItem(name: "Vacuum house", seconds: 10 * 60, perceivedDifficulty: 2)
+            ]
 
             let wfhTasks = [
                 TaskItem(name: "Take ADHD medication", seconds: 15, perceivedDifficulty: 1),
-                TaskItem(name: "Pushups", seconds: 30, perceivedDifficulty: 3),
-                TaskItem(name: "Wash face", seconds: 60, perceivedDifficulty: 1),
-                TaskItem(name: "Make coffee", seconds: 3 * 60, perceivedDifficulty: 2),
+                TaskItem(name: "Pushups", seconds: 20, perceivedDifficulty: 3),
+                TaskItem(name: "Wash face", seconds: 30, perceivedDifficulty: 1),
+                TaskItem(name: "Make coffee", seconds: (2 * 60) + 45, perceivedDifficulty: 2),
                 TaskItem(name: "Have breakfast", seconds: 20 * 60, perceivedDifficulty: 2)
-            ]
-
-            let weekendTasks = [
-                TaskItem(name: "Drink water", seconds: 20, perceivedDifficulty: 1),
-                TaskItem(name: "Moisturise", seconds: 30, perceivedDifficulty: 1),
-                TaskItem(name: "Have breakfast", seconds: 10 * 60, perceivedDifficulty: 2),
-                TaskItem(name: "Journal", seconds: 5 * 60, perceivedDifficulty: 3)
             ]
 
             let officeDayTasks = [
