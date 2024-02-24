@@ -7,6 +7,12 @@
 
 import SwiftData
 import SwiftUI
+import TipKit
+
+struct AddTaskTip: Tip {
+    var title: Text = .init("Add a new Task here")
+    var message: Text? = Text("Try to give your best estimates!")
+}
 
 struct RhythmDetailView: View {
     @Environment(\.modelContext) var modelContext
@@ -15,11 +21,11 @@ struct RhythmDetailView: View {
     @State private var isActive: Bool = false
     
     // @Query var tasks: [TaskItem]
-    // 
+    //
     // init(currentRhythm: Rhythm) {
     //     self.currentRhythm = currentRhythm
     //     let currentRhythmID = currentRhythm.persistentModelID
-    // 
+    //
     //     _tasks = Query(
     //         filter: #Predicate<TaskItem> { task in
     //             task.rhythm?.persistentModelID == currentRhythmID
@@ -44,33 +50,38 @@ struct RhythmDetailView: View {
         ZStack {
             Color.offBlack.ignoresSafeArea()
             if !isActive {
-                // Colored Ring
                 VStack {
-                    ZStack(alignment: .bottom) {
-                        Circle()
-                            .trim(from: 0.0, to: 0.5)
-                            .stroke(archGradient, style: StrokeStyle(lineWidth: 7))
-                            .rotationEffect(.degrees(180))
-                            .frame(height: circleHeight)
-                            .frame(height: circleHeight / 2)
-                            .offset(y: circleHeight / 4)
-                            .padding(.top)
+                    // MARK: Colored Gradient Ring + Time estimates
 
-                        VStack(spacing: 10) {
-                            Text("\(currentRhythm.totalMinutes.clean) minutes")
-                                .font(.largeTitle.bold())
-                                .fontWidth(.condensed)
-                            
-                            // Start suggestion
-                            Text(
-                                "Start now, and be ready by **\(estimatedEndTime.formatted(date: .omitted, time: .shortened))**")
-                        }
-                        .foregroundStyle(.white)
-                    }
-                    .padding(.top, 5)
-                    
                     // Display the tasks in list view
                     List {
+                        Section {
+                            ZStack(alignment: .bottom) {
+                                Color.offBlack
+                                
+                                Circle()
+                                    .trim(from: 0.0, to: 0.5)
+                                    .stroke(archGradient, style: StrokeStyle(lineWidth: 7))
+                                    .rotationEffect(.degrees(180))
+                                    .frame(height: circleHeight)
+                                    .frame(height: circleHeight / 2)
+                                    .offset(y: circleHeight / 4)
+                                    .padding(.top)
+
+                                VStack(spacing: 10) {
+                                    Text("\(currentRhythm.totalMinutes.clean) minutes")
+                                        .font(.largeTitle.bold())
+                                        .fontWidth(.condensed)
+                                    
+                                    // Start suggestion
+                                    Text(
+                                        "Start now, and be ready by **\(estimatedEndTime.formatted(date: .omitted, time: .shortened))**")
+                                }
+                                .foregroundStyle(.white)
+                            }
+                            .listRowInsets(EdgeInsets())
+                        }
+                        
                         ForEach(currentRhythm.tasks.indices, id: \.self) { index in
                             TaskListCell(task: currentRhythm.tasks[index])
                                 .listRowSeparator(.hidden, edges: .all)
@@ -94,7 +105,7 @@ struct RhythmDetailView: View {
                     .scrollIndicators(.hidden)
                     
                     if currentRhythm.tasks.count > 0 {
-                        Button ("Start Rhythm") {
+                        Button("Start Rhythm") {
                             withAnimation {
                                 isActive = true
                             }
@@ -121,16 +132,13 @@ struct RhythmDetailView: View {
                             }
                             .frame(width: 40, height: 40)
                         }
+                        .popoverTip(AddTaskTip())
                     }
                 }
                 .navigationTitle("\(currentRhythm.name) \(currentRhythm.emoji)")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbarColorScheme(.dark, for: .navigationBar)
-                .toolbarBackground(
-                    Color.offBlackHighlight,
-                    for: .navigationBar)
                 .toolbarBackground(.visible, for: .navigationBar)
-                
                 .onAppear(perform: {
                     withAnimation(.easeIn(duration: 0.8).delay(3.5)) {
                         suggestStart = true
