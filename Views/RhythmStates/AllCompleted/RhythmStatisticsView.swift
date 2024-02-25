@@ -50,9 +50,9 @@ struct RhythmStatisticsView: View {
                             .font(.largeTitle.bold())
                             .expandedHeading()
                         
-                        Text("You've completed your *Rhythm*")
-                            .font(.headline.bold())
-                            .expandedHeading()
+                        Text("You've completed your Rhythm")
+                            .foregroundStyle(.white)
+                            .font(.title2.bold())
                     }
                     .padding(.bottom, 30)
                     .moveAndFade(showAnimation: showGreeting, duration: 1.5)
@@ -90,7 +90,7 @@ struct RhythmStatisticsView: View {
                         
                         if rhythmManager.meditationOpened > 0 {
                             VStack(alignment: .leading) {
-                                Text("Total breathing time:")
+                                Text("Time in breathing mode:")
                                     .expandedHeading()
                                 
                                 Text(rhythmManager.elapsedMeditationTotal.detailed)

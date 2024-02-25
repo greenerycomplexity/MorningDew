@@ -49,6 +49,8 @@ struct ContentView: View {
                                     .fontDesign(.rounded)
                                 }
                             }
+                            // This is needed since SwiftUI row sometimes would stay highlighted after exiting from other views
+                            .listRowBackground(Color(.systemBackground))
                         }
                         .onDelete(perform: { indexSet in
                             for rhythmIndex in indexSet {
