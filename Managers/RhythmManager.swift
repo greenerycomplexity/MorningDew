@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 
 enum RhythmState {
-    case getReady
     case active
     case meditation
     case checkup

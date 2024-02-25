@@ -16,8 +16,8 @@ struct AddRhythmView: View {
     @State private var showEmojiPicker = false
     
     @State private var showDuplicateNameAlert = false
-    let addRhythmFailed = "Failed to save"
-    let rhythmFailedMessage = "Existing Rhythm names cannot be reused. Please try again."
+    let addRhythmFailed = "Failed to save Rhythm"
+    let rhythmFailedMessage = "Existing Rhythm names cannot be reused"
     
     @State private var showEmptyAlert = false
     
@@ -26,8 +26,9 @@ struct AddRhythmView: View {
             Color.offBlack.ignoresSafeArea()
                     
             VStack(spacing: 20) {
-                
-                ZStack (alignment: .bottom) {
+                // MARK: Emoji Picker
+
+                ZStack(alignment: .bottom) {
                     Button {
                         showEmojiPicker = true
                     } label: {
@@ -53,11 +54,13 @@ struct AddRhythmView: View {
                     .padding(.top, 5)
                     
                     Text("Tap to Edit")
-                        .offset(y:-10)
+                        .offset(y: -10)
                         .font(.headline)
                         .foregroundStyle(.white)
                 }
                 
+                // MARK: Rhythm Name Editor
+
                 HStack {
                     TextField("Name", text: $name)
                         .font(.title.bold())
@@ -84,28 +87,30 @@ struct AddRhythmView: View {
                     )
                         
                     let count = (try? modelContext.fetchCount(descriptor)) ?? 0
-                    if count > 0 {
+                    guard count == 0 else {
                         showDuplicateNameAlert = true
-                    } else {
-                        let newRhythm = Rhythm(name: name, emoji: emoji)
-                        withAnimation {
-                            modelContext.insert(newRhythm)
-                        }
-                        dismiss()
+                        return
                     }
+                    
+                    let newRhythm = Rhythm(name: name, emoji: emoji)
+                    withAnimation {
+                        modelContext.insert(newRhythm)
+                    }
+                    dismiss()
                 }
                 .buttonStyle(GradientButton(gradient: .buttonGradient))
                 .alert("Name field cannot be empty", isPresented: $showEmptyAlert) {
                     Button("Okay") {}
                 }
+                .alert(addRhythmFailed, isPresented: $showDuplicateNameAlert) {
+                    Button("Okay") {}
+                } message: {
+                    Text(rhythmFailedMessage)
+                }
             }
             .foregroundStyle(.white)
             .padding(20)
-            .alert(addRhythmFailed, isPresented: $showDuplicateNameAlert) {
-                Button("Okay") {}
-            } message: {
-                Text(rhythmFailedMessage)
-            }
+           
         }
     }
 }

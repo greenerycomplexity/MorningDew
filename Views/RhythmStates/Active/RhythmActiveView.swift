@@ -41,7 +41,6 @@ struct RhythmActiveView: View {
                 // Current task name
                 Text(rhythmManager.currentTask.name)
                     .font(.largeTitle.bold())
-                    .fontDesign(.rounded)
                     .foregroundStyle(.white)
                     
                 Spacer()

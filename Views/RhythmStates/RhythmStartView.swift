@@ -15,18 +15,6 @@ struct RhythmStartView: View {
         rhythmManager = RhythmManager(rhythm: rhythm)
     }
     
-    // TODO: Use this to change background color based on RhythmState
-    // var backgroundColor: Color {
-    //     switch rhythmManager.currentState {
-    //     case .getReady:
-    //         return .orange
-    //     case .active:
-    //         return .green
-    //     case .meditation:
-    //         return .blue
-    //     }
-    // }
-    // 
     var body: some View {
         switch rhythmManager.currentState {
         case .active:
@@ -44,12 +32,6 @@ struct RhythmStartView: View {
                     MusicPlayer().play(file: "forest.wav", volume: 0.2)
                 }
             
-        case .allCompleted:
-            RhythmStatisticsView(rhythmManager: rhythmManager)
-                .onAppear {
-                    musicPlayer?.stop()
-                }
-            
         case .checkup:
             RhythmCheckupView(rhythmManager: rhythmManager)
                 .navigationBarBackButtonHidden(true)
@@ -60,7 +42,12 @@ struct RhythmStartView: View {
                     }
                 }
             
-        default: Text("There really should be something here!")
+        case .allCompleted:
+            RhythmStatisticsView(rhythmManager: rhythmManager)
+                .navigationBarBackButtonHidden(true)
+                .onAppear {
+                    musicPlayer?.stop()
+                }
         }
     }
 }
