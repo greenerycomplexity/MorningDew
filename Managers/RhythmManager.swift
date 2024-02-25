@@ -30,7 +30,8 @@ class RhythmManager {
     private(set) var progress = 0.0
     private(set) var elapsed: Bool = false
     
-    private(set) var meditationLength: Double = 45.9
+    // Duration of 46.5 to make sure animation finishes with 3 full breaths
+    private(set) var meditationLength: Double = 46.5
     private(set) var meditationOpened: Int = 0
     private(set) var elapsedMeditationTotal: Double = 0.0
     

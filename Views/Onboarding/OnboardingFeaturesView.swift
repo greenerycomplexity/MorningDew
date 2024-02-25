@@ -103,6 +103,9 @@ struct OnboardingFeaturesView: View {
                     // Continue playing the birds sound
                     musicPlayer?.volume = 0.8
                     musicPlayer?.play()
+                    delay(seconds: 2) {
+                        musicPlayer?.setVolume(0.3, fadeDuration: 2)
+                    }
                 }
 
                 DispatchQueue.main.asyncAfter(deadline: deadline + 11) {

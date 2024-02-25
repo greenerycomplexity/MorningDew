@@ -32,6 +32,10 @@ extension Double {
             return "^[\(remainingSeconds) second](inflect: true)"
         }
     }
+
+    func roundTo(nearest: Double) -> Double {
+        (self / nearest).rounded() * nearest
+    }
 }
 
 func delay(seconds: Double, _ perform: @escaping () -> Void) {

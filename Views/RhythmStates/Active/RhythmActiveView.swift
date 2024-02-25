@@ -127,7 +127,8 @@ struct RhythmActiveView: View {
                         
                         Button("Cancel", role: .cancel) {}
                     } message: {
-                        Text("Breathe for \(rhythmManager.meditationLength.clean) seconds. This Task will be restarted when you come back.")
+                        // Number is rounded to the nearest 5 for clean look
+                        Text("Breathe for \(rhythmManager.meditationLength.roundTo(nearest: 5.0).clean) seconds. This Task will be restarted when you come back.")
                     }
                 }
                 Spacer()
