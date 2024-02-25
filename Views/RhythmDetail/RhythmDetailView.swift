@@ -19,18 +19,28 @@ struct RhythmDetailView: View {
     @State private var showAddTaskView = false
     @Bindable var currentRhythm: Rhythm
     @State private var isActive: Bool = false
+    @Query var tasks: [TaskItem]
     
-    // @Query var tasks: [TaskItem]
-    //
-    // init(currentRhythm: Rhythm) {
-    //     self.currentRhythm = currentRhythm
-    //     let currentRhythmID = currentRhythm.persistentModelID
-    //
-    //     _tasks = Query(
-    //         filter: #Predicate<TaskItem> { task in
-    //             task.rhythm?.persistentModelID == currentRhythmID
-    //         }, sort: \TaskItem.addedTime, order: .reverse)
-    // }
+    init(currentRhythm: Rhythm) {
+        self.currentRhythm = currentRhythm
+        let currentRhythmID = currentRhythm.persistentModelID
+    
+        _tasks = Query(
+            filter: #Predicate<TaskItem> { task in
+                task.rhythm?.persistentModelID == currentRhythmID
+            })
+    }
+    
+    // Total time has to be calculated here based on the tasks @Query,
+    // instead of grabbing it from Bindable currentRhythm object.
+    // Else time won't be updated on post-edit (e.g deletion or modification)
+    private var totalMinutes: Double {
+        var minutes: Double = 0
+        for task in tasks {
+            minutes += task.minutes
+        }
+        return minutes
+    }
     
     private var estimatedEndTime: Date {
         Calendar.current.date(byAdding: .second, value: currentRhythm.totalSeconds, to: Date.now) ?? .now
@@ -67,7 +77,7 @@ struct RhythmDetailView: View {
                                     .padding(.top)
 
                                 VStack(spacing: 10) {
-                                    Text("\(currentRhythm.totalMinutes.clean) minutes")
+                                    Text("\(totalMinutes.clean) minutes")
                                         .font(.largeTitle.bold())
                                         .fontWidth(.condensed)
                                     
@@ -82,7 +92,7 @@ struct RhythmDetailView: View {
                             .listRowBackground(Color.offBlack)
                         }
                         
-                        ForEach(currentRhythm.tasks.indices, id: \.self) { index in
+                        ForEach(tasks.indices, id: \.self) { index in
                             TaskListCell(task: currentRhythm.tasks[index])
                                 .listRowSeparator(.hidden, edges: .all)
                                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
