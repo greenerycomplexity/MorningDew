@@ -23,13 +23,13 @@ struct OnboardingEmpathiseView: View {
             Spacer()
 
             VStack(alignment: .leading, spacing: 20) {
-                Text("But with ADHD, you get *distracted*.")
+                Text("But with ADHD, you get **distracted**")
                     .opacity(showText ? 1.0 : 0)
                     .animation(.bouncy(duration: textDuration), value: showText)
 
                 Text("""
                 A 20-minute routine turns into
-                **an hour**.
+                **an hour**
                 """)
                 .opacity(showText ? 1.0 : 0)
                 .animation(.bouncy(duration: textDuration).delay(delay * 2), value: showText)

@@ -38,11 +38,6 @@ struct OnboardingGreetingView: View {
                 Have ADHD?
                 A better morning routine starts \(Text("today").underline())
                 """)
-
-                // Text("""
-                // Have ADHD?
-                // Experience a better morning routine \(Text("today").underline())
-                // """)
                 .font(.title3)
                 .padding(.top)
                 .opacity(showText ? 1.0 : 0)

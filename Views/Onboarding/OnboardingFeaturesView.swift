@@ -43,9 +43,9 @@ struct OnboardingFeaturesView: View {
 
                 OnboardingFeatureCell(showCellAnimation: $showTimer, icon: "⏱️", title: "Timer", secondary: "Don't lose track of time!")
 
-                OnboardingFeatureCell(showCellAnimation: $showMusic, icon: "🎵", title: "Fast-paced music", secondary: "Gets you moving!")
+                OnboardingFeatureCell(showCellAnimation: $showMusic, icon: "🎵", title: "Fast-paced Music", secondary: "Gets you moving!")
 
-                OnboardingFeatureCell(showCellAnimation: $showAlarm, icon: "🚨", title: "Random checkups", secondary: "No response? Sound the alarm!")
+                OnboardingFeatureCell(showCellAnimation: $showAlarm, icon: "🚨", title: "Interval Checkups", secondary: "No response after a task? Sound the alarm!")
                 
                 OnboardingFeatureCell(showCellAnimation: $showBreathe, icon: "🧘", title: "Guided Breathing", secondary: "A moment of calm, if you're overwhelmed.")
             }

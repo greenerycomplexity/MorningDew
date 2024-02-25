@@ -94,3 +94,15 @@ extension View {
     }
 }
 
+// MARK: Show or Hide page index of TabView
+extension View {
+    func pageIndex(hidden: Bool) -> some View {
+        if hidden {
+            return self
+                .tabViewStyle(.page(indexDisplayMode: .never))
+        } else {
+            return self
+                .tabViewStyle(.page(indexDisplayMode: .always))
+        }
+    }
+}

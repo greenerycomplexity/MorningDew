@@ -30,7 +30,7 @@ class RhythmManager {
     private(set) var progress = 0.0
     private(set) var elapsed: Bool = false
     
-    private(set) var meditationLength: Double = 30
+    private(set) var meditationLength: Double = 45.9
     private(set) var meditationOpened: Int = 0
     private(set) var elapsedMeditationTotal: Double = 0.0
     

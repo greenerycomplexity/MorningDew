@@ -28,7 +28,7 @@ struct OnboardingChecklistView: View {
             Text("""
             You already have a morning routine,
             a set of tasks to do - your morning
-            ***Rhythm***.
+            ***Rhythm***
             """)
             .font(.title3)
             .foregroundStyle(.white)
