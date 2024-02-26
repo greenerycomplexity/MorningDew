@@ -50,18 +50,18 @@ struct OnboardingView: View {
             .animation(.linear(duration: 0.5), value: blinkingInstruction)
             .onAppear {
                 delay(seconds: 7.5) {
-                withAnimation(.linear(duration: 0.5)) {
-                        showInstruction = true
-                    }
-
-                    delay(seconds: 0.5) {
+                    if activeTab == . greeting {
+                        withAnimation(.linear(duration: 0.25)) {
+                            showInstruction = true
+                        }
                         blink()
+                        
                     }
                 }
             }
             .onChange(of: activeTab) {
                 if activeTab != .greeting {
-                    withAnimation(.linear(duration: 0.25)) {
+                    withAnimation(.linear(duration: 0.2)) {
                         showInstruction = false
                     }
                 }
@@ -76,7 +76,7 @@ struct OnboardingView: View {
             blinkingInstruction = false
         }
 
-        delay(seconds: 3.0) {
+        delay(seconds: 2.75) {
             blink()
         }
     }
