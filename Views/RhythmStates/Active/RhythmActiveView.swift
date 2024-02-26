@@ -49,7 +49,9 @@ struct RhythmActiveView: View {
 
                 Text(encouragement)
                     .foregroundStyle(.white)
-                    .font(.headline)
+                    .font(.title3.bold())
+                    .fontWeight(.semibold)
+                    .fontDesign(.rounded)
                     .moveAndFade(showAnimation: showEncouragement)
 
                 // MARK: Control buttons

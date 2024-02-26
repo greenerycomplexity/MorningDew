@@ -14,8 +14,9 @@ struct ContentView: View {
                 
                 VStack {
                     HStack {
-                        Text("Your rhythms")
-                            .font(.largeTitle.bold())
+                        Text("Your Rhythms")
+                            .font(.title.bold())
+                            .fontWidth(.expanded)
                             .foregroundStyle(.white)
                         
                         Spacer()
