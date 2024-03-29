@@ -2,9 +2,15 @@
 
 # MorningDew
 ### Apple Swift Student Challenge 2024 Submission
-**Current status:** Submitted :inbox_tray: 
+**Current status:** 
+Accepted :tada:
 
-MorningDew is a morning routine task timer for people with ADHD. Using multiple engaging techniques to minimise distractions, MorningDew aims to get you up and ready in as little time as possible.
+## What is it?
+**MorningDew is a morning routine task timer for people with ADHD.**
+
+With ADHD, it's easy to get distracted, especially in the morning. A 15-min routine can turn into an hour :flushed:
+
+Using multiple engaging techniques to minimise distractions, MorningDew aims to get you up and ready in as little time as possible.
 
 **Technologies used:** SwiftUI, SwiftData, Combine, Observation, AVFoundation & TipKit.
 
