@@ -40,9 +40,9 @@ MorningDew is an **iOS 17-only** application, intended for the iPhone.
 - iOS Simulator device running iOS 17.0 or later.
 
 ### Instructions
-1. Clone the repository to your local machine.
-2. Open the **MorningDew.swiftpm** file in Xcode.
-3. Change the Run Destination to your iPhone, or the iOS Simulator device.
+1. Download the latest version under the **Releases** section of the repository.
+2. Unzip and open the **MorningDew.swiftpm** file in Xcode.
+3. Change the Run Destination to your iPhone, or an iOS Simulator device.
 4. Run the project.
 
 
