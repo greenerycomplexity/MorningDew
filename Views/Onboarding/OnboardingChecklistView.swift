@@ -10,12 +10,13 @@ import SwiftUI
 struct OnboardingChecklistView: View {
     @State private var showText = false
     @State private var showCellAnimation = false
-    @State var listCellDelay = 0.5
+    
 
-    let listTextColor: Color = .white
-    let backgroundListRowColor: Material = .ultraThinMaterial
+    let listTextColor: Color = .black
+    let backgroundListRowColor = Color.white
 
-    var textDuration = 1.5
+    var textDuration = 1.0
+    @State var listCellDelay = 0.3
 
     @Binding var activeTab: OnboardingTab
     let tab: OnboardingTab = .checklist
@@ -26,9 +27,8 @@ struct OnboardingChecklistView: View {
         VStack {
             Spacer()
             Text("""
-            You already have a morning routine,
-            a set of tasks to do - your morning
-            ***Rhythm***
+            You already know what you need
+            to do in the morning...
             """)
             .font(.title3)
             .foregroundStyle(.white)
@@ -68,7 +68,7 @@ struct OnboardingChecklistView: View {
             if activeTab == self.tab {
                 showText = true
                 musicPlayer?.setVolume(0.3, fadeDuration: 2)
-                delay(seconds: 2.0) {
+                delay(seconds: 1.0) {
                     showCellAnimation = true
                 }
                 
@@ -79,4 +79,5 @@ struct OnboardingChecklistView: View {
 
 #Preview {
     OnboardingChecklistView(activeTab: .constant(.checklist))
+        .background(.blue)
 }

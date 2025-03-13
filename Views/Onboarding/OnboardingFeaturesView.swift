@@ -28,30 +28,28 @@ struct OnboardingFeaturesView: View {
     var body: some View {
         VStack {
             Spacer()
-            VStack(alignment: .leading, spacing: 20) {
-                VStack(alignment: .leading) {
-                    Text("MorningDew")
-                        .font(.largeTitle.bold())
-                        .fontDesign(.monospaced)
-
-                    Text("helps by using:")
-                        .font(.title2.bold())
+            VStack(alignment: .leading, spacing: 10) {
+                VStack(alignment: .center) {
+                    Text("How MorningDew helps")
+                        .font(.title.bold())
                 }
                 .foregroundStyle(.white)
                 .padding(.bottom, 20)
                 .moveAndFade(showAnimation: showText)
 
-                OnboardingFeatureCell(showCellAnimation: $showTimer, icon: "⏱️", title: "Timer", secondary: "Don't lose track of time!")
+                OnboardingFeatureCell(showCellAnimation: $showTimer, icon: "⏱️", title: "Timer for each task", secondary: "No more losing track of time")
 
-                OnboardingFeatureCell(showCellAnimation: $showMusic, icon: "🎵", title: "Fast-paced Music", secondary: "Gets you moving!")
+                OnboardingFeatureCell(showCellAnimation: $showMusic, icon: "🎵", title: "Fast-paced music", secondary: "Getting you to move quickly")
 
-                OnboardingFeatureCell(showCellAnimation: $showAlarm, icon: "🚨", title: "Interval Checkups", secondary: "No response after a task? Sound the alarm!")
+                OnboardingFeatureCell(showCellAnimation: $showAlarm, icon: "🚨", title: "Interval check-ups", secondary: "Pulling you back to the task at hand")
                 
-                OnboardingFeatureCell(showCellAnimation: $showBreathe, icon: "🧘", title: "Guided Breathing", secondary: "A moment of calm, if you're overwhelmed.")
+                OnboardingFeatureCell(showCellAnimation: $showBreathe, icon: "🧘", title: "Guided breathing sessions", secondary: "Providing a moment of calm, if you get overwhelmed")
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 50)
 
+            
+            Spacer()
             Button {
                 musicPlayer?.stop()
                 soundPlayer?.stop()
@@ -63,6 +61,7 @@ struct OnboardingFeaturesView: View {
                     .font(.title3.bold())
                     .fontDesign(.rounded)
                     .padding()
+                    .padding(.horizontal, 20)
                     .background(.orange.gradient)
                     .clipShape(RoundedRectangle(cornerRadius: 15))
                     .scaleEffect(showStartButton ? 1 : 0)
@@ -71,32 +70,33 @@ struct OnboardingFeaturesView: View {
             Spacer()
         }
         .onChange(of: activeTab) {
-            if activeTab == self.tab {
+            if activeTab == self.tab && !showText {
                 let deadline = DispatchTime.now()
-
+       
                 DispatchQueue.main.asyncAfter(deadline: deadline) {
                     showText = true
                 }
-
+       
                 DispatchQueue.main.asyncAfter(deadline: deadline + 1.0) {
                     pauseAllSounds()
                     showTimer = true
                     SoundPlayer().play(file: "tickingClock.wav")
                 }
-
-                DispatchQueue.main.asyncAfter(deadline: deadline + 3) {
+       
+                DispatchQueue.main.asyncAfter(deadline: deadline + 2.5) {
                     pauseAllSounds()
                     showMusic = true
                     SoundPlayer().play(file: "electro.wav")
                 }
-
-                DispatchQueue.main.asyncAfter(deadline: deadline + 6.5) {
+       
+                DispatchQueue.main.asyncAfter(deadline: deadline + 5.5) {
                     pauseAllSounds()
                     showAlarm = true
+                    musicPlayer?.setVolume(0.2, fadeDuration: 2)
                     SoundPlayer().play(file: "alarm.wav")
                 }
                 
-                DispatchQueue.main.asyncAfter(deadline: deadline + 8.5) {
+                DispatchQueue.main.asyncAfter(deadline: deadline + 6.5) {
                     pauseAllSounds()
                     showBreathe = true
                     
@@ -104,11 +104,11 @@ struct OnboardingFeaturesView: View {
                     musicPlayer?.volume = 0.8
                     musicPlayer?.play()
                     delay(seconds: 2) {
-                        musicPlayer?.setVolume(0.3, fadeDuration: 2)
+                        musicPlayer?.setVolume(0.2, fadeDuration: 2)
                     }
                 }
-
-                DispatchQueue.main.asyncAfter(deadline: deadline + 11) {
+       
+                DispatchQueue.main.asyncAfter(deadline: deadline + 8) {
                     showStartButton = true
                 }
             }
@@ -150,12 +150,19 @@ struct OnboardingFeatureCell: View {
         }
         .padding(.vertical, 5)
         .frame(maxWidth: .infinity)
-        .background(.thinMaterial)
+        .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 15))
         .moveAndFade(showAnimation: showCellAnimation, duration: cellDuration)
     }
 }
 
 #Preview {
-    OnboardingFeaturesView(activeTab: .constant(.features))
+    @Previewable @State var activeTab: OnboardingTab = .greeting
+    
+    OnboardingFeaturesView(activeTab: $activeTab)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(.gray)
+        .onAppear {
+            activeTab = .features
+        }
 }

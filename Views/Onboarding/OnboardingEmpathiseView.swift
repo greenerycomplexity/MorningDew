@@ -9,11 +9,11 @@ import SwiftUI
 
 struct OnboardingEmpathiseView: View {
     @State private var showGaspButton = false
-
     @State private var showText = false
+    @State private var shakeAmount: CGFloat = 0
 
-    var textDuration = 1.5
-    var delay = 1.0
+    var textDuration = 1.0
+    var delay = 0.75
 
     @Binding var activeTab: OnboardingTab
     let tab: OnboardingTab = .emphathise
@@ -21,7 +21,6 @@ struct OnboardingEmpathiseView: View {
     var body: some View {
         VStack {
             Spacer()
-
             VStack(alignment: .leading, spacing: 20) {
                 Text("But with ADHD, you get **distracted**")
                     .opacity(showText ? 1.0 : 0)
@@ -42,6 +41,9 @@ struct OnboardingEmpathiseView: View {
             Button {
                 musicPlayer?.pause()
                 SoundPlayer().play(file: "gasp.wav")
+                withAnimation(.spring(response: 0.1, dampingFraction: 0.1)) {
+                    shakeAmount += 0.8
+                }
             } label: {
                 Text("Tap to Gasp")
                     .foregroundStyle(.white)
@@ -51,8 +53,11 @@ struct OnboardingEmpathiseView: View {
                     .background(.orange.gradient)
                     .clipShape(.rect(cornerRadius: 20))
                     .scaleEffect(showGaspButton ? 1 : 0)
-                    .animation(.spring(bounce: 0.6).delay(delay * 4), value: showGaspButton)
+                    .animation(.spring(bounce: 0.5).delay(delay * 4), value: showGaspButton)
+                    .modifier(ShakeEffect(animatableData: shakeAmount))
             }
+           
+            Spacer()
             Spacer()
             Spacer()
             Spacer()
@@ -72,5 +77,12 @@ struct OnboardingEmpathiseView: View {
 }
 
 #Preview {
-    OnboardingEmpathiseView(activeTab: .constant(.emphathise))
+    @Previewable @State var activeTab: OnboardingTab = .greeting
+    
+    OnboardingEmpathiseView(activeTab: $activeTab)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(.gray)
+        .onAppear {
+            activeTab = .emphathise
+        }
 }

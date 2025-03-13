@@ -16,8 +16,6 @@ enum OnboardingTab {
 
 struct OnboardingView: View {
     @State var activeTab: OnboardingTab = .greeting
-    @State private var showInstruction = false
-    @State private var blinkingInstruction = false
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -38,46 +36,10 @@ struct OnboardingView: View {
                     .tag(OnboardingTab.features)
             }
             .pageIndex(hidden: activeTab == .greeting ? true : false)
+           
 
-            HStack {
-                Text("Swipe to continue")
-                Image(systemName: "arrow.forward")
-            }
-            .foregroundStyle(.white)
-            .offset(y: -30)
-            .opacity(showInstruction ? 1.0 : 0)
-            .opacity(blinkingInstruction ? 1.0 : 0)
-            .animation(.linear(duration: 0.5), value: blinkingInstruction)
-            .onAppear {
-                delay(seconds: 7.5) {
-                    if activeTab == . greeting {
-                        withAnimation(.linear(duration: 0.25)) {
-                            showInstruction = true
-                        }
-                        blink()
-                        
-                    }
-                }
-            }
-            .onChange(of: activeTab) {
-                if activeTab != .greeting {
-                    withAnimation(.linear(duration: 0.2)) {
-                        showInstruction = false
-                    }
-                }
-            }
-        }
-    }
-    
-    func blink() {
-        blinkingInstruction = true
 
-        delay(seconds: 2.0) {
-            blinkingInstruction = false
-        }
-
-        delay(seconds: 2.75) {
-            blink()
+          
         }
     }
 }
