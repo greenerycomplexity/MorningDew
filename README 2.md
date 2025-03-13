@@ -2,9 +2,15 @@
 
 # MorningDew
 ### Apple Swift Student Challenge 2024 Submission
-**Current status:** Submitted :inbox_tray: 
+**Current status:** 
+Accepted :tada:
 
-MorningDew is a morning routine task timer for people with ADHD. Using multiple engaging techniques to minimise distractions, MorningDew aims to get you up and ready in as little time as possible.
+## What is it?
+**MorningDew is a morning routine task timer for people with ADHD.**
+
+With ADHD, it's easy to get distracted, especially in the morning. A 15-min routine can turn into an hour :flushed:
+
+Using multiple engaging techniques to minimise distractions, MorningDew aims to get you up and ready in as little time as possible.
 
 **Technologies used:** SwiftUI, SwiftData, Combine, Observation, AVFoundation & TipKit.
 
@@ -34,9 +40,9 @@ MorningDew is an **iOS 17-only** application, intended for the iPhone.
 - iOS Simulator device running iOS 17.0 or later.
 
 ### Instructions
-1. Clone the repository to your local machine.
-2. Open the **MorningDew.swiftpm** file in Xcode.
-3. Change the Run Destination to your iPhone, or the iOS Simulator device.
+1. Download the latest version under the **Releases** section of the repository.
+2. Unzip and open the **MorningDew.swiftpm** file in Xcode.
+3. Change the Run Destination to your iPhone, or an iOS Simulator device.
 4. Run the project.
 
 
