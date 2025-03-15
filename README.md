@@ -28,7 +28,7 @@ Using multiple engaging techniques to minimise distractions, MorningDew aims to 
 
 | Home Screen | Define Tasks | Active | Breathing Session |
 | ------------- | ------------- | ------------- | ------------- |
-| <img src="GitHub Resources/Screenshots/HomeScreen.png" width="236" alt="Home Screen View"> | <img src="GitHub Resources/Screenshots/Detail.png" width="236" alt="Rhythm Detail View"> | <img src="GitHub Resources/Screenshots/Active.png" width="236" alt="Rhythm when Active View"> |  <img src="GitHub Resources/Screenshots/Breathe.png" width="236" alt="Breathing Session View">  |
+| <img src="GitHub Resources/Screenshots/HomeScreen.png" width="236" alt="Home Screen View"> | <img src="GitHub Resources/Screenshots/Detail.png" width="236" alt="Routine Detail View"> | <img src="GitHub Resources/Screenshots/Active.png" width="236" alt="Routine when Active View"> |  <img src="GitHub Resources/Screenshots/Breathe.png" width="236" alt="Breathing Session View">  |
 
 ## Usage
 MorningDew is an **iOS 17-only** application, intended for the iPhone.

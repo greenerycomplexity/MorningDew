@@ -17,22 +17,22 @@ enum AppData {
     // Data-preloading at first access
     static let appContainer: ModelContainer = {
         do {
-            let container = try ModelContainer(for: Rhythm.self)
+            let container = try ModelContainer(for: Routine.self)
 
             // Sample data population code will only run if the persistent store is empty.
-            var itemFetchDescriptor = FetchDescriptor<Rhythm>()
+            var itemFetchDescriptor = FetchDescriptor<Routine>()
             itemFetchDescriptor.fetchLimit = 1
 
             guard try container.mainContext.fetch(itemFetchDescriptor).count == 0 else { return container }
 
-            let wfhRhythm = Rhythm(name: "WFH Weekday", emoji: "🏠")
-            let weekendRhythm = Rhythm(name: "Weekend", emoji: "🌻")
-            let officeDayRhythm = Rhythm(name: "Before the office", emoji: "📊")
+            let wfhRoutine = Routine(name: "WFH Weekday", emoji: "🏠")
+            let weekendRoutine = Routine(name: "Weekend", emoji: "🌻")
+            let officeDayRoutine = Routine(name: "Before the office", emoji: "📊")
 
-            let rhythms: [Rhythm] = [officeDayRhythm, weekendRhythm, wfhRhythm]
+            let routines: [Routine] = [officeDayRoutine, weekendRoutine, wfhRoutine]
 
-            for rhythm in rhythms {
-                container.mainContext.insert(rhythm)
+            for routine in routines {
+                container.mainContext.insert(routine)
             }
             
             let weekendTasks = [
@@ -61,9 +61,9 @@ enum AppData {
                 TaskItem(name: "Pick outfit", seconds: 60, perceivedDifficulty: 3)
             ]
 
-            officeDayRhythm.tasks.append(contentsOf: officeDayTasks)
-            weekendRhythm.tasks.append(contentsOf: weekendTasks)
-            wfhRhythm.tasks.append(contentsOf: wfhTasks)
+            officeDayRoutine.tasks.append(contentsOf: officeDayTasks)
+            weekendRoutine.tasks.append(contentsOf: weekendTasks)
+            wfhRoutine.tasks.append(contentsOf: wfhTasks)
 
             return container
         } catch {

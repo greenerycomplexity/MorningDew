@@ -8,19 +8,19 @@
 import SwiftUI
 
 struct TimerView: View {
-    @Bindable var rhythmManager: RhythmManager
+    @Bindable var routineManager: RoutineManager
   
     var body: some View {
         ZStack {
             // MARK: Display timer and progress ring
             ZStack {
-                TimerProgressRing(progress: rhythmManager.progress)
+                TimerProgressRing(progress: routineManager.progress)
                     .containerRelativeFrame(.horizontal) {width, axis in
                         width * 0.8
                     }
                 
                 VStack {
-                    Text(rhythmManager.taskEndTime, style: .timer)
+                    Text(routineManager.taskEndTime, style: .timer)
                         .font(.custom("SF Pro", size: 80, relativeTo: .largeTitle))
                         .fontDesign(.rounded)
                         .foregroundStyle(.white)
@@ -58,10 +58,10 @@ struct TimerProgressRing: View {
 #Preview {
     MainActor.assumeIsolated {
         let container = PreviewData.container
-        let rhythm = PreviewData.rhythmExample
-        container.mainContext.insert(rhythm)
+        let routine = PreviewData.routineExample
+        container.mainContext.insert(routine)
         
-        return TimerView(rhythmManager: RhythmManager(rhythm: rhythm))
+        return TimerView(routineManager: RoutineManager(routine: routine))
             .modelContainer(container)
     }
 }

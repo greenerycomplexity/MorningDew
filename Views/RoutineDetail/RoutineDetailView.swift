@@ -1,5 +1,5 @@
 //
-//  RhythmView.swift
+//  RoutineView.swift
 //  MorningDew
 //
 //  Created by Son Cao on 23/1/2024.
@@ -14,25 +14,25 @@ struct AddTaskTip: Tip {
     var message: Text? = Text("Try to give your best estimates!")
 }
 
-struct RhythmDetailView: View {
+struct RoutineDetailView: View {
     @Environment(\.modelContext) var modelContext
     @State private var showAddTaskView = false
-    @Bindable var currentRhythm: Rhythm
+    @Bindable var currentRoutine: Routine
     @State private var isActive: Bool = false
     @Query var tasks: [TaskItem]
     
-    init(currentRhythm: Rhythm) {
-        self.currentRhythm = currentRhythm
-        let currentRhythmID = currentRhythm.persistentModelID
+    init(currentRoutine: Routine) {
+        self.currentRoutine = currentRoutine
+        let currentRoutineID = currentRoutine.persistentModelID
     
         _tasks = Query(
             filter: #Predicate<TaskItem> { task in
-                task.rhythm?.persistentModelID == currentRhythmID
+                task.routine?.persistentModelID == currentRoutineID
             })
     }
     
     // Total time has to be calculated here based on the tasks @Query,
-    // instead of grabbing it from Bindable currentRhythm object.
+    // instead of grabbing it from Bindable currentRoutine object.
     // Else time won't be updated on post-edit (e.g deletion or modification)
     private var totalMinutes: Double {
         var minutes: Double = 0
@@ -43,7 +43,7 @@ struct RhythmDetailView: View {
     }
     
     private var estimatedEndTime: Date {
-        Calendar.current.date(byAdding: .second, value: currentRhythm.totalSeconds, to: Date.now) ?? .now
+        Calendar.current.date(byAdding: .second, value: currentRoutine.totalSeconds, to: Date.now) ?? .now
     }
     
     @State private var showCellAnimation = false
@@ -93,7 +93,7 @@ struct RhythmDetailView: View {
                         }
                         
                         ForEach(tasks.indices, id: \.self) { index in
-                            TaskListCell(task: currentRhythm.tasks[index])
+                            TaskListCell(task: currentRoutine.tasks[index])
                                 .listRowSeparator(.hidden, edges: .all)
                                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                                 .listRowBackground(Color.clear)
@@ -106,7 +106,7 @@ struct RhythmDetailView: View {
                         }
                         .onDelete(perform: { indexSet in
                             for taskIndex in indexSet {
-                                let task = currentRhythm.tasks[taskIndex]
+                                let task = currentRoutine.tasks[taskIndex]
                                 modelContext.delete(task)
                             }
                         })
@@ -114,8 +114,8 @@ struct RhythmDetailView: View {
                     .scrollContentBackground(.hidden)
                     .scrollIndicators(.hidden)
                     
-                    if currentRhythm.tasks.count > 0 {
-                        Button("Start Rhythm") {
+                    if currentRoutine.tasks.count > 0 {
+                        Button("Start Routine") {
                             withAnimation {
                                 isActive = true
                             }
@@ -125,7 +125,7 @@ struct RhythmDetailView: View {
                     }
                 }
                 .sheet(isPresented: $showAddTaskView) {
-                    AddTaskView(currentRhythm: currentRhythm)
+                    AddTaskView(currentRoutine: currentRoutine)
                         .presentationDetents([.fraction(0.5), .large])
                         .presentationDragIndicator(.visible)
                 }
@@ -145,7 +145,7 @@ struct RhythmDetailView: View {
                         .popoverTip(AddTaskTip())
                     }
                 }
-                .navigationTitle("\(currentRhythm.name) \(currentRhythm.emoji)")
+                .navigationTitle("\(currentRoutine.name) \(currentRoutine.emoji)")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbarColorScheme(.dark, for: .navigationBar)
                 .toolbarBackground(.visible, for: .navigationBar)
@@ -161,7 +161,7 @@ struct RhythmDetailView: View {
                     }
                 })
             } else {
-                RhythmStartView(rhythm: currentRhythm)
+                RoutineStartView(routine: currentRoutine)
             }
         }
     }
@@ -194,9 +194,9 @@ struct TaskListCell: View {
 #Preview {
     MainActor.assumeIsolated {
         let container = PreviewData.container
-        let rhythm = PreviewData.rhythmExample
-        container.mainContext.insert(rhythm)
-        return RhythmDetailView(currentRhythm: rhythm)
+        let routine = PreviewData.routineExample
+        container.mainContext.insert(routine)
+        return RoutineDetailView(currentRoutine: routine)
             .modelContainer(container)
     }
 }

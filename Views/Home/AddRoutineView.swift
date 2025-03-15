@@ -1,5 +1,5 @@
 //
-//  AddRhythmView.swift
+//  AddRoutineView.swift
 //  MorningDew
 //
 //  Created by Son Cao on 23/1/2024.
@@ -8,16 +8,16 @@
 import SwiftData
 import SwiftUI
 
-struct AddRhythmView: View {
+struct AddRoutineView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
-    @State private var name = "New Rhythm"
+    @State private var name = "New Routine"
     @State private var emoji = AppData.defaultEmoji
     @State private var showEmojiPicker = false
     
     @State private var showDuplicateNameAlert = false
-    let addRhythmFailed = "Failed to save Rhythm"
-    let rhythmFailedMessage = "Existing Rhythm names cannot be reused"
+    let addRoutineFailed = "Failed to save Routine"
+    let routineFailedMessage = "Existing Routine names cannot be reused"
     
     @State private var showEmptyAlert = false
     
@@ -59,7 +59,7 @@ struct AddRhythmView: View {
                         .foregroundStyle(.white)
                 }
                 
-                // MARK: Rhythm Name Editor
+                // MARK: Routine Name Editor
 
                 HStack {
                     TextField("Name", text: $name)
@@ -80,9 +80,9 @@ struct AddRhythmView: View {
                         return
                     }
                     
-                    let descriptor = FetchDescriptor<Rhythm>(
-                        predicate: #Predicate { rhythm in
-                            rhythm.name == name
+                    let descriptor = FetchDescriptor<Routine>(
+                        predicate: #Predicate { routine in
+                            routine.name == name
                         }
                     )
                         
@@ -92,9 +92,9 @@ struct AddRhythmView: View {
                         return
                     }
                     
-                    let newRhythm = Rhythm(name: name, emoji: emoji)
+                    let newRoutine = Routine(name: name, emoji: emoji)
                     withAnimation {
-                        modelContext.insert(newRhythm)
+                        modelContext.insert(newRoutine)
                     }
                     dismiss()
                 }
@@ -102,10 +102,10 @@ struct AddRhythmView: View {
                 .alert("Name field cannot be empty", isPresented: $showEmptyAlert) {
                     Button("Okay") {}
                 }
-                .alert(addRhythmFailed, isPresented: $showDuplicateNameAlert) {
+                .alert(addRoutineFailed, isPresented: $showDuplicateNameAlert) {
                     Button("Okay") {}
                 } message: {
-                    Text(rhythmFailedMessage)
+                    Text(routineFailedMessage)
                 }
             }
             .foregroundStyle(.white)
@@ -118,11 +118,11 @@ struct AddRhythmView: View {
 #Preview {
     do {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try! ModelContainer(for: Rhythm.self, configurations: config)
+        let container = try! ModelContainer(for: Routine.self, configurations: config)
         
-        let rhythm = Rhythm(name: "Morning Routine")
+        let routine = Routine(name: "Morning Routine")
         
-        return AddRhythmView()
+        return AddRoutineView()
             .modelContainer(container)
     }
 }

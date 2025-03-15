@@ -23,8 +23,8 @@ extension View {
     }
 }
 
-struct RhythmStatisticsView: View {
-    @Bindable var rhythmManager: RhythmManager
+struct RoutineStatisticsView: View {
+    @Bindable var routineManager: RoutineManager
     @Environment(\.dismiss) var dismiss
 
     @State private var showGreeting = false
@@ -32,7 +32,7 @@ struct RhythmStatisticsView: View {
     @State private var showFarewell = false
 
     private var timeSinceStart: TimeInterval {
-        rhythmManager.rhythmEndTime.timeIntervalSince(rhythmManager.rhythmStartTime)
+        routineManager.routineEndTime.timeIntervalSince(routineManager.routineStartTime)
     }
 
     var body: some View {
@@ -50,23 +50,23 @@ struct RhythmStatisticsView: View {
                             .font(.largeTitle.bold())
                             .expandedHeading()
                         
-                        Text("You've completed your Rhythm")
+                        Text("You've completed your Routine")
                             .foregroundStyle(.white)
                             .font(.title2.bold())
                     }
                     .padding(.bottom, 30)
                     .moveAndFade(showAnimation: showGreeting, duration: 1.5)
                     
-                    // MARK: Rhythm Completion Stats
+                    // MARK: Routine Completion Stats
 
                     VStack(alignment: .leading, spacing: 25) {
-                        // MARK: Rhythm Time report
+                        // MARK: Routine Time report
                         
                         VStack(alignment: .leading) {
                             Text("Expected time:")
                                 .expandedHeading()
                             
-                            Text("\(rhythmManager.rhythm.totalMinutes.clean) minutes")
+                            Text("\(routineManager.routine.totalMinutes.clean) minutes")
                                 .condensedHeading()
                         }
                         
@@ -84,16 +84,16 @@ struct RhythmStatisticsView: View {
                             Text("Breathing sessions taken:")
                                 .expandedHeading()
                             
-                            Text("^[\(rhythmManager.meditationOpened) time](inflect:true)")
+                            Text("^[\(routineManager.meditationOpened) time](inflect:true)")
                                 .condensedHeading()
                         }
                         
-                        if rhythmManager.meditationOpened > 0 {
+                        if routineManager.meditationOpened > 0 {
                             VStack(alignment: .leading) {
                                 Text("Time in breathing mode:")
                                     .expandedHeading()
                                 
-                                Text(rhythmManager.elapsedMeditationTotal.detailed)
+                                Text(routineManager.elapsedMeditationTotal.detailed)
                                     .condensedHeading()
                             }
                         }
@@ -135,10 +135,10 @@ struct RhythmStatisticsView: View {
 #Preview {
     MainActor.assumeIsolated {
         let container = PreviewData.container
-        let rhythm = PreviewData.rhythmExample
-        container.mainContext.insert(rhythm)
+        let routine = PreviewData.routineExample
+        container.mainContext.insert(routine)
 
-        return RhythmStatisticsView(rhythmManager: RhythmManager(rhythm: rhythm))
+        return RoutineStatisticsView(routineManager: RoutineManager(routine: routine))
             .modelContainer(container)
     }
 }

@@ -12,7 +12,7 @@ import SwiftUI
 struct AddTaskView: View {
     @State private var name = "New Task"
     @State private var perceivedDifficulty = 3
-    @Bindable var currentRhythm: Rhythm
+    @Bindable var currentRoutine: Routine
     
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
@@ -90,9 +90,9 @@ struct AddTaskView: View {
                         return
                     }
                     
-                    let newTask = TaskItem(name: name, seconds: totalSeconds, perceivedDifficulty: perceivedDifficulty, rhythm: currentRhythm)
+                    let newTask = TaskItem(name: name, seconds: totalSeconds, perceivedDifficulty: perceivedDifficulty, routine: currentRoutine)
                         
-                    currentRhythm.tasks.append(newTask)
+                    currentRoutine.tasks.append(newTask)
                     dismiss()
                 }
                 .alert("Name field cannot be empty", isPresented: $showEmptyAlert) {
@@ -109,11 +109,11 @@ struct AddTaskView: View {
 #Preview {
     do {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try! ModelContainer(for: Rhythm.self, configurations: config)
+        let container = try! ModelContainer(for: Routine.self, configurations: config)
         
-        let rhythm = Rhythm(name: "Morning Routine")
+        let routine = Routine(name: "Morning Routine")
         
-        return AddTaskView(currentRhythm: rhythm)
+        return AddTaskView(currentRoutine: routine)
             .modelContainer(container)
     }
 }

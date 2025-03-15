@@ -3,8 +3,8 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(\.modelContext) var modelContext
-    @Query private var rhythms: [Rhythm]
-    @State private var showAddRhythmView = false
+    @Query private var routines: [Routine]
+    @State private var showAddRoutineView = false
     
     var body: some View {
         NavigationStack {
@@ -14,7 +14,7 @@ struct ContentView: View {
                 
                 VStack {
                     HStack {
-                        Text("Your Rhythms")
+                        Text("Your Routines")
                             .font(.title.bold())
                             .fontWidth(.expanded)
                             .foregroundStyle(.white)
@@ -25,13 +25,13 @@ struct ContentView: View {
                     .padding(.top, 10)
                     
                     List {
-                        ForEach(rhythms) { rhythm in
-                            NavigationLink(value: rhythm) {
+                        ForEach(routines) { routine in
+                            NavigationLink(value: routine) {
                                 HStack(spacing: 10) {
-                                    Text(rhythm.emoji)
+                                    Text(routine.emoji)
                                         .font(.title)
                                     
-                                    Text(rhythm.name)
+                                    Text(routine.name)
                                         .font(.title3.bold())
                                         .fontDesign(.default)
                                         .foregroundStyle(.primary)
@@ -39,7 +39,7 @@ struct ContentView: View {
                                     Spacer()
                                     
                                     VStack {
-                                        Text("\(rhythm.totalMinutes.clean)")
+                                        Text("\(routine.totalMinutes.clean)")
                                             .font(.title2.bold())
                                         
                                         Text("minutes")
@@ -54,20 +54,20 @@ struct ContentView: View {
                             .listRowBackground(Color(.systemBackground))
                         }
                         .onDelete(perform: { indexSet in
-                            for rhythmIndex in indexSet {
-                                let rhythm = rhythms[rhythmIndex]
-                                modelContext.delete(rhythm)
+                            for routineIndex in indexSet {
+                                let routine = routines[routineIndex]
+                                modelContext.delete(routine)
                             }
                         })
                         
                         Section {} footer: {
                             Button {
-                                showAddRhythmView = true
+                                showAddRoutineView = true
                             } label: {
                                 HStack {
                                     Spacer()
                                     HStack {
-                                        Text("Add Rhythm")
+                                        Text("Add Routine")
                                             .font(.headline)
                                             .foregroundStyle(.black)
                                             .fontDesign(.rounded)
@@ -83,20 +83,20 @@ struct ContentView: View {
                                     Spacer()
                                 }
                             }
-                            .sheet(isPresented: $showAddRhythmView) {
-                                AddRhythmView()
+                            .sheet(isPresented: $showAddRoutineView) {
+                                AddRoutineView()
                                     .presentationDetents([.fraction(0.65), .large])
                             }
                         }
                     }
                     .scrollContentBackground(.hidden)
-                    .navigationDestination(for: Rhythm.self) { rhythm in
-                        RhythmDetailView(currentRhythm: rhythm)
+                    .navigationDestination(for: Routine.self) { routine in
+                        RoutineDetailView(currentRoutine: routine)
                     }
                     .onAppear(perform: {
-                        if rhythms.count == 0 {
-                            let newRhythm = Rhythm(name: "Morning")
-                            modelContext.insert(newRhythm)
+                        if routines.count == 0 {
+                            let newRoutine = Routine(name: "Morning")
+                            modelContext.insert(newRoutine)
                         }
                     })
                     

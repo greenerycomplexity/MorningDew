@@ -1,4 +1,4 @@
-//  StartRhythmView.swift
+//  StartRoutineView.swift
 //
 //  MorningDew
 //
@@ -8,17 +8,17 @@
 import SwiftData
 import SwiftUI
 
-struct RhythmStartView: View {
-    @State private var rhythmManager: RhythmManager
+struct RoutineStartView: View {
+    @State private var routineManager: RoutineManager
     
-    init(rhythm: Rhythm) {
-        rhythmManager = RhythmManager(rhythm: rhythm)
+    init(routine: Routine) {
+        routineManager = RoutineManager(routine: routine)
     }
     
     var body: some View {
-        switch rhythmManager.currentState {
+        switch routineManager.currentState {
         case .active:
-            RhythmActiveView(rhythmManager: rhythmManager)
+            RoutineActiveView(routineManager: routineManager)
                 .navigationBarBackButtonHidden(true)
                 .onAppear {
                     MusicPlayer().play(file: "electro.wav", volume: 0.1)
@@ -26,14 +26,14 @@ struct RhythmStartView: View {
                 }
             
         case .meditation:
-            MeditationView(rhythmManager: rhythmManager)
+            MeditationView(routineManager: routineManager)
                 .navigationBarBackButtonHidden(true)
                 .onAppear {
                     MusicPlayer().play(file: "forest.wav", volume: 0.2)
                 }
             
         case .checkup:
-            RhythmCheckupView(rhythmManager: rhythmManager)
+            RoutineCheckupView(routineManager: routineManager)
                 .navigationBarBackButtonHidden(true)
                 .onAppear {
                     musicPlayer?.setVolume(0.0, fadeDuration: 3)
@@ -43,7 +43,7 @@ struct RhythmStartView: View {
                 }
             
         case .allCompleted:
-            RhythmStatisticsView(rhythmManager: rhythmManager)
+            RoutineStatisticsView(routineManager: routineManager)
                 .navigationBarBackButtonHidden(true)
                 .onAppear {
                     musicPlayer?.stop()
@@ -55,10 +55,10 @@ struct RhythmStartView: View {
 #Preview {
     MainActor.assumeIsolated {
         let container = PreviewData.container
-        let rhythm = PreviewData.rhythmExample
-        container.mainContext.insert(rhythm)
+        let routine = PreviewData.routineExample
+        container.mainContext.insert(routine)
         
-        return RhythmStartView(rhythm: rhythm)
+        return RoutineStartView(routine: routine)
             .modelContainer(container)
     }
 }

@@ -1,5 +1,5 @@
 //
-//  RhythmManager.swift
+//  RoutineManager.swift
 //  MorningDew
 //
 //  Created by Son Cao on 8/2/2024.
@@ -8,20 +8,20 @@
 import Foundation
 import SwiftUI
 
-enum RhythmState {
+enum RoutineState {
     case active
     case meditation
     case checkup
     case allCompleted
 }
 
-// Manages the entire Rhythm lifecycle once the user clicks begin
+// Manages the entire Routine lifecycle once the user clicks begin
 @Observable
-class RhythmManager {
-    private(set) var rhythm: Rhythm
+class RoutineManager {
+    private(set) var routine: Routine
     private(set) var tasksToComplete: [TaskItem]
-    private(set) var rhythmStartTime: Date = .now
-    private(set) var rhythmEndTime: Date = .now
+    private(set) var routineStartTime: Date = .now
+    private(set) var routineEndTime: Date = .now
     
     private(set) var currentTask: TaskItem = PreviewData.taskItemExample
     private(set) var taskEndTime: Date = .now
@@ -36,7 +36,7 @@ class RhythmManager {
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
-    var currentState: RhythmState = .active {
+    var currentState: RoutineState = .active {
         didSet {
             // Going back from Meditation view means resetting the entire task again
             if oldValue == .meditation {
@@ -59,9 +59,9 @@ class RhythmManager {
         return Date.now >= taskEndTime
     }
     
-    init(rhythm: Rhythm) {
-        self.rhythm = rhythm
-        self.tasksToComplete = rhythm.tasks
+    init(routine: Routine) {
+        self.routine = routine
+        self.tasksToComplete = routine.tasks
     }
     
     // For every new task that comes in, reset the progress ring
@@ -86,7 +86,7 @@ class RhythmManager {
     func nextTask() {
         elapsed = true
         if tasksToComplete.isEmpty {
-            rhythmEndTime = .now
+            routineEndTime = .now
             currentState = .allCompleted
         } else {
             elapsed = false

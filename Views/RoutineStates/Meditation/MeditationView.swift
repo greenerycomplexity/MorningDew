@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MeditationView: View {
-    @Bindable var rhythmManager: RhythmManager
+    @Bindable var routineManager: RoutineManager
     
     @State private var numberOfPetals: Double = 1
     @State private var isMinimized = false
@@ -45,7 +45,7 @@ struct MeditationView: View {
             
             VStack {
                 Spacer()
-                if !rhythmManager.elapsed {
+                if !routineManager.elapsed {
                     LotusView(isMinimized: $isMinimized,
                               numberOfPetals: $numberOfPetals,
                               breatheDuration: $breatheDuration)
@@ -127,18 +127,18 @@ struct MeditationView: View {
                         showFarewell = true
 
                         delay(seconds: 4.5) {
-                            rhythmManager.currentState = .active
+                            routineManager.currentState = .active
                         }
                     }
                 }
               
                 Spacer()
                 
-                // Text(rhythmManager.taskEndTime, style: .timer)
+                // Text(routineManager.taskEndTime, style: .timer)
                 
                 Button {
                     withAnimation {
-                        rhythmManager.currentState = .active
+                        routineManager.currentState = .active
                     }
                     
                 } label: {
@@ -155,10 +155,10 @@ struct MeditationView: View {
             }
         }
         .onAppear {
-            rhythmManager.prepareMeditation()
+            routineManager.prepareMeditation()
         }
-        .onReceive(rhythmManager.timer, perform: { _ in
-            rhythmManager.trackMeditation()
+        .onReceive(routineManager.timer, perform: { _ in
+            routineManager.trackMeditation()
         })
         .transition(.opacity)
     }
@@ -167,10 +167,10 @@ struct MeditationView: View {
 #Preview {
     MainActor.assumeIsolated {
         let container = PreviewData.container
-        let rhythm = PreviewData.rhythmExample
-        container.mainContext.insert(rhythm)
+        let routine = PreviewData.routineExample
+        container.mainContext.insert(routine)
         
-        return MeditationView(rhythmManager: RhythmManager(rhythm: rhythm))
+        return MeditationView(routineManager: RoutineManager(routine: routine))
             .modelContainer(container)
     }
 }

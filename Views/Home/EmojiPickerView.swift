@@ -39,7 +39,7 @@ struct EmojiPickerView: View {
             Color.black.opacity(0.9)
                 .ignoresSafeArea()
             VStack {
-                Text("Choose an icon for your Rhythm")
+                Text("Choose an icon for your Routine")
                     .font(.headline)
                     .foregroundStyle(.white)
                 

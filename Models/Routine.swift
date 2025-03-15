@@ -1,5 +1,5 @@
 //
-//  Rhythm.swift
+//  Routine.swift
 //  MorningDew
 //
 //  Created by Son Cao on 18/1/2024.
@@ -9,12 +9,12 @@ import Foundation
 import SwiftData
 
 @Model
-class Rhythm {
+class Routine {
     var name: String
     var emoji: String
     
-    // If a Rhythm is deleted, then delete all tasks associated.
-    // @Relationship(deleteRule: .cascade, inverse: \TaskItem.rhythm) var tasks: [TaskItem]
+    // If a Routine is deleted, then delete all tasks associated.
+    // @Relationship(deleteRule: .cascade, inverse: \TaskItem.routine) var tasks: [TaskItem]
     
     var tasks: [TaskItem]
     

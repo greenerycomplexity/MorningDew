@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct RhythmCheckupView: View {
-    @Bindable var rhythmManager: RhythmManager
+struct RoutineCheckupView: View {
+    @Bindable var routineManager: RoutineManager
     @State private var timeRemaining = 10
     @State private var showAlert = false
     
@@ -32,7 +32,7 @@ struct RhythmCheckupView: View {
                 Text("Have you completed this task?")
                     .font(.headline)
                 
-                Text("\(rhythmManager.currentTask.name)")
+                Text("\(routineManager.currentTask.name)")
                     .font(.largeTitle.bold())
                     .fontDesign(.rounded)
                     .foregroundStyle(.white)
@@ -62,8 +62,8 @@ struct RhythmCheckupView: View {
                     // MARK: Go to next task
 
                     Button {
-                        rhythmManager.currentState = .active
-                        rhythmManager.nextTask()
+                        routineManager.currentState = .active
+                        routineManager.nextTask()
                     } label: {
                         Text("Yes")
                             .foregroundStyle(.white)
@@ -78,8 +78,8 @@ struct RhythmCheckupView: View {
                     // MARK: Go back to current task but add 30s
                     Button {
                         // Add extra time, then go back to current task
-                        rhythmManager.addExtraTime(seconds: extraTimeAllotment)
-                        rhythmManager.currentState = .active
+                        routineManager.addExtraTime(seconds: extraTimeAllotment)
+                        routineManager.currentState = .active
                     } label: {
                         Text("I need more time (+\(extraTimeAllotment.clean)s)")
                             .foregroundStyle(.white)
@@ -102,10 +102,10 @@ struct RhythmCheckupView: View {
 #Preview {
     MainActor.assumeIsolated {
         let container = PreviewData.container
-        let rhythm = PreviewData.rhythmExample
-        container.mainContext.insert(rhythm)
+        let routine = PreviewData.routineExample
+        container.mainContext.insert(routine)
         
-        return RhythmCheckupView(rhythmManager: RhythmManager(rhythm: rhythm))
+        return RoutineCheckupView(routineManager: RoutineManager(routine: routine))
             .modelContainer(container)
     }
 }

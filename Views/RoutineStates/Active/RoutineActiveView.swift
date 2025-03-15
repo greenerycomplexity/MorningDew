@@ -1,4 +1,4 @@
-//  StartRhythmView.swift
+//  StartRoutineView.swift
 //
 //  MorningDew
 //
@@ -8,8 +8,8 @@
 import SwiftData
 import SwiftUI
 
-struct RhythmActiveView: View {
-    @Bindable var rhythmManager: RhythmManager
+struct RoutineActiveView: View {
+    @Bindable var routineManager: RoutineManager
     
     @State private var soundMuted: Bool = false {
         didSet {
@@ -36,10 +36,10 @@ struct RhythmActiveView: View {
                 
                 // MARK: Timer
 
-                TimerView(rhythmManager: rhythmManager)
+                TimerView(routineManager: routineManager)
                     
                 // Current task name
-                Text(rhythmManager.currentTask.name)
+                Text(routineManager.currentTask.name)
                     .font(.largeTitle.bold())
                     .foregroundStyle(.white)
                     
@@ -102,7 +102,7 @@ struct RhythmActiveView: View {
                     VStack {
                         Button {
                             SoundPlayer().play(file: "taskFinished.wav")
-                            rhythmManager.nextTask()
+                            routineManager.nextTask()
                             generateEncouragement()
                         } label: {
                             Image(systemName: "checkmark.gobackward")
@@ -122,14 +122,14 @@ struct RhythmActiveView: View {
                     .alert("Start Meditation?", isPresented: $showMeditationAlert) {
                         Button("Confirm") {
                             withAnimation {
-                                rhythmManager.currentState = .meditation
+                                routineManager.currentState = .meditation
                             }
                         }
                         
                         Button("Cancel", role: .cancel) {}
                     } message: {
                         // Number is rounded to the nearest 5 for clean look
-                        Text("Breathe for \(rhythmManager.meditationLength.roundTo(nearest: 5.0).clean) seconds. This Task will be restarted when you come back.")
+                        Text("Breathe for \(routineManager.meditationLength.roundTo(nearest: 5.0).clean) seconds. This Task will be restarted when you come back.")
                     }
                 }
                 Spacer()
@@ -137,12 +137,12 @@ struct RhythmActiveView: View {
         }
         .transition(.opacity)
         .onAppear {
-            if rhythmManager.currentTask == PreviewData.taskItemExample {
-                rhythmManager.nextTask()
+            if routineManager.currentTask == PreviewData.taskItemExample {
+                routineManager.nextTask()
             }
         }
-        .onReceive(rhythmManager.timer, perform: { _ in
-            rhythmManager.trackTask()
+        .onReceive(routineManager.timer, perform: { _ in
+            routineManager.trackTask()
         })
     }
     
@@ -167,10 +167,10 @@ struct RhythmActiveView: View {
 #Preview {
     MainActor.assumeIsolated {
         let container = PreviewData.container
-        let rhythm = PreviewData.rhythmExample
-        container.mainContext.insert(rhythm)
+        let routine = PreviewData.routineExample
+        container.mainContext.insert(routine)
         
-        return RhythmActiveView(rhythmManager: RhythmManager(rhythm: rhythm))
+        return RoutineActiveView(routineManager: RoutineManager(routine: routine))
             .modelContainer(container)
     }
 }
